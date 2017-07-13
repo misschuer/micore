@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 public abstract class AbstractCoder implements Coder {
 	private int opcode;
+	private int id;
 	
 	public AbstractCoder(int opcode) {
 		this.opcode = opcode;
@@ -13,12 +14,14 @@ public abstract class AbstractCoder implements Coder {
 	@Override
 	public void onEncode(ByteBuf buffer) {
 		buffer.writeInt(opcode);
+		buffer.writeInt(id);
 		this.encode(buffer);
 	}
 
 	@Override
 	public void onDecode(ByteBuf buffer) {
-		opcode = buffer.readInt();
+		this.opcode = buffer.readInt();
+		this.id		= buffer.readInt();
 		this.decode(buffer);
 	}
 	
@@ -26,7 +29,20 @@ public abstract class AbstractCoder implements Coder {
 	
 	public abstract void decode(ByteBuf buffer);
 	
+	@Override
 	public int getOpcode() {
-		return opcode;
+		return this.opcode;
 	}
+	
+	@Override
+	public int getId() {
+		return this.id;
+	}
+	
+	@Override
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public abstract AbstractCoder newInstance();
 }
