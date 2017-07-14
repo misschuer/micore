@@ -14,15 +14,15 @@ public abstract class AbstractCoder implements Coder {
 	@Override
 	public void onEncode(ByteBuf buffer) {
 		buffer.writeInt(opcode);
-		buffer.writeInt(id);
 		this.encode(buffer);
+		buffer.writeInt(id);
 	}
 
 	@Override
 	public void onDecode(ByteBuf buffer) {
 		this.opcode = buffer.readInt();
-		this.id		= buffer.readInt();
 		this.decode(buffer);
+		this.id		= buffer.readInt();
 	}
 	
 	public abstract void encode(ByteBuf buffer);
