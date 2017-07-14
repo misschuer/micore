@@ -10,6 +10,8 @@ public interface Coder {
 	public int getOpcode();
 	
 	public int getId();
-	
 	public void setId(int id);
+	
+	public int getInternalDestFD();
+	public void setInternalDestFD(int internalDestFD);
 }
