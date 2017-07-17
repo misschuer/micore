@@ -7,6 +7,9 @@ public interface Coder {
 	void onEncode(ByteBuf buffer);
 	void onDecode(ByteBuf buffer);
 	
+	void onEncode(ByteBuf buffer, boolean isfromClient);
+	void onDecode(ByteBuf buffer, boolean isfromClient);
+	
 	public int getOpcode();
 	
 	public int getId();

@@ -3,27 +3,30 @@ package cc.mi.core.generate;
 import cc.mi.core.coder.Coder;
 import cc.mi.core.coder.AbstractCoder;
 
-import cc.mi.core.generate.msg.null_action;
-import cc.mi.core.generate.msg.ping_pong;
-import cc.mi.core.generate.msg.forced_into;
-import cc.mi.core.generate.msg.get_session;
-import cc.mi.core.generate.msg.send_instance_result;
+import cc.mi.core.generate.msg.NullAction;
+import cc.mi.core.generate.msg.PingPong;
+import cc.mi.core.generate.msg.ServerRegOpcode;
+import cc.mi.core.generate.msg.ServerRegIdentity;
+import cc.mi.core.generate.msg.GetSession;
+import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
 	private static final AbstractCoder[] coders = new AbstractCoder[376];
 
-	public static final int MSG_NULL_ACTION = 0; //无效动作
-	public static final int MSG_PING_PONG = 1; //测试连接状态
-	public static final int MSG_FORCED_INTO = 2; //踢掉在线的准备强制登陆
-	public static final int MSG_GET_SESSION = 3; //获得Session对象
-	public static final int MSG_SEND_INSTANCE_RESULT = 375; //副本结果
+	public static final int MSG_NULLACTION = 0; //无效动作
+	public static final int MSG_PINGPONG = 1; //测试连接状态
+	public static final int MSG_SERVERREGOPCODE = 2; //服务器注册消息号
+	public static final int MSG_SERVERREGIDENTITY = 3; //服务器注册身份信息
+	public static final int MSG_GETSESSION = 4; //获得Session对象
+	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
-		coders[MSG_NULL_ACTION] = new null_action();
-		coders[MSG_PING_PONG] = new ping_pong();
-		coders[MSG_FORCED_INTO] = new forced_into();
-		coders[MSG_GET_SESSION] = new get_session();
-		coders[MSG_SEND_INSTANCE_RESULT] = new send_instance_result();
+		coders[MSG_NULLACTION] = new NullAction();
+		coders[MSG_PINGPONG] = new PingPong();
+		coders[MSG_SERVERREGOPCODE] = new ServerRegOpcode();
+		coders[MSG_SERVERREGIDENTITY] = new ServerRegIdentity();
+		coders[MSG_GETSESSION] = new GetSession();
+		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
 	private Opcodes(){}

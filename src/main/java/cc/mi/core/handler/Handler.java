@@ -5,6 +5,4 @@ import io.netty.channel.Channel;
 
 public interface Handler<T> {
 	public void handle(T player, Channel channel, Coder decoder);
-	
-	public Coder newCoder();
 }

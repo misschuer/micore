@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * 道具奖励信息
  **/
-public class item_reward_info  {
+public class ItemRewardInfo  {
 	//道具id
 	private short item_id;
 	//道具数量

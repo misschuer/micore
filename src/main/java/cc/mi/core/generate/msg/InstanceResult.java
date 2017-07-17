@@ -5,24 +5,24 @@ import cc.mi.core.coder.AbstractCoder;
 import cc.mi.core.coder.StringCoder;
 import java.util.List;
 import java.util.ArrayList;
-import cc.mi.core.generate.stru.item_reward_info;
+import cc.mi.core.generate.stru.ItemRewardInfo;
 
 /**
  * 副本结果
  **/
-public class send_instance_result extends AbstractCoder  {
+public class InstanceResult extends AbstractCoder  {
 	//副本状态(249:副本失败 250:副本通关 251:副本未通关)
 	private byte state;
 	//副本cd
 	private byte cd;
 	//道具列表
-	private List<item_reward_info> list;
+	private List<ItemRewardInfo> list;
 	//副本类型
 	private byte type;
 	//额外数据
 	private String data;
 
-	public send_instance_result() {
+	public InstanceResult() {
 		super(375);
 	}
 	
@@ -31,7 +31,7 @@ public class send_instance_result extends AbstractCoder  {
 		buffer.writeByte(this.state);
 		buffer.writeByte(this.cd);
 		buffer.writeShort(this.list.size());
-		for (item_reward_info element : this.list) {
+		for (ItemRewardInfo element : this.list) {
 			element.encode(buffer);
 		}
 		buffer.writeByte(this.type);
@@ -45,7 +45,7 @@ public class send_instance_result extends AbstractCoder  {
 		int size = buffer.readUnsignedShort();
 		this.list = new ArrayList<>(size);
 		for (int i = 0; i < size; ++ i) {
-			item_reward_info element = new item_reward_info();
+			ItemRewardInfo element = new ItemRewardInfo();
 			element.decode(buffer);
 			this.list.add(element);
 		}
@@ -69,11 +69,11 @@ public class send_instance_result extends AbstractCoder  {
 		this.cd = cd;
 	}
 		
-	public List<item_reward_info> getList() {
+	public List<ItemRewardInfo> getList() {
 		return this.list;
 	}
 	
-	public void setList(List<item_reward_info> list) {
+	public void setList(List<ItemRewardInfo> list) {
 		this.list = list;
 	}
 	
@@ -95,6 +95,6 @@ public class send_instance_result extends AbstractCoder  {
 		
 
 	public AbstractCoder newInstance() {
-		return new send_instance_result();
+		return new InstanceResult();
 	}
 }

@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 public abstract class AbstractCoder implements Coder {
 	private int opcode;
 	private int id;
-	// 仅内部连接用(内部目标fd), -1表示从客户端来的
-	private int internalDestFD = -1;
+	// 仅内部连接用(内部目标fd), -2表示从客户端来的, -1表示给客户端的
+	private int internalDestFD = -2;
 	
 	public AbstractCoder(int opcode) {
 		this.opcode = opcode;
@@ -15,18 +15,32 @@ public abstract class AbstractCoder implements Coder {
 	
 	@Override
 	public void onEncode(ByteBuf buffer) {
+		this.onEncode(buffer, false);
+	}
+	
+	@Override
+	public void onEncode(ByteBuf buffer, boolean isfromClient) {
 		buffer.writeInt(opcode);
 		this.encode(buffer);
-		buffer.writeInt(id);
-		buffer.writeInt(internalDestFD);
+		if (!isfromClient) {
+			buffer.writeInt(id);
+			buffer.writeInt(internalDestFD);
+		}
+	}
+	
+	@Override
+	public void onDecode(ByteBuf buffer) {
+		this.onDecode(buffer, false);
 	}
 
 	@Override
-	public void onDecode(ByteBuf buffer) {
+	public void onDecode(ByteBuf buffer, boolean isfromClient) {
 		this.opcode = buffer.readInt();
 		this.decode(buffer);
-		this.id		= buffer.readInt();
-		this.internalDestFD = buffer.readInt();
+		if (!isfromClient) {
+			this.id		= buffer.readInt();
+			this.internalDestFD = buffer.readInt();
+		}
 	}
 	
 	public abstract void encode(ByteBuf buffer);

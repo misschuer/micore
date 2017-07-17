@@ -1,4 +1,4 @@
-package cc.mi.core.task;
+package cc.mi.core.task.base;
 
 public abstract class AbstractTask implements Task {
 	

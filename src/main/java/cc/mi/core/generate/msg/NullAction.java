@@ -6,9 +6,9 @@ import cc.mi.core.coder.AbstractCoder;
 /**
  * 无效动作
  **/
-public class null_action extends AbstractCoder  {
+public class NullAction extends AbstractCoder  {
 
-	public null_action() {
+	public NullAction() {
 		super(0);
 	}
 	
@@ -22,6 +22,6 @@ public class null_action extends AbstractCoder  {
 	
 
 	public AbstractCoder newInstance() {
-		return new null_action();
+		return new NullAction();
 	}
 }

@@ -7,7 +7,7 @@ import cc.mi.core.coder.StringCoder;
 /**
  * 获得Session对象
  **/
-public class get_session extends AbstractCoder  {
+public class GetSession extends AbstractCoder  {
 	//
 	private String sessionkey;
 	//玩家id
@@ -15,8 +15,8 @@ public class get_session extends AbstractCoder  {
 	//版本
 	private String version;
 
-	public get_session() {
-		super(3);
+	public GetSession() {
+		super(4);
 	}
 	
 	@Override
@@ -59,6 +59,6 @@ public class get_session extends AbstractCoder  {
 		
 
 	public AbstractCoder newInstance() {
-		return new get_session();
+		return new GetSession();
 	}
 }

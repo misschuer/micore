@@ -4,12 +4,12 @@ import io.netty.buffer.ByteBuf;
 import cc.mi.core.coder.AbstractCoder;
 
 /**
- * 踢掉在线的准备强制登陆
+ * 测试连接状态
  **/
-public class forced_into extends AbstractCoder  {
+public class PingPong extends AbstractCoder  {
 
-	public forced_into() {
-		super(2);
+	public PingPong() {
+		super(1);
 	}
 	
 	@Override
@@ -22,6 +22,6 @@ public class forced_into extends AbstractCoder  {
 	
 
 	public AbstractCoder newInstance() {
-		return new forced_into();
+		return new PingPong();
 	}
 }
