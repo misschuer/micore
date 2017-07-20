@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<!-- TimeFilter -->
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+		
+		<!--
+		<RollingFile name = "roll" fileName = "log/app.log" filePattern = "log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+			<SizeBasedTriggeringPolicy size="10MB"/>
+		</RollingFile>
+		-->
+		
+		<RollingRandomAccessFile name = "asyncLogger" fileName = "log2/app.log" filePattern = "log2/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			<!--
+			<PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+			-->
+			<PatternLayout pattern="%d %p %c [%t] %L - %m%n"/>
+			<SizeBasedTriggeringPolicy size="10MB"/>
+		</RollingRandomAccessFile>
+		
+		<!-- AsyncAppender -->
+		<!--
+		<Async name="Async">
+			<AppenderRef ref="roll"/>
+		</Async>
+		-->
+	</appenders>
+	<loggers>
+		<!-- AsyncLogger -->
+		<AsyncLogger name = "cc.mi" level = "info" additivity = "false">
+			<appender-ref ref="console"/>
+		</AsyncLogger>
+		
+		<AsyncLogger name = "cc.mi.core.log.Demo" level = "error" additivity = "false">
+			<appender-ref ref="asyncLogger"/>
+		</AsyncLogger>
+		
+		<!--
+		<logger name = "cc.mi.core.log" level = "error" additivity = "false">
+			<appender-ref ref="Async"/>
+		</logger>
+		-->
+		
+		<asyncRoot level="error">
+			<appender-ref ref="console"/>
+		</asyncRoot>
+	</loggers>
+</configuration>

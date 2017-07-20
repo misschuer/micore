@@ -1,0 +1,64 @@
+package cc.mi.core.generate.msg;
+
+import io.netty.buffer.ByteBuf;
+import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.coder.StringCoder;
+
+/**
+ * 客户端连接进来了
+ **/
+public class CreateConnection extends AbstractCoder  {
+	//客户端连接网关服的fd
+	private int fd;
+	//客户端ip
+	private String remoteIp;
+	//客户端网关
+	private short remotePort;
+
+	public CreateConnection() {
+		super(5);
+	}
+	
+	@Override
+	public void encode(ByteBuf buffer) {
+		buffer.writeInt(this.fd);
+		StringCoder.writeString(buffer, this.remoteIp);
+		buffer.writeShort(this.remotePort);
+	}
+
+	@Override
+	public void decode(ByteBuf buffer) {
+		this.fd = buffer.readInt(); 
+		this.remoteIp = StringCoder.readString(buffer);
+		this.remotePort = buffer.readShort(); 
+	}
+	
+	public int getFd() {
+		return this.fd;
+	}
+	
+	public void setFd(int fd) {
+		this.fd = fd;
+	}
+		
+	public String getRemoteIp() {
+		return this.remoteIp;
+	}
+	
+	public void setRemoteIp(String remoteIp) {
+		this.remoteIp = remoteIp;
+	}
+		
+	public short getRemotePort() {
+		return this.remotePort;
+	}
+	
+	public void setRemotePort(short remotePort) {
+		this.remotePort = remotePort;
+	}
+		
+
+	public AbstractCoder newInstance() {
+		return new CreateConnection();
+	}
+}

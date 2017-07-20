@@ -1,5 +1,5 @@
 package cc.mi.core.handler;
 
-public abstract class AbstractHandler<T> implements Handler<T> {
+public abstract class AbstractHandler implements Handler {
 	
 }

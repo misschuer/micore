@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<!-- TimeFilter -->
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+		<File name="log" fileName="log/test.log" append="true">
+			<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+		</File>
+		<RollingFile name = "roll" fileName = "log/app.log" filePattern = "log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+			
+			<!-- combines multiple triggering policies and returns true if any of the configured policies return true -->
+			<!--
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			-->
+			
+			<!-- causes a rollover if the log file is older than the current JVM's start time.  -->
+			<!--
+			<OnStartupTriggeringPolicy/>
+			-->
+			
+			<!-- causes a rollover once the file has reached the specified size -->
+			
+			<SizeBasedTriggeringPolicy size="1KB"/>
+			
+			
+			<!-- causes a rollover once the date/time pattern no longer applies to the active file -->
+			<!-- based on filePattern  attribute precision [%d{MM-dd-yyyy-HH-mm}, the smallest unit mm means minutes]-->
+			<!--
+			<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+			-->
+			<!--
+				RolloverStrategy
+					DefaultRolloverStrategy
+						fileIndex: default max
+						min: default 1,
+						max: test default is 7
+						compressionLevel: 0-9[0:None, 1:best speed, 9:best compress]
+						
+				The default rollover strategy supports two variations for incrementing the counter. The first is the "fixed window" strategy. To illustrate how it works, suppose that the min attribute is set to 1, the max attribute is set to 3, the file name is "foo.log", and the file name pattern is "foo-%i.log".
+				Number of rollovers 	Active output target 	Archived log files 	Description
+				0 	foo.log 	- 	All logging is going to the initial file.
+				1 	foo.log 	foo-1.log 	During the first rollover foo.log is renamed to foo-1.log. A new foo.log file is created and starts being written to.
+				2 	foo.log 	foo-1.log, foo-2.log 	During the second rollover foo-1.log is renamed to foo-2.log and foo.log is renamed to foo-1.log. A new foo.log file is created and starts being written to.
+				3 	foo.log 	foo-1.log, foo-2.log, foo-3.log 	During the third rollover foo-2.log is renamed to foo-3.log, foo-1.log is renamed to foo-2.log and foo.log is renamed to foo-1.log. A new foo.log file is created and starts being written to.
+				4 	foo.log 	foo-1.log, foo-2.log, foo-3.log 	In the fourth and subsequent rollovers, foo-3.log is deleted, foo-2.log is renamed to foo-3.log, foo-1.log is renamed to foo-2.log and foo.log is renamed to foo-1.log. A new foo.log file is created and starts being written to.
+				
+				By way of contrast, when the fileIndex attribute is set to "max" but all the other settings are the same the following actions will be performed. 		
+				Number of rollovers 	Active output target 	Archived log files 	Description
+				0 	foo.log 	- 	All logging is going to the initial file.
+				1 	foo.log 	foo-1.log 	During the first rollover foo.log is renamed to foo-1.log. A new foo.log file is created and starts being written to.
+				2 	foo.log 	foo-1.log, foo-2.log 	During the second rollover foo.log is renamed to foo-2.log. A new foo.log file is created and starts being written to.
+				3 	foo.log 	foo-1.log, foo-2.log, foo-3.log 	During the third rollover foo.log is renamed to foo-3.log. A new foo.log file is created and starts being written to.
+				4 	foo.log 	foo-1.log, foo-2.log, foo-3.log 	In the fourth and subsequent rollovers, foo-1.log is deleted, foo-2.log is renamed to foo-1.log, foo-3.log is renamed to foo-2.log and foo.log is renamed to foo-3.log. A new foo.log file is created and starts being written to.
+			-->
+			<DefaultRolloverStrategy max = "8" />
+		</RollingFile>
+		<!-- AsyncAppender -->
+	</appenders>
+	<loggers>
+		<!-- AsyncLogger -->
+		<logger name = "cc.mi.engine.log" level = "debug" additivity = "false">
+			<appender-ref ref="roll"/>
+		</logger>
+		<root level="error">
+			<appender-ref ref="console"/>
+		</root>
+	</loggers>
+</configuration>

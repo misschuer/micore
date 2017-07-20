@@ -2,31 +2,26 @@ package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
 import cc.mi.core.coder.AbstractCoder;
-import cc.mi.core.coder.StringCoder;
 
 /**
- * 获得Session对象
+ * 销毁fd
  **/
-public class GetSession extends AbstractCoder  {
+public class DestroyConnection extends AbstractCoder  {
 	//客户端连接网关服的fd
 	private int fd;
-	//会话密钥
-	private String sessionkey;
 
-	public GetSession() {
-		super(4);
+	public DestroyConnection() {
+		super(7);
 	}
 	
 	@Override
 	public void encode(ByteBuf buffer) {
 		buffer.writeInt(this.fd);
-		StringCoder.writeString(buffer, this.sessionkey);
 	}
 
 	@Override
 	public void decode(ByteBuf buffer) {
 		this.fd = buffer.readInt(); 
-		this.sessionkey = StringCoder.readString(buffer);
 	}
 	
 	public int getFd() {
@@ -37,16 +32,8 @@ public class GetSession extends AbstractCoder  {
 		this.fd = fd;
 	}
 		
-	public String getSessionkey() {
-		return this.sessionkey;
-	}
-	
-	public void setSessionkey(String sessionkey) {
-		this.sessionkey = sessionkey;
-	}
-		
 
 	public AbstractCoder newInstance() {
-		return new GetSession();
+		return new DestroyConnection();
 	}
 }

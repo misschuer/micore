@@ -3,12 +3,26 @@ package cc.mi.core.server;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.mi.core.constance.MsgConst;
+import cc.mi.core.generate.msg.DestroyConnection;
+import io.netty.channel.Channel;
+
 public final class ContextManager {
 	private static final Map<Integer, ServerContext> fdContextHash
 		= new HashMap<>();
 	
-	public static void pushContext(int fd, ServerContext context) {
-		fdContextHash.put(fd, context);
+	private static final Map<String, Integer> sessionHash = new HashMap<>();
+	
+	public static void putSession(String account, int fd) {
+		sessionHash.put(account, fd);
+	}
+	
+	public static Integer getSessionFd(String account) {
+		return sessionHash.get(account);
+	}
+	
+	public static void pushContext(ServerContext context) {
+		fdContextHash.put(context.getFd(), context);
 	}
 	
 	public static void removeContext(int fd) {
@@ -17,5 +31,20 @@ public final class ContextManager {
 	
 	public static void removeContext(ServerContext context) {
 		removeContext(context.getFd());
+	}
+	
+	public static ServerContext getContext(int fd) {
+		return fdContextHash.get(fd);
+	}
+	
+	public static void closeSession(Channel channel, int fd) {
+		closeSession(channel, fd, false);
+	}
+	
+	public static void closeSession(Channel channel, int fd, boolean isForced) {
+		DestroyConnection dc = new DestroyConnection();
+		dc.setFd(fd);
+		dc.setInternalDestFD(MsgConst.MSG_TO_GATE);
+		channel.writeAndFlush(dc);
 	}
 }

@@ -8,6 +8,9 @@ import cc.mi.core.generate.msg.PingPong;
 import cc.mi.core.generate.msg.ServerRegOpcode;
 import cc.mi.core.generate.msg.ServerRegIdentity;
 import cc.mi.core.generate.msg.GetSession;
+import cc.mi.core.generate.msg.CreateConnection;
+import cc.mi.core.generate.msg.OperationResult;
+import cc.mi.core.generate.msg.DestroyConnection;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -18,6 +21,9 @@ public final class Opcodes  {
 	public static final int MSG_SERVERREGOPCODE = 2; //服务器注册消息号
 	public static final int MSG_SERVERREGIDENTITY = 3; //服务器注册身份信息
 	public static final int MSG_GETSESSION = 4; //获得Session对象
+	public static final int MSG_CREATECONNECTION = 5; //客户端连接进来了
+	public static final int MSG_OPERATIONRESULT = 6; //操作结果
+	public static final int MSG_DESTROYCONNECTION = 7; //销毁fd
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -26,6 +32,9 @@ public final class Opcodes  {
 		coders[MSG_SERVERREGOPCODE] = new ServerRegOpcode();
 		coders[MSG_SERVERREGIDENTITY] = new ServerRegIdentity();
 		coders[MSG_GETSESSION] = new GetSession();
+		coders[MSG_CREATECONNECTION] = new CreateConnection();
+		coders[MSG_OPERATIONRESULT] = new OperationResult();
+		coders[MSG_DESTROYCONNECTION] = new DestroyConnection();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
