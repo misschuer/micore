@@ -3,6 +3,7 @@ package cc.mi.core.server;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.mi.core.callback.Callback;
 import cc.mi.core.constance.MsgConst;
 import cc.mi.core.generate.msg.DestroyConnection;
 import io.netty.channel.Channel;
@@ -39,6 +40,17 @@ public final class ContextManager {
 	
 	public static void closeSession(Channel channel, int fd) {
 		closeSession(channel, fd, false);
+	}
+	
+	public static int getLoginPlayers(Callback<ServerContext> callback) {
+		int cnt = 0;
+		for (ServerContext context : fdContextHash.values()) {
+			if (callback.isMatched(context)) {
+				cnt ++;
+			}
+		}
+		
+		return cnt;
 	}
 	
 	public static void closeSession(Channel channel, int fd, boolean isForced) {

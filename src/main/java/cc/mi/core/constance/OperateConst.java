@@ -33,6 +33,6 @@ public class OperateConst {
 	public static final short OPERATE_TYPE_CLOSE = 2;		//连接关闭
 	// 下面的都是连接关闭 原因
 	public static final short OPERATE_CLOSE_REASON_OTHER_LOGINED = 1;	//角色在其他地方登陆
-		
+	public static final short OPERATE_CLOSE_REASON_LOGDIN_ONE18	 = 2;	//登陆队列 context.GetGuid().isEmpty()
 	//************************************************************
 }

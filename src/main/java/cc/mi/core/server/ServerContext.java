@@ -12,6 +12,7 @@ public abstract class ServerContext {
 	private SessionStatus status;
 	private String remoteIp;
 	private short remotePort;
+	private String guid;
 	
 	public ServerContext(int fd) {
 		this.fd = fd;
@@ -82,5 +83,13 @@ public abstract class ServerContext {
 
 	public void setRemotePort(short remotePort) {
 		this.remotePort = remotePort;
+	}
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
 	}
 }
