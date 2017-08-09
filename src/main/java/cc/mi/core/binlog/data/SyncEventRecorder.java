@@ -12,6 +12,8 @@ import cc.mi.core.utils.Bytes;
 import cc.mi.core.utils.Mask;
 
 public class SyncEventRecorder {
+	private static final String BINLOG_DATA_SEP = "\1";
+	
 	//事件记录器模式
 	protected final int mode;
 	
@@ -181,5 +183,39 @@ public class SyncEventRecorder {
 //				events_value_.Dispatch(binlog.index,&binlog);
 //			}
 //		}
+	}
+	
+	public String getIntDataString() {
+		String str = "";
+		str += this.intValues.getInt(0);
+		
+		int size = this.intValues.intSize();
+		for (int i = 1; i < size; ++ i) {
+			str += BINLOG_DATA_SEP + this.intValues.getInt(i);
+		}
+		
+		return str;
+	}
+	
+	public String getStrDataString() {
+		String str = "";
+		str += this.strValues[ 0 ];
+		
+		int size = this.strValues.length;
+		for (int i = 1; i < size; ++ i) {
+			str += BINLOG_DATA_SEP + this.strValues[ i ];
+		}
+		
+		return str;
+	}
+	
+	public void fromString(String ints, String strs) {
+		String[] params = ints.split(BINLOG_DATA_SEP);
+		for (int i = 0; i < params.length; ++ i) {
+			intValues.setInt(i, Integer.parseInt(params[ i ]));
+		}
+		
+		params = strs.split(BINLOG_DATA_SEP);
+		System.arraycopy(params, 0, strValues, 0, params.length);
 	}
 }

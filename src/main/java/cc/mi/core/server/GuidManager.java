@@ -78,4 +78,8 @@ public enum GuidManager {
 	public void setUnitGuid(int unitId) {
 		this.myData.setUInt32(ObjectType.UNIT, unitId);
 	}
+	
+	public boolean isPlayerGuid(String guid) {
+		return guid != null && guid.charAt(0) == ObjectType.PLAYER;
+	}
 }

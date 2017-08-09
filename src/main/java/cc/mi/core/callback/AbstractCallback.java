@@ -4,10 +4,10 @@ public abstract class AbstractCallback<T> implements Callback<T> {
 	public AbstractCallback() {}
 	
 	@Override
-	public void invoke(T obj) {}
+	public void invoke(T value) {}
 	
 	@Override
-	public boolean isMatched(T obj) {
+	public boolean isMatched(T value) {
 		return false;
 	}
 }

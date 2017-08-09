@@ -1,6 +1,7 @@
 package cc.mi.core.binlog.data;
 
 import cc.mi.core.constance.BinlogOptType;
+import cc.mi.core.constance.BinlogStrFieldIndice;
 
 public class GuidObject extends SyncEventRecorder {
 
@@ -10,6 +11,15 @@ public class GuidObject extends SyncEventRecorder {
 	
 	public GuidObject(int mode, String guid, int intMaxSize, int strMaxSize) {
 		super(mode, guid, intMaxSize, strMaxSize);
+	}
+	
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+		this.setStr(BinlogStrFieldIndice.BINLOG_STRING_FIELD_GUID, guid);
 	}
 	
 	public long getLong(int indx) {
