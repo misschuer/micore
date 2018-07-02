@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IdentityConst {
-	public static final byte SERVER_TYPE_GATE	= 1;
-	public static final byte SERVER_TYPE_CENTER = 2;
-	public static final byte SERVER_TYPE_LOGIN	= 3;
-	public static final byte SERVER_TYPE_APP	= 4;
-	public static final byte SERVER_TYPE_RECORD	= 5;
-	public static final byte SERVER_TYPE_SCENE  = 6;
+	public static final int SERVER_TYPE_GATE	= 1;
+	public static final int SERVER_TYPE_CENTER = 2;
+	public static final int SERVER_TYPE_LOGIN	= 3;
+	public static final int SERVER_TYPE_APP	= 4;
+	public static final int SERVER_TYPE_RECORD	= 5;
+	public static final int SERVER_TYPE_SCENE  = 6;
 	
-	private static final Map<Byte, String> serverNameHash = new HashMap<>();
+	private static final Map<Integer, String> serverNameHash = new HashMap<>();
 	static {
 		serverNameHash.put(SERVER_TYPE_GATE, "gate");
 		serverNameHash.put(SERVER_TYPE_CENTER, "center");
@@ -21,7 +21,7 @@ public class IdentityConst {
 		serverNameHash.put(SERVER_TYPE_RECORD, "record");
 	}
 	
-	public static String getServerName(byte identity) {
+	public static String getServerName(int identity) {
 		if (serverNameHash.containsKey(identity)) {
 			return serverNameHash.get(identity);
 		}

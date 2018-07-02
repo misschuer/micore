@@ -1,14 +1,14 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.PacketImpl;
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  * 服务器注册消息号
  **/
-public class ServerRegOpcode extends AbstractCoder  {
+public class ServerRegOpcode extends PacketImpl  {
 	//消息号
 	private List<Integer> opcodes;
 
@@ -43,7 +43,7 @@ public class ServerRegOpcode extends AbstractCoder  {
 	}
 	
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new ServerRegOpcode();
 	}
 }

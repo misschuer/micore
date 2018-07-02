@@ -1,12 +1,12 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.PacketImpl;
 
 /**
  * 测试连接状态
  **/
-public class PingPong extends AbstractCoder  {
+public class PingPong extends PacketImpl  {
 
 	public PingPong() {
 		super(1);
@@ -21,7 +21,7 @@ public class PingPong extends AbstractCoder  {
 	}
 	
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new PingPong();
 	}
 }

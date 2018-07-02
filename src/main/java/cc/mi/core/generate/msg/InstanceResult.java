@@ -1,8 +1,8 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
-import cc.mi.core.coder.StringCoder;
+import cc.mi.core.packet.PacketImpl;
+import cc.mi.core.packet.StringCoder;
 import java.util.List;
 import java.util.ArrayList;
 import cc.mi.core.generate.stru.ItemRewardInfo;
@@ -10,7 +10,7 @@ import cc.mi.core.generate.stru.ItemRewardInfo;
 /**
  * 副本结果
  **/
-public class InstanceResult extends AbstractCoder  {
+public class InstanceResult extends PacketImpl  {
 	//副本状态(249:副本失败 250:副本通关 251:副本未通关)
 	private byte state;
 	//副本cd
@@ -94,7 +94,7 @@ public class InstanceResult extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new InstanceResult();
 	}
 }

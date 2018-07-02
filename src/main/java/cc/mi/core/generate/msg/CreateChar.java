@@ -1,13 +1,13 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.PacketImpl;
 import cc.mi.core.generate.stru.CharCreateInfo;
 
 /**
  * 创建角色
  **/
-public class CreateChar extends AbstractCoder  {
+public class CreateChar extends PacketImpl  {
 	//角色信息
 	private CharCreateInfo charData;
 
@@ -35,7 +35,7 @@ public class CreateChar extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new CreateChar();
 	}
 }

@@ -1,6 +1,6 @@
 package cc.mi.core.handler;
 
-import cc.mi.core.coder.Packet;
+import cc.mi.core.packet.Packet;
 import cc.mi.core.server.ServerContext;
 import io.netty.channel.Channel;
 

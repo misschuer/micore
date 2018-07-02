@@ -1,7 +1,7 @@
 package cc.mi.core.generate.stru;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.StringCoder;
+import cc.mi.core.packet.StringCoder;
 
 /**
  * 玩家角色创建选择信息

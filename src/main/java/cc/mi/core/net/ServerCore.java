@@ -25,7 +25,7 @@ public enum ServerCore {
 	
 	static final CustomLogger logger = CustomLogger.getLogger(ServerCore.class);
 	
-	public void run(int port, ChannelHandlerGenerator handlerGenerator, byte serverType) throws Exception {
+	public void run(int port, ChannelHandlerGenerator handlerGenerator, int serverType) throws Exception {
 		final EventLoopGroup bossGroup = new NioEventLoopGroup(4);
 		final EventLoopGroup workerGroup = new NioEventLoopGroup(4);
 		

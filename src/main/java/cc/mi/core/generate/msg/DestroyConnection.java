@@ -1,12 +1,12 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.PacketImpl;
 
 /**
  * 销毁fd
  **/
-public class DestroyConnection extends AbstractCoder  {
+public class DestroyConnection extends PacketImpl  {
 	//客户端连接网关服的fd
 	private int fd;
 
@@ -33,7 +33,7 @@ public class DestroyConnection extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new DestroyConnection();
 	}
 }

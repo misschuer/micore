@@ -1,8 +1,8 @@
-package cc.mi.core.coder;
+package cc.mi.core.packet;
 
 import io.netty.buffer.ByteBuf;
 
-public abstract class AbstractCoder implements Packet {
+public abstract class PacketImpl implements Packet {
 	/**
 	 * 消息号
 	 */
@@ -12,7 +12,7 @@ public abstract class AbstractCoder implements Packet {
 	 */
 	private int fd;
 	
-	public AbstractCoder(int opcode) {
+	public PacketImpl(int opcode) {
 		this.opcode = opcode;
 		this.fd = 0;
 	}
@@ -50,5 +50,5 @@ public abstract class AbstractCoder implements Packet {
 		this.fd = fd;
 	}
 	
-	public abstract AbstractCoder newInstance();
+	public abstract PacketImpl newInstance();
 }

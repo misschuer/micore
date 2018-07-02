@@ -1,6 +1,6 @@
 package cc.mi.core.net;
 
-import cc.mi.core.coder.Packet;
+import cc.mi.core.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

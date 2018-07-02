@@ -1,13 +1,13 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
-import cc.mi.core.coder.StringCoder;
+import cc.mi.core.packet.PacketImpl;
+import cc.mi.core.packet.StringCoder;
 
 /**
  * 获得Session对象
  **/
-public class GetSession extends AbstractCoder  {
+public class GetSession extends PacketImpl  {
 	//客户端连接网关服的fd
 	private int fd;
 	//会话密钥
@@ -46,7 +46,7 @@ public class GetSession extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new GetSession();
 	}
 }

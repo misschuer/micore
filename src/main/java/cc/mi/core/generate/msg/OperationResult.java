@@ -1,13 +1,13 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
-import cc.mi.core.coder.StringCoder;
+import cc.mi.core.packet.PacketImpl;
+import cc.mi.core.packet.StringCoder;
 
 /**
  * 操作结果
  **/
-public class OperationResult extends AbstractCoder  {
+public class OperationResult extends PacketImpl  {
 	//操作类型
 	private short type;
 	//造成结果的原因
@@ -58,7 +58,7 @@ public class OperationResult extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new OperationResult();
 	}
 }

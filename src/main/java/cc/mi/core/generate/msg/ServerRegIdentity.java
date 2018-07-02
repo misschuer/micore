@@ -1,12 +1,12 @@
 package cc.mi.core.generate.msg;
 
 import io.netty.buffer.ByteBuf;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.PacketImpl;
 
 /**
  * 服务器注册身份信息
  **/
-public class ServerRegIdentity extends AbstractCoder  {
+public class ServerRegIdentity extends PacketImpl  {
 	//身份信息
 	private byte identity;
 
@@ -33,7 +33,7 @@ public class ServerRegIdentity extends AbstractCoder  {
 	}
 		
 
-	public AbstractCoder newInstance() {
+	public PacketImpl newInstance() {
 		return new ServerRegIdentity();
 	}
 }

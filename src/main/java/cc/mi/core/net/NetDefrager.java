@@ -2,8 +2,8 @@ package cc.mi.core.net;
 
 import java.util.List;
 
-import cc.mi.core.coder.Packet;
 import cc.mi.core.generate.Opcodes;
+import cc.mi.core.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

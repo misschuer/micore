@@ -31,6 +31,14 @@ public abstract class ServerManager {
 		this.indentityServer(this.centerChannel);
 	}
 	
+	public void onCenterDisconnected(Channel centerChannel) {
+		if (this.centerChannel == centerChannel) {
+			this.centerChannel = null;
+			return;
+		}
+		throw new RuntimeException("与中心服断开连接, 但是断开的channel不是this.centerChannel");
+	}
+	
 	/**
 	 * 和网关服连接上以后触发的操作
 	 * @param gateChannel
@@ -43,6 +51,14 @@ public abstract class ServerManager {
 		this.gateChannel = gateChannel;
 		logger.devLog("identity to gate");
 		this.indentityServer(this.gateChannel);
+	}
+	
+	public void onGateDisconnected(Channel gateChannel) {
+		if (this.gateChannel == centerChannel) {
+			this.centerChannel = null;
+			return;
+		}
+		throw new RuntimeException("与网关服断开连接, 但是断开的channel不是this.gateChannel");
 	}
 	
 	/**

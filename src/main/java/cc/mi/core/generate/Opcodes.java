@@ -1,7 +1,7 @@
 package cc.mi.core.generate;
 
-import cc.mi.core.coder.Packet;
-import cc.mi.core.coder.AbstractCoder;
+import cc.mi.core.packet.Packet;
+import cc.mi.core.packet.PacketImpl;
 
 import cc.mi.core.generate.msg.NullAction;
 import cc.mi.core.generate.msg.PingPong;
@@ -17,7 +17,7 @@ import cc.mi.core.generate.msg.IdentityServerMsg;
 import cc.mi.core.generate.msg.ServerStartFinishMsg;
 
 public final class Opcodes  {
-	private static final AbstractCoder[] coders = new AbstractCoder[376];
+	private static final PacketImpl[] coders = new PacketImpl[376];
 
 	public static final int MSG_NULLACTION = 0; //无效动作
 	public static final int MSG_PINGPONG = 1; //测试连接状态

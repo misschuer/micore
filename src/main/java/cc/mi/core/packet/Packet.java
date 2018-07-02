@@ -1,4 +1,4 @@
-package cc.mi.core.coder;
+package cc.mi.core.packet;
 
 
 import io.netty.buffer.ByteBuf;
