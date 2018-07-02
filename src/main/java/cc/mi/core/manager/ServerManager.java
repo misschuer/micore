@@ -1,20 +1,27 @@
 package cc.mi.core.manager;
 
+import java.util.List;
+
 import cc.mi.core.generate.msg.IdentityServerMsg;
+import cc.mi.core.generate.msg.ServerRegOpcode;
 import cc.mi.core.log.CustomLogger;
 import io.netty.channel.Channel;
 
 public abstract class ServerManager {
 	static final CustomLogger logger = CustomLogger.getLogger(ServerManager.class);
 	
-	private Channel centerChannel = null;
+	protected Channel centerChannel = null;
 	// 连接网关服的通道
-	private Channel gateChannel = null;
+	protected Channel gateChannel = null;
 	
 	private final int serverType;
 	
-	public ServerManager(int serverType) {
+	// 需要的消息opcode列表
+	private final List<Integer> opcodes;
+	
+	public ServerManager(int serverType, List<Integer> opcodes) {
 		this.serverType = serverType;
+		this.opcodes = opcodes;
 	}
 	
 	/**
@@ -29,6 +36,8 @@ public abstract class ServerManager {
 		this.centerChannel = centerChannel;
 		logger.devLog("identity to center");
 		this.indentityServer(this.centerChannel);
+		// 注册消息
+		this.registerOpcode(this.centerChannel, opcodes);
 	}
 	
 	public void onCenterDisconnected(Channel centerChannel) {
@@ -73,5 +82,19 @@ public abstract class ServerManager {
 		IdentityServerMsg ism = new IdentityServerMsg();
 		ism.setServerType(this.serverType);
 		channel.writeAndFlush(ism);
+	}
+	
+	/**
+	 * 告诉对方自己需要的消息opcode
+	 * @param channel
+	 */
+	private void registerOpcode(Channel channel, List<Integer> opcodes) {
+		if (!channel.isActive()) {
+			logger.devLog("channel is inactive");
+			return;
+		}
+		ServerRegOpcode sro = new ServerRegOpcode();
+		sro.setOpcodes(opcodes);
+		channel.writeAndFlush(sro);
 	}
 }

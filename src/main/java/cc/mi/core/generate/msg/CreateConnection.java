@@ -13,7 +13,7 @@ public class CreateConnection extends PacketImpl  {
 	//客户端ip
 	private String remoteIp;
 	//客户端网关
-	private short remotePort;
+	private int remotePort;
 
 	public CreateConnection() {
 		super(5);
@@ -23,14 +23,14 @@ public class CreateConnection extends PacketImpl  {
 	public void encode(ByteBuf buffer) {
 		buffer.writeInt(this.fd);
 		StringCoder.writeString(buffer, this.remoteIp);
-		buffer.writeShort(this.remotePort);
+		buffer.writeInt(this.remotePort);
 	}
 
 	@Override
 	public void decode(ByteBuf buffer) {
 		this.fd = buffer.readInt(); 
 		this.remoteIp = StringCoder.readString(buffer);
-		this.remotePort = buffer.readShort(); 
+		this.remotePort = buffer.readInt(); 
 	}
 	
 	public int getFd() {
@@ -49,11 +49,11 @@ public class CreateConnection extends PacketImpl  {
 		this.remoteIp = remoteIp;
 	}
 		
-	public short getRemotePort() {
+	public int getRemotePort() {
 		return this.remotePort;
 	}
 	
-	public void setRemotePort(short remotePort) {
+	public void setRemotePort(int remotePort) {
 		this.remotePort = remotePort;
 	}
 		
