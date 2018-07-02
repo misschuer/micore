@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.mi.core.callback.Callback;
-import cc.mi.core.constance.MsgConst;
-import cc.mi.core.generate.msg.DestroyConnection;
 import io.netty.channel.Channel;
 
 public final class ContextManager {
@@ -54,9 +52,9 @@ public final class ContextManager {
 	}
 	
 	public static void closeSession(Channel channel, int fd, boolean isForced) {
-		DestroyConnection dc = new DestroyConnection();
-		dc.setFd(fd);
-		dc.setInternalDestFD(MsgConst.MSG_TO_GATE);
-		channel.writeAndFlush(dc);
+//		DestroyConnection dc = new DestroyConnection();
+//		dc.setFd(fd);
+//		dc.setInternalDestFD(MsgConst.MSG_TO_GATE);
+//		channel.writeAndFlush(dc);
 	}
 }

@@ -4,20 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IdentityConst {
-	public static final byte IDENDITY_GATE	= -1;
-	public static final byte IDENDITY_CENTER = 0;
-	public static final byte IDENDITY_LOGIN	= 1;
-	public static final byte IDENDITY_APP	= 2;
-	public static final byte IDENDITY_RECORD = 3;
-	public static final byte IDENDITY_SCENE	= 4;
+	public static final byte SERVER_TYPE_GATE	= 1;
+	public static final byte SERVER_TYPE_CENTER = 2;
+	public static final byte SERVER_TYPE_LOGIN	= 3;
+	public static final byte SERVER_TYPE_APP	= 4;
+	public static final byte SERVER_TYPE_RECORD	= 5;
+	public static final byte SERVER_TYPE_SCENE  = 6;
 	
 	private static final Map<Byte, String> serverNameHash = new HashMap<>();
 	static {
-		serverNameHash.put(IDENDITY_GATE, "gate");
-		serverNameHash.put(IDENDITY_LOGIN, "login");
-		serverNameHash.put(IDENDITY_APP, "app");
-		serverNameHash.put(IDENDITY_RECORD, "record");
-		serverNameHash.put(IDENDITY_SCENE, "scene");
+		serverNameHash.put(SERVER_TYPE_GATE, "gate");
+		serverNameHash.put(SERVER_TYPE_CENTER, "center");
+		serverNameHash.put(SERVER_TYPE_LOGIN, "login");
+		serverNameHash.put(SERVER_TYPE_APP, "app");
+		serverNameHash.put(SERVER_TYPE_SCENE, "scene");
+		serverNameHash.put(SERVER_TYPE_RECORD, "record");
 	}
 	
 	public static String getServerName(byte identity) {

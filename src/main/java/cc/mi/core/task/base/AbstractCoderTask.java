@@ -1,11 +1,11 @@
 package cc.mi.core.task.base;
 
-import cc.mi.core.coder.Coder;
+import cc.mi.core.coder.Packet;
 
 public abstract class AbstractCoderTask extends AbstractTask {
-	protected final Coder coder;
+	protected final Packet coder;
 	
-	public AbstractCoderTask(Coder coder) {
+	public AbstractCoderTask(Packet coder) {
 		this.coder = coder;
 	}
 }

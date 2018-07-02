@@ -1,8 +1,10 @@
 package cc.mi.core.net;
 
+import cc.mi.core.handler.ChannelHandlerGenerator;
+import cc.mi.core.log.CustomLogger;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -11,22 +13,20 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
-public class ClientCore {
+public enum ClientCore {
+	INSTANCE;
 	
-	public static void start(String ip, int port, ChannelHandler handler) {
-		start(ip, port, handler, true);
-	}
+	static final CustomLogger logger = CustomLogger.getLogger(ClientCore.class);
 	
-	public static void start(String ip, int port, ChannelHandler handler, boolean isSync) {
-        final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+	public void start(String ip, int port, ChannelHandlerGenerator handlerGenerator) throws Exception {
+		final EventLoopGroup eventLoopGroup = new NioEventLoopGroup(1);
         try {
         	final Bootstrap bootstrap = new Bootstrap();
 	        bootstrap.channel(NioSocketChannel.class)
 	        		 .option(ChannelOption.SO_KEEPALIVE,true)
 	        		 .option(ChannelOption.TCP_NODELAY, true)
+	        		 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
 	        		 .group(eventLoopGroup);
 	        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
 	            @Override
@@ -34,29 +34,18 @@ public class ClientCore {
 	            	ch.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, -4, 4));
 					ch.pipeline().addLast("decoder", new NetDefrager());
 					
-					ch.pipeline().addLast("clientHandler", handler);
+					ch.pipeline().addLast("clientHandler", handlerGenerator.newChannelHandler());
 					
 					ch.pipeline().addLast("frameEncoder", new LengthFieldPrepender(4, true));
 					ch.pipeline().addLast("encoder", new NetEnfrager());
 	            }
 	        });
 	        
+	        logger.devLog("connect to ip = {} port = {}", ip, port);
 	        ChannelFuture future = bootstrap.connect(ip, port).sync();
-	        if (isSync) {
-	        	future.channel().closeFuture().sync();
-	        } else {
-	        	// 有多个Bootstrap的情况采用
-		        future.awaitUninterruptibly();
-		        future.channel().closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
-					@Override
-					public void operationComplete(Future<? super Void> future) throws Exception {
-						eventLoopGroup.shutdownGracefully();
-					}
-				});
-	        }
-	        
-        } catch (Exception e) {
-        	e.printStackTrace();
+        	future.channel().closeFuture().sync();
+        } finally {
+        	eventLoopGroup.shutdownGracefully();
         }
     }
 }

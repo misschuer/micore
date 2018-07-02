@@ -1,48 +1,36 @@
 package cc.mi.core.coder;
 
-
 import io.netty.buffer.ByteBuf;
 
-public abstract class AbstractCoder implements Coder {
+public abstract class AbstractCoder implements Packet {
+	/**
+	 * 消息号
+	 */
 	private int opcode;
-	private int id;
-	// 仅内部连接用(内部目标fd), -2表示从客户端来的, -1表示给客户端的
-	private int internalDestFD = -2;
+	/**
+	 *  如果是发给客户端的fd > 0, 否则只是内部发
+	 */
+	private int fd;
 	
 	public AbstractCoder(int opcode) {
 		this.opcode = opcode;
+		this.fd = 0;
 	}
 	
 	@Override
 	public void onEncode(ByteBuf buffer) {
-		this.onEncode(buffer, false);
-	}
-	
-	@Override
-	public void onEncode(ByteBuf buffer, boolean isfromClient) {
 		buffer.writeInt(opcode);
+		buffer.writeInt(fd);
 		this.encode(buffer);
-		if (!isfromClient) {
-			buffer.writeInt(id);
-			buffer.writeInt(internalDestFD);
-		}
 	}
 	
 	@Override
 	public void onDecode(ByteBuf buffer) {
-		this.onDecode(buffer, false);
+		this.opcode = buffer.readInt();
+		this.fd = buffer.readInt();
+		this.decode(buffer);
 	}
 
-	@Override
-	public void onDecode(ByteBuf buffer, boolean isfromClient) {
-		this.opcode = buffer.readInt();
-		this.decode(buffer);
-		if (!isfromClient) {
-			this.id		= buffer.readInt();
-			this.internalDestFD = buffer.readInt();
-		}
-	}
-	
 	public abstract void encode(ByteBuf buffer);
 	
 	public abstract void decode(ByteBuf buffer);
@@ -53,23 +41,13 @@ public abstract class AbstractCoder implements Coder {
 	}
 	
 	@Override
-	public int getId() {
-		return this.id;
+	public int getFD() {
+		return this.fd;
 	}
 	
 	@Override
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	@Override
-	public int getInternalDestFD() {
-		return internalDestFD;
-	}
-	
-	@Override
-	public void setInternalDestFD(int internalDestFD) {
-		this.internalDestFD = internalDestFD;
+	public void setFD(int fd) {
+		this.fd = fd;
 	}
 	
 	public abstract AbstractCoder newInstance();

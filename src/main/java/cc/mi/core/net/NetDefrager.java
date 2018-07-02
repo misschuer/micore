@@ -2,7 +2,7 @@ package cc.mi.core.net;
 
 import java.util.List;
 
-import cc.mi.core.coder.Coder;
+import cc.mi.core.coder.Packet;
 import cc.mi.core.generate.Opcodes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,7 +21,7 @@ public class NetDefrager extends ByteToMessageDecoder {
 			ctx.close();
 			return;
 		}
-		Coder object = Opcodes.newInstance(opcode);
+		Packet object = Opcodes.newInstance(opcode);
 		object.onDecode(in);
 		out.add(object);
 	}

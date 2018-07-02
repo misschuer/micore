@@ -1,9 +1,7 @@
 package cc.mi.core.server;
 
-import cc.mi.core.coder.Coder;
-import cc.mi.core.constance.MsgConst;
+import cc.mi.core.coder.Packet;
 import cc.mi.core.constance.OperateConst;
-import cc.mi.core.generate.msg.OperationResult;
 import io.netty.channel.Channel;
 
 public abstract class ServerContext {
@@ -18,21 +16,21 @@ public abstract class ServerContext {
 		this.fd = fd;
 	}
 	
-	protected abstract void send(Coder coder);
+	protected abstract void send(Packet coder);
 	
-	protected void sendPacketToOtherServer(int serverFd, Coder coder) {
-		coder.setId(0);
-		coder.setInternalDestFD(serverFd);
-		this.send(coder);
+	protected void sendPacketToOtherServer(int serverFd, Packet coder) {
+//		coder.setId(0);
+//		coder.setInternalDestFD(serverFd);
+//		this.send(coder);
 	}
 	
-	protected void sendToClient(Coder coder) {
-		coder.setId(fd);
-		coder.setInternalDestFD(MsgConst.MSG_TO_GATE);
-		this.send(coder);
+	protected void sendToClient(Packet coder) {
+//		coder.setId(fd);
+//		coder.setInternalDestFD(MsgConst.MSG_TO_GATE);
+//		this.send(coder);
 	}
 	
-	protected void sendToCenter(Coder coder) {
+	protected void sendToCenter(Packet coder) {
 		
 	}
 	
@@ -60,13 +58,13 @@ public abstract class ServerContext {
 	}
 	
 	public void callOperationResult(Channel channel, short type, short reason, String data) {
-		OperationResult result = new OperationResult();
-		result.setData(data);
-		result.setReason(reason);
-		result.setType(type);
-		result.setId(this.fd);
-		result.setInternalDestFD(MsgConst.MSG_TO_GATE);
-		channel.writeAndFlush(result);
+//		OperationResult result = new OperationResult();
+//		result.setData(data);
+//		result.setReason(reason);
+//		result.setType(type);
+//		result.setId(this.fd);
+//		result.setInternalDestFD(MsgConst.MSG_TO_GATE);
+//		channel.writeAndFlush(result);
 	}
 
 	public String getRemoteIp() {
