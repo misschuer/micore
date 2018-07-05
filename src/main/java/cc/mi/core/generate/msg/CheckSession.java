@@ -5,15 +5,15 @@ import cc.mi.core.packet.PacketImpl;
 import cc.mi.core.packet.StringCoder;
 
 /**
- * 获得Session对象
+ * 验证Session
  **/
-public class GetSession extends PacketImpl  {
+public class CheckSession extends PacketImpl  {
 	//客户端连接网关服的fd
 	private int fd;
 	//会话密钥
 	private String sessionkey;
 
-	public GetSession() {
+	public CheckSession() {
 		super(4);
 	}
 	
@@ -47,6 +47,6 @@ public class GetSession extends PacketImpl  {
 		
 
 	public PacketImpl newInstance() {
-		return new GetSession();
+		return new CheckSession();
 	}
 }
