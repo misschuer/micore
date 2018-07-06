@@ -13,9 +13,8 @@ public interface Packet {
 	public int getOpcode();
 	
 	/**
-	 * 当消息发送给网关服的时候 作为客户端的fd
-	 * 当消息发送给中心服的时候 
-	 * 	内部服发时作为内部服务器的fd
+	 *  默认是网关服和客户端连接的fd
+	 * 当消息只发给内部服务器时的是中心服和内部服务器连接的fd
 	 * @return
 	 */
 	public int getFD();

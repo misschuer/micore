@@ -1,6 +1,6 @@
 package cc.mi.core.server;
 
-import cc.mi.core.constance.OperateConst;
+import cc.mi.core.generate.msg.OperationResult;
 import cc.mi.core.packet.Packet;
 import io.netty.channel.Channel;
 
@@ -14,24 +14,21 @@ public abstract class ServerContext {
 	
 	public ServerContext(int fd) {
 		this.fd = fd;
+		this.status = SessionStatus.STATUS_NONE;
 	}
 	
-	protected abstract void send(Packet coder);
+	protected abstract void sendToGate(Packet coder);
+	
+	protected abstract void sendToCenter(Packet coder);
 	
 	protected void sendPacketToOtherServer(int serverFd, Packet coder) {
-//		coder.setId(0);
-//		coder.setInternalDestFD(serverFd);
-//		this.send(coder);
+		coder.setFD(serverFd);
+		this.sendToCenter(coder);
 	}
 	
 	protected void sendToClient(Packet coder) {
-//		coder.setId(fd);
-//		coder.setInternalDestFD(MsgConst.MSG_TO_GATE);
-//		this.send(coder);
-	}
-	
-	protected void sendToCenter(Packet coder) {
-		
+		coder.setFD(fd);
+		this.sendToGate(coder);
 	}
 	
 	public int getFd() {
@@ -46,26 +43,18 @@ public abstract class ServerContext {
 		this.status = status;
 	}
 	
-	public void close(Channel channel, short reason, String data) {
-		close(channel, reason, data, false);
+	abstract public void closeSession(int type);
+	
+	public void callOperationResult(Channel channel, short type, String data) {
+		OperationResult result = new OperationResult();
+		result.setData(data);
+		result.setType(type);
+		result.setFD(this.fd);
+		channel.writeAndFlush(result);
 	}
 	
-	public void close(Channel channel, short reason, String data, boolean isForced) {
-		if (reason > 0) {
-			this.callOperationResult(channel, OperateConst.OPERATE_TYPE_CLOSE, reason, data);
-		}
-		ContextManager.closeSession(channel, fd, isForced);
-	}
+	abstract protected void operationResult(short type, String data);
 	
-	public void callOperationResult(Channel channel, short type, short reason, String data) {
-//		OperationResult result = new OperationResult();
-//		result.setData(data);
-//		result.setReason(reason);
-//		result.setType(type);
-//		result.setId(this.fd);
-//		result.setInternalDestFD(MsgConst.MSG_TO_GATE);
-//		channel.writeAndFlush(result);
-	}
 
 	public String getRemoteIp() {
 		return remoteIp;

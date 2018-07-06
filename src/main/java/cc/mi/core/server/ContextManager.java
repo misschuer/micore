@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.mi.core.callback.Callback;
+import cc.mi.core.generate.msg.CloseSession;
 import io.netty.channel.Channel;
 
 public final class ContextManager {
@@ -36,10 +37,6 @@ public final class ContextManager {
 		return fdContextHash.get(fd);
 	}
 	
-	public static void closeSession(Channel channel, int fd) {
-		closeSession(channel, fd, false);
-	}
-	
 	public static int getLoginPlayers(Callback<ServerContext> callback) {
 		int cnt = 0;
 		for (ServerContext context : fdContextHash.values()) {
@@ -51,10 +48,10 @@ public final class ContextManager {
 		return cnt;
 	}
 	
-	public static void closeSession(Channel channel, int fd, boolean isForced) {
-//		DestroyConnection dc = new DestroyConnection();
-//		dc.setFd(fd);
-//		dc.setInternalDestFD(MsgConst.MSG_TO_GATE);
-//		channel.writeAndFlush(dc);
+	public static void closeSession(Channel channel, int fd, int reasonType) {
+		CloseSession cs = new CloseSession();
+		cs.setFd(fd);
+		cs.setReasonType(reasonType);
+		channel.writeAndFlush(cs);
 	}
 }

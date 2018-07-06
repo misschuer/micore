@@ -2,7 +2,7 @@ package cc.mi.core.server;
 
 public enum SessionStatus {
 	STATUS_NONE,
-	STATUS_NEVER,					
+	STATUS_NEVER,				//用在消息包中永远不接收
 	STATUS_AUTHED,				//身份验证通过
 	STATUS_LOGGEDIN,			//登录成功
 	STATUS_TRANSFER,			//传送中	

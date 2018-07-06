@@ -1,7 +1,6 @@
 package cc.mi.core.constance;
 
 public class OperateConst {
-	public static final short OPERATE_TYPE_LOGIN = 1;		//登录
 	// 下面的都是 登录类型 原因
 	public static final short OPERATE_LOGIN_REASON_SUCCESS				= 1;	//成功
 	public static final short OPERATE_LOGIN_REASON_NAME_REPEAT			= 2;	//名称重复
@@ -30,9 +29,8 @@ public class OperateConst {
 	
 	//************************************************************
 	
-	public static final short OPERATE_TYPE_CLOSE = 2;		//连接关闭
 	// 下面的都是连接关闭 原因
-	public static final short OPERATE_CLOSE_REASON_OTHER_LOGINED = 1;	//角色在其他地方登陆
-	public static final short OPERATE_CLOSE_REASON_LOGDIN_ONE18	 = 2;	//登陆队列 context.GetGuid().isEmpty()
+	public static final short OPERATE_CLOSE_REASON_OTHER_LOGINED = 51;	//角色在其他地方登陆
+	public static final short OPERATE_CLOSE_REASON_LOGDIN_ONE18	 = 52;	//登陆队列 context.GetGuid().isEmpty()
 	//************************************************************
 }

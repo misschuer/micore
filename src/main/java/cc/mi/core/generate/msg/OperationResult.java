@@ -8,11 +8,9 @@ import cc.mi.core.packet.StringCoder;
  * 操作结果
  **/
 public class OperationResult extends PacketImpl  {
-	//操作类型
-	private short type;
-	//造成结果的原因
-	private short reason;
-	//参数
+	//操作类型(填表)
+	private int type;
+	//参数(如果需要填充的话)
 	private String data;
 
 	public OperationResult() {
@@ -21,32 +19,22 @@ public class OperationResult extends PacketImpl  {
 	
 	@Override
 	public void encode(ByteBuf buffer) {
-		buffer.writeShort(this.type);
-		buffer.writeShort(this.reason);
+		buffer.writeInt(this.type);
 		StringCoder.writeString(buffer, this.data);
 	}
 
 	@Override
 	public void decode(ByteBuf buffer) {
-		this.type = buffer.readShort(); 
-		this.reason = buffer.readShort(); 
+		this.type = buffer.readInt(); 
 		this.data = StringCoder.readString(buffer);
 	}
 	
-	public short getType() {
+	public int getType() {
 		return this.type;
 	}
 	
-	public void setType(short type) {
+	public void setType(int type) {
 		this.type = type;
-	}
-		
-	public short getReason() {
-		return this.reason;
-	}
-	
-	public void setReason(short reason) {
-		this.reason = reason;
 	}
 		
 	public String getData() {

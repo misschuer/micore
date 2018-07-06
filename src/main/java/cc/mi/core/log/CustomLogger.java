@@ -9,7 +9,7 @@ import org.apache.logging.log4j.spi.ExtendedLoggerWrapper;
 public class CustomLogger {
 	protected static final String FQCN = CustomLogger.class.getName();
 	protected static final Level ERROR_LOG = Level.forName("ERROR", 12);
-	protected static final Level MSG_LOG   = Level.forName("MSG"  , 23);
+	protected static final Level WARN_LOG   = Level.forName("WARN"  , 23);
 	protected static final Level DEV_LOG   = Level.forName("DEV"  , 30);
 	protected static final Level DB_LOG    = Level.forName("DB"   , 89);
 	
@@ -26,5 +26,13 @@ public class CustomLogger {
 	
 	public void devLog(String message, Object... params) {
 		extendLogger.logIfEnabled(FQCN, DEV_LOG, null, message, params);
+	}
+	
+	public void warnLog(String message, Object... params) {
+		extendLogger.logIfEnabled(FQCN, WARN_LOG, null, message, params);
+	}
+	
+	public void errorLog(String message, Object... params) {
+		extendLogger.logIfEnabled(FQCN, ERROR_LOG, null, message, params);
 	}
 }
