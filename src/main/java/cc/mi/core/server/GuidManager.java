@@ -1,6 +1,6 @@
 package cc.mi.core.server;
 
-import cc.mi.core.binlog.data.BinlogObject;
+import cc.mi.core.binlog.data.Binlog;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.constance.ObjectType;
 
@@ -8,11 +8,11 @@ public enum GuidManager {
 	INSTANCE;
 	
 	// 临时数据
-	private BinlogObject myData;
+	private Binlog myData;
 	// 存档的数据
-	private BinlogObject data;
+	private Binlog data;
 	
-	public void initData(BinlogObject data) {
+	public void initData(Binlog data) {
 		if (this.data != null) {
 			return;
 		}
@@ -57,7 +57,7 @@ public enum GuidManager {
 	}
 
 	private void loadMyData() {
-		this.myData = new BinlogObject(BinlogSyncMode.SYNC_NONE, 255, 1);
+		this.myData = new Binlog(BinlogSyncMode.SYNC_NONE, 255, 1);
 		for (int i = 0; i < this.data.intSize(); ++ i) {
 			this.myData.setUInt32(i, (int) this.data.getUInt32(i));
 		}

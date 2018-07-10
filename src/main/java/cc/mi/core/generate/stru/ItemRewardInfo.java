@@ -12,8 +12,8 @@ public class ItemRewardInfo  {
 	private int num;
 
 	public void encode(ByteBuf buffer) {
-		buffer.writeShort(this.itemId); 
-		buffer.writeInt(this.num); 
+		buffer.writeShort(this.itemId);
+		buffer.writeInt(this.num);
 	}
 
 	public void decode(ByteBuf buffer) {
@@ -28,7 +28,7 @@ public class ItemRewardInfo  {
 	public void setItemId(short itemId) {
 		this.itemId = itemId;
 	}
-	
+		
 	public int getNum() {
 		return this.num;
 	}
@@ -36,5 +36,5 @@ public class ItemRewardInfo  {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	
+		
 }

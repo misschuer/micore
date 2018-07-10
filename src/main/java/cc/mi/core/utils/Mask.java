@@ -2,12 +2,20 @@ package cc.mi.core.utils;
 
 import java.util.Arrays;
 
+/**
+ * @author gy
+ */
 public class Mask {
-	// 掩码
 	private final byte[] mask;
+	private final int maxIndex;
 	
 	public Mask(int count) {
-		this.mask = new byte[count<<2];
+		this.maxIndex = count;
+		this.mask = new byte[(count+7)>>>3];
+	}
+	
+	public void fullAll() {
+		Arrays.fill(mask, (byte)1);
 	}
 	
 	public void clear() {
@@ -15,10 +23,10 @@ public class Mask {
 	}
 	
 	public boolean isMarked(int indx) {
-		if (indx < this.getCount()) {
-			return (this.mask[indx>>>3] & (1 << (indx & 0x7))) != 0;
+		if (indx >= this.getCount()) {
+			return false;
 		}
-		return false;
+		return (this.mask[indx>>>3] & (1 << (indx & 0x7))) != 0;
 	}
 	
 	public void mark(int indx) {
@@ -29,21 +37,13 @@ public class Mask {
 	}
 	
 	public void unMark(int indx) {
-		if (indx < this.getCount()) {
-			this.mask[indx>>>3] &= 0xFF ^ (1 << (indx & 0x7));
+		if (indx >= this.getCount()) {
+			return;
 		}
-	}
-	
-	public void fill(int intIndex, int value) {
-		int offset = intIndex << 2;
-		for (int i = 0; i < 4; ++ i) {
-			byte val = (byte) (value & 0xFF);
-			value >>>= 8;
-			this.mask[offset+i] = val;
-		}
+		this.mask[indx>>>3] &= 0xFF ^ (1 << (indx & 0x7));
 	}
 	
 	public int getCount() {
-		return mask.length << 3;
+		return this.maxIndex;
 	}
 }

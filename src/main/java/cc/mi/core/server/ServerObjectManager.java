@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cc.mi.core.binlog.data.GuidObject;
+import cc.mi.core.binlog.data.BinlogModifier;
 import cc.mi.core.callback.AbstractCallback;
 import cc.mi.core.constance.BinlogSyncMode;
 import io.netty.channel.Channel;
@@ -15,11 +15,11 @@ public class ServerObjectManager extends GuidObjectTable {
 	private final Map<String, OwnerDataSet> allOwnerDataSet;
 	
 	protected ServerObjectManager() {
-		super(BinlogSyncMode.SYNC_SLAVE);
+		super();
 		allOwnerDataSet = new HashMap<>();
 	}
 	
-	public void getDataSetAllObject(final String guid, List<GuidObject> result) {
+	public void getDataSetAllObject(final String guid, List<BinlogModifier> result) {
 		if (!allOwnerDataSet.containsKey(guid)) {
 			return;
 		}
@@ -29,7 +29,7 @@ public class ServerObjectManager extends GuidObjectTable {
 		ds.foreach(new AbstractCallback<String>() {
 			@Override
 			public void invoke(String value) {
-				GuidObject obj = get(value);
+				BinlogModifier obj = get(value);
 				if (obj == null) {
 					removeGuidList.add(value);
 					return;

@@ -3,13 +3,18 @@ package cc.mi.core.binlog.data;
 import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.constance.BinlogStrFieldIndice;
 
-public class GuidObject extends SyncEventRecorder {
+/**
+ * binlog对象修改器
+ * @author gy
+ *
+ */
+public class BinlogModifier extends SyncEventRecorder {
 
-	public GuidObject(int mode, int intMaxSize, int strMaxSize) {
+	public BinlogModifier(int mode, int intMaxSize, int strMaxSize) {
 		this(mode, "", intMaxSize, strMaxSize);
 	}
 	
-	public GuidObject(int mode, String guid, int intMaxSize, int strMaxSize) {
+	public BinlogModifier(int mode, String guid, int intMaxSize, int strMaxSize) {
 		super(mode, guid, intMaxSize, strMaxSize);
 	}
 	
@@ -22,6 +27,7 @@ public class GuidObject extends SyncEventRecorder {
 		this.setStr(BinlogStrFieldIndice.BINLOG_STRING_FIELD_GUID, guid);
 	}
 	
+	/******* long的操作 *******/
 	public long getLong(int indx) {
 		return this.intValues.getLong(indx);
 	}
@@ -32,15 +38,25 @@ public class GuidObject extends SyncEventRecorder {
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx+1));
 	}
 	
+	/**
+	 * float 操作
+	 * @param indx
+	 * @return
+	 */
 	public float getFloat(int indx) {
 		return this.intValues.getFloat(indx);
 	}
-
+	
 	public void setFloat(int indx, float value) {
-		this.intValues.setFloat(indx, value);
+		this.intValues.setInt(indx, Float.floatToIntBits(value));
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
 	
+	/**
+	 * int 操作
+	 * @param indx
+	 * @return
+	 */
 	public long getUInt32(int indx) {
 		return this.intValues.getUnsignedInt(indx);
 	}
@@ -60,7 +76,12 @@ public class GuidObject extends SyncEventRecorder {
 		this.setUInt32(indx, (int) (prev - value));
 	}
 	
-	
+	/**
+	 * short操作
+	 * @param indx
+	 * @param offset
+	 * @return
+	 */
 	public int getUInt16(int indx, short offset) {
 		return this.intValues.getUnsignedShort(indx, offset);
 	}
@@ -80,7 +101,12 @@ public class GuidObject extends SyncEventRecorder {
 		this.setUInt16(indx, offset, prev - value);
 	}
 
-
+	/**
+	 * byte 操作
+	 * @param indx
+	 * @param offset
+	 * @return
+	 */
 	public int getUInt8(int indx, short offset) {
 		return this.intValues.getUnsignedByte(indx, offset);
 	}
@@ -111,6 +137,7 @@ public class GuidObject extends SyncEventRecorder {
 	
 	public void unSetBit(int indx, short offset) {
 		this.intValues.unSetBit(indx, offset);
+		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
 	
 	public String getStr(int indx) {
@@ -129,6 +156,4 @@ public class GuidObject extends SyncEventRecorder {
 	public int strSize() {
 		return this.strValues.length;
 	}
-		
-//	size_t GetHashCode();
 }

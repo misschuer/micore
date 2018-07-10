@@ -22,11 +22,11 @@ public class CharCreateInfo  {
 
 	public void encode(ByteBuf buffer) {
 		StringCoder.writeString(buffer, this.name);
-		buffer.writeByte(this.gender); 
-		buffer.writeShort(this.level); 
+		buffer.writeByte(this.gender);
+		buffer.writeShort(this.level);
 		StringCoder.writeString(buffer, this.guid);
-		buffer.writeInt(this.headId); 
-		buffer.writeInt(this.hairId); 
+		buffer.writeInt(this.headId);
+		buffer.writeInt(this.hairId);
 	}
 
 	public void decode(ByteBuf buffer) {
@@ -45,7 +45,7 @@ public class CharCreateInfo  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+		
 	public byte getGender() {
 		return this.gender;
 	}
@@ -53,7 +53,7 @@ public class CharCreateInfo  {
 	public void setGender(byte gender) {
 		this.gender = gender;
 	}
-	
+		
 	public short getLevel() {
 		return this.level;
 	}
@@ -61,7 +61,7 @@ public class CharCreateInfo  {
 	public void setLevel(short level) {
 		this.level = level;
 	}
-	
+		
 	public String getGuid() {
 		return this.guid;
 	}
@@ -69,7 +69,7 @@ public class CharCreateInfo  {
 	public void setGuid(String guid) {
 		this.guid = guid;
 	}
-	
+		
 	public int getHeadId() {
 		return this.headId;
 	}
@@ -77,7 +77,7 @@ public class CharCreateInfo  {
 	public void setHeadId(int headId) {
 		this.headId = headId;
 	}
-	
+		
 	public int getHairId() {
 		return this.hairId;
 	}
@@ -85,5 +85,5 @@ public class CharCreateInfo  {
 	public void setHairId(int hairId) {
 		this.hairId = hairId;
 	}
-	
+		
 }

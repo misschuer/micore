@@ -1,13 +1,13 @@
 package cc.mi.core.server;
 
-import cc.mi.core.binlog.data.BinlogObject;
+import cc.mi.core.binlog.data.Binlog;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.constance.PlayerEnumFields;
 
-public class PlayerBase extends BinlogObject {
+public class PlayerBase extends Binlog {
 	
 	public PlayerBase(int intMaxSize, int strMaxSize) {
-		super(BinlogSyncMode.SYNC_SLAVE, intMaxSize, strMaxSize);
+		super(BinlogSyncMode.SYNC_UPDATEDATA, intMaxSize, strMaxSize);
 	}
 	
 	public void setLevel(int level) {

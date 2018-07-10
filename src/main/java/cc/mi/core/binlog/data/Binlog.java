@@ -5,18 +5,18 @@ import java.util.Arrays;
 import cc.mi.core.constance.BinlogStrFieldIndice;
 import cc.mi.core.constance.BinlogSyncMode;
 
-public class BinlogObject extends GuidObject {
+public class Binlog extends BinlogModifier {
 	private int dbHashCode;
 	
-	public BinlogObject(int intMaxSize, int strMaxSize) {
-		this(BinlogSyncMode.SYNC_SLAVE, intMaxSize, strMaxSize);
+	public Binlog(int intMaxSize, int strMaxSize) {
+		this(BinlogSyncMode.SYNC_UPDATEDATA, intMaxSize, strMaxSize);
 	}
 	
-	public BinlogObject(int mode, int intMaxSize, int strMaxSize) {
+	public Binlog(int mode, int intMaxSize, int strMaxSize) {
 		this(mode, "", intMaxSize, strMaxSize);
 	}
 	
-	public BinlogObject(int mode, String guid, int intMaxSize, int strMaxSize) {
+	public Binlog(int mode, String guid, int intMaxSize, int strMaxSize) {
 		super(mode, guid, intMaxSize, strMaxSize);
 	}
 	

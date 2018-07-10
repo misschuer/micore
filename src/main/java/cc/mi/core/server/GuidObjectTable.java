@@ -3,33 +3,32 @@ package cc.mi.core.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.mi.core.binlog.data.GuidObject;
+import cc.mi.core.binlog.data.BinlogModifier;
 
 public class GuidObjectTable {
-	private final int mode;
-	private final Map<String, GuidObject> objHash;
+	private final Map<String, BinlogModifier> objHash;
 	
-	public GuidObjectTable(int mode) {
-		this.mode = mode;
+	public GuidObjectTable() {
 		this.objHash = new HashMap<>();
 	}
 	
-	public GuidObject get(String guid) {
+	public BinlogModifier get(String guid) {
 		return objHash.get(guid);
 	}
 	
-	public GuidObject createObject(String guid, int intMaxSize, int strMaxSize) {
-		GuidObject obj = new GuidObject(this.mode, guid, intMaxSize, strMaxSize);
-		this.attachObject(obj);
-		return obj;
+	public BinlogModifier createObject(String guid, int intMaxSize, int strMaxSize) {
+//		GuidObject obj = new GuidObject(this.mode, guid, intMaxSize, strMaxSize);
+//		this.attachObject(obj);
+//		return obj;
+		return null;
 	}
 	
-	public void attachObject(GuidObject obj) {
+	public void attachObject(BinlogModifier obj) {
 		this.objHash.put(obj.getGuid(), obj);
 	}
 	
 	public void releaseObject(String guid) {
-		GuidObject obj = this.get(guid);
+		BinlogModifier obj = this.get(guid);
 		if (obj == null) {
 			return;
 		}
@@ -37,7 +36,7 @@ public class GuidObjectTable {
 		this.detachObject(obj);
 	}
 	
-	public void detachObject(GuidObject obj) {
+	public void detachObject(BinlogModifier obj) {
 		this.objHash.remove(obj.getGuid());
 	}
 }
