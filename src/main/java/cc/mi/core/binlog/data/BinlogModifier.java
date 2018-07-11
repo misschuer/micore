@@ -1,7 +1,15 @@
 package cc.mi.core.binlog.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import cc.mi.core.binlog.stru.BinlogStruValueInt;
+import cc.mi.core.binlog.stru.BinlogStruValueStr;
 import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.constance.BinlogStrFieldIndice;
+import cc.mi.core.generate.stru.BinlogInfo;
+import cc.mi.core.utils.Mask;
 
 /**
  * binlog对象修改器
@@ -9,14 +17,98 @@ import cc.mi.core.constance.BinlogStrFieldIndice;
  *
  */
 public class BinlogModifier extends SyncEventRecorder {
-
+	
+	// 临时
+	private final Mask tmpIntMask;
+	private final Mask tmpStrMask;
+	
 	public BinlogModifier(int mode, int intMaxSize, int strMaxSize) {
 		this(mode, "", intMaxSize, strMaxSize);
 	}
 	
 	public BinlogModifier(int mode, String guid, int intMaxSize, int strMaxSize) {
 		super(mode, guid, intMaxSize, strMaxSize);
+		this.tmpIntMask = new Mask(intMaxSize);
+		this.tmpStrMask = new Mask(strMaxSize);
 	}
+
+	public BinlogInfo packNewBinlogInfo() {
+		BinlogInfo data = new BinlogInfo();
+		data.setBinlogId(this.guid);
+		data.setState(BinlogOptType.OPT_NEW);
+		
+		tmpIntMask.clear();
+		int size = this.intValues.intSize();
+		List<Integer> newIntList = new ArrayList<>(size);
+		for (int i = 0; i < size; ++ i) {
+			int value = this.intValues.getInt(i);
+			if (value > 0 && (this.createIntMask == null || this.createIntMask.isMarked(i))) {
+				newIntList.add(value);
+				tmpIntMask.mark(i);
+			}
+		}
+		data.setIntMask(tmpIntMask.toNewList());
+		data.setIntValues(newIntList);
+		
+		tmpStrMask.clear();
+		List<String> newStrList = new ArrayList<>(strValues.length);
+		for (int i = 0; i < this.strValues.length; ++ i) {
+			String str = this.strValues[ i ];
+			if (str != null && !"".equals(str) && (this.createStrMask == null || this.createStrMask.isMarked(i))) {
+				newStrList.add(str);
+				tmpStrMask.mark(i);
+			}
+		}
+		data.setStrMask(tmpStrMask.toNewList());
+		data.setStrValues(newStrList);
+		
+		return data;
+	}
+	
+	public BinlogInfo packUpdateBinlogInfo() {
+		BinlogInfo data = new BinlogInfo();
+		data.setBinlogId(this.guid);
+		data.setState(BinlogOptType.OPT_UPDATE);
+		// 先排序后处理		
+		List<Integer> indice = new ArrayList<>(bsIntIndxHash.size());
+		for (int indx : bsIntIndxHash.keySet()) {
+			indice.add(indx);
+		}
+		Collections.sort(indice);
+		tmpIntMask.clear();
+		int size = this.intValues.intSize();
+		List<Integer> newIntList = new ArrayList<>(size);
+		for (int indx : indice) {
+			BinlogStruValueInt bs = bsIntIndxHash.get(indx);
+			tmpIntMask.mark(indx);
+			newIntList.add(bs.getValue());
+		}
+		data.setIntMask(tmpIntMask.toNewList());
+		data.setIntValues(newIntList);
+		
+		// 先排序后处理		
+		indice = new ArrayList<>(bsStrIndxHash.size());
+		for (int indx : bsStrIndxHash.keySet()) {
+			indice.add(indx);
+		}
+		Collections.sort(indice);
+		tmpStrMask.clear();
+		size = this.strValues.length;
+		List<String> newStrList = new ArrayList<>(size);
+		for (int indx : indice) {
+			BinlogStruValueStr bs = bsStrIndxHash.get(indx);
+			tmpStrMask.mark(indx);
+			newStrList.add(bs.getValue());
+		}
+		data.setStrMask(tmpStrMask.toNewList());
+		data.setStrValues(newStrList);
+		
+		bsIntIndxHash.clear();
+		bsStrIndxHash.clear();
+		
+		return data;
+	}
+	
 	
 	public String getGuid() {
 		return guid;

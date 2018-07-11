@@ -2,6 +2,7 @@ package cc.mi.core.utils;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 
 public class Bytes {
 	static final int DEFAULT_LEN = 1 << 7;
@@ -154,5 +155,7 @@ public class Bytes {
 			+ a0;
 	}
 	
-	
+	public List<Integer> toNewList() {
+		return ArrayUtils.bytesToIntegers(this.values);
+	}
 }

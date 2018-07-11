@@ -42,9 +42,9 @@ public class InstanceResult extends PacketImpl  {
 	public void decode(ByteBuf buffer) {
 		this.state = buffer.readByte(); 
 		this.cd = buffer.readByte(); 
-		int size = buffer.readUnsignedShort();
-		this.list = new ArrayList<>(size);
-		for (int i = 0; i < size; ++ i) {
+		int listSize = buffer.readUnsignedShort();
+		this.list = new ArrayList<>(listSize);
+		for (int i = 0; i < listSize; ++ i) {
 			ItemRewardInfo element = new ItemRewardInfo();
 			element.decode(buffer);
 			this.list.add(element);

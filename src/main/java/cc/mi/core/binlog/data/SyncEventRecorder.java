@@ -1,10 +1,11 @@
 package cc.mi.core.binlog.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.binlog.callback.BinlogUpdateCallback;
-import cc.mi.core.binlog.stru.BinlogStru;
+import cc.mi.core.binlog.callbackParam.BinlogUpdateCallbackParam;
 import cc.mi.core.binlog.stru.BinlogStruValueInt;
 import cc.mi.core.binlog.stru.BinlogStruValueStr;
 import cc.mi.core.constance.BinlogSyncMode;
@@ -28,12 +29,13 @@ public class SyncEventRecorder {
 	private BinlogUpdateCallback updateCallback;
 	
 	// 记录哪个下标的值修改
-	private final Map<Integer, BinlogStru> bsIntIndxHash;
-	private final Map<Integer, BinlogStru> bsStrIndxHash;
+	protected final Map<Integer, BinlogStruValueInt> bsIntIndxHash;
+	protected final Map<Integer, BinlogStruValueStr> bsStrIndxHash;
 	
-	// 临时变量用来存
-	private final Mask intMask;
-	private final Mask strMask;
+	protected Mask createIntMask;
+	protected Mask updateIntMask;
+	protected Mask createStrMask;
+	protected Mask updateStrMask;
 
 	public SyncEventRecorder(int mode, String guid, int intMaxSize, int strMaxSize) {
 		this.guid = guid;
@@ -43,14 +45,8 @@ public class SyncEventRecorder {
 		
 		bsIntIndxHash = new HashMap<>();
 		bsStrIndxHash = new HashMap<>();
-		intMask = new Mask(intMaxSize);
-		strMask = new Mask(strMaxSize);
 	}
 	
-	public void writeCreatePacket() {
-		
-	}
-
 	public BinlogUpdateCallback getUpdateCallback() {
 		return updateCallback;
 	}
@@ -59,19 +55,87 @@ public class SyncEventRecorder {
 		this.updateCallback = updateCallback;
 	}
 	
-	/**
-	 *  TODO: 对象有更新了
-	 */
-	public void onUpdateEvent() {
-		
+	private void setIntValues(List<Integer> intMask, 
+								List<Integer> intValueUpdated, 
+								Map<Integer, Integer> intValuePrevHash) {
+		int intValueIndx = 0;
+		for (int i = 0; i < intMask.size(); ++ i) {
+			int offset = i << 5; // * 32
+			int maskValue = intMask.get(i);
+			for (int bit = 0; bit < 32; ++ bit) {
+				if ((maskValue & (1 << bit)) > 0) {
+					int intValue = intValueUpdated.get(intValueIndx);
+					++ intValueIndx;
+					int indx = offset+bit;
+					int prev = this.intValues.getInt(indx);
+					this.intValues.setInt(indx, intValue);
+					if (intValuePrevHash != null) {
+						intValuePrevHash.put(indx, prev);
+					}
+				}
+			}
+		}
 	}
 	
-	public Mask getIntMask() {
-		return intMask;
+	private void setStrValues(List<Integer> strMask, 
+								List<String> strValueUpdated, 
+								Map<Integer, String> strValuePrevHash) {
+		int strValueIndx = 0;
+		for (int i = 0; i < strMask.size(); ++ i) {
+			int offset = i << 5; // * 32
+			int maskValue = strMask.get(i);
+			for (int bit = 0; bit < 32; ++ bit) {
+				if ((maskValue & (1 << bit)) > 0) {
+					String strValue = strValueUpdated.get(strValueIndx);
+					++ strValueIndx;
+					int indx = offset+bit;
+					String prev = this.strValues[indx];
+					this.strValues[indx] = strValue;
+					if (strValuePrevHash != null) {
+						strValuePrevHash.put(indx, prev);
+					}
+				}
+			}
+		}
 	}
-
-	public Mask getStrMask() {
-		return strMask;
+	
+	private Map<Integer, Integer> setAndGetIntPrevHashMap(List<Integer> intMask, List<Integer> intValueUpdated) {
+		Map<Integer, Integer> intValuePrevHash = new HashMap<>();
+		this.setIntValues(intMask, intValueUpdated, intValuePrevHash);
+		return intValuePrevHash;
+	}
+	
+	private Map<Integer, String> setAndGetStrPrevHashMap(List<Integer> strMask, List<String> strValueUpdated) {
+		Map<Integer, String> strValuePrevHash = new HashMap<>();
+		this.setStrValues(strMask, strValueUpdated, strValuePrevHash);
+		return strValuePrevHash;
+	}
+	
+	/**
+	 * 创建新对象
+	 * @param intMask
+	 * @param intValueChanged
+	 * @param strMask
+	 * @param strValueChanged
+	 */
+	public void onCreateEvent(List<Integer> intMask, List<Integer> intValueChanged, 
+			  				  List<Integer> strMask, List<String>  strValueChanged) {
+		this.setIntValues(intMask, intValueChanged, null);
+		this.setStrValues(strMask, strValueChanged, null);
+	}
+	
+	/**
+	 *  对象有更新了
+	 */
+	public void onUpdateEvent(List<Integer> intMask, List<Integer> intValueChanged, 
+							  List<Integer> strMask, List<String>  strValueChanged) {
+		
+		Map<Integer, Integer> intValuePrevHash = this.setAndGetIntPrevHashMap(intMask, intValueChanged);
+		Map<Integer, String> strValuePrevHash = this.setAndGetStrPrevHashMap(strMask, strValueChanged);
+		if (this.updateCallback != null) {
+			BinlogUpdateCallbackParam param = new BinlogUpdateCallbackParam(intValuePrevHash, strValuePrevHash);
+			this.updateCallback.invoke(param);
+		}
 	}
 	
 	//操作记录为空
@@ -79,57 +143,16 @@ public class SyncEventRecorder {
 		return this.bsIntIndxHash.size() == 0 && this.bsStrIndxHash.size() == 0;
 	}
 	
-	//数字下标创建包掩码
-	public Mask getCreateMask() {
-//		if(mask.GetCount() < (int)uint32_values_.size())
-//			mask.SetCount(uint32_values_.size());
-//
-//		for(int i = 0; i < (int)uint32_values_.size(); i++){
-//			//如果该下标不等于0则需要下发
-//			if(uint32_values_[i])
-//				mask.SetBit(i);
-//		}
-		return null;
-	}
-	
-	//字符串创建包掩码
-	public Mask getCreateStringMask(){
-//		//扩展一下内存
-//		mask.Clear();
-//		if(mask.GetCount() < (int)str_values_.size())
-//			mask.SetCount(str_values_.size());
-//
-//		for(int i = 0; i < (int)str_values_.size(); i++){
-//			if(!str_values_[i].empty())
-//				mask.SetBit(i);
-//		}
-		return null;
-	}
-	
-//	//根据掩码写入整数下标的值
-//	void WriteValues(UpdateMask &mask,ByteArray& bytes){
-//		int len = mask.GetCount();
-//		for(int i = 0; i<len; i++){
-//			if(mask.GetBit(i))
-//				bytes.writeT(uint32_values_[i]);
-//		}
-//	}
-//
-//	void WriteStringValues(UpdateMask &mask,ByteArray& bytes){
-//		int len = mask.GetCount();
-//		for(int i = 0; i < len; i++){
-//			if(mask.GetBit(i))
-//				bytes.writeUTF(str_values_[i]);
-//		}
-//	}
 	
 	public void onEventUInt32(byte optType, int indx, int value) {
 		//不需要记录binlog
 		if ((this.mode & BinlogSyncMode.SYNC_NONE) == 1) {
 			return;
 		}
-		BinlogStruValueInt binlog = new BinlogStruValueInt(optType, indx, value);
-		this.bsIntIndxHash.put(indx, binlog);
+		if (this.updateIntMask == null || this.updateIntMask.isMarked(indx)) {
+			BinlogStruValueInt binlog = new BinlogStruValueInt(optType, indx, value);
+			this.bsIntIndxHash.put(indx, binlog);
+		}
 	}
 	
 	public void onEventStr(byte optType, int indx, String value) {
@@ -137,8 +160,11 @@ public class SyncEventRecorder {
 		if ((this.mode & BinlogSyncMode.SYNC_NONE) == 1) {
 			return;
 		}
-		BinlogStruValueStr binlog = new BinlogStruValueStr(optType, indx, value);
-		this.bsStrIndxHash.put(indx, binlog);
+		
+		if (this.updateStrMask == null || this.updateStrMask.isMarked(indx)) {
+			BinlogStruValueStr binlog = new BinlogStruValueStr(optType, indx, value);
+			this.bsStrIndxHash.put(indx, binlog);
+		}
 	}
 
 	public String getIntDataString() {

@@ -26,9 +26,9 @@ public class ServerRegOpcode extends PacketImpl  {
 
 	@Override
 	public void decode(ByteBuf buffer) {
-		int size = buffer.readUnsignedShort();
-		this.opcodes = new ArrayList<>(size);
-		for (int i = 0; i < size; ++ i) {
+		int opcodesSize = buffer.readUnsignedShort();
+		this.opcodes = new ArrayList<>(opcodesSize);
+		for (int i = 0; i < opcodesSize; ++ i) {
 			int element = buffer.readInt();
 			this.opcodes.add(element);
 		}

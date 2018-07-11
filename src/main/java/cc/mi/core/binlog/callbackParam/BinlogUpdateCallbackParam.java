@@ -1,34 +1,21 @@
 package cc.mi.core.binlog.callbackParam;
 
-import cc.mi.core.binlog.data.SyncEventRecorder;
-import cc.mi.core.utils.Mask;
+import java.util.Map;
 
 public class BinlogUpdateCallbackParam {
-	private final SyncEventRecorder data;
-	private final int flag;
-	private final Mask intMask;
-	private final Mask strMask;
+	private final Map<Integer, Integer> intPrevValue;
+	private final Map<Integer, String> strPrevValue;
 	
-	public BinlogUpdateCallbackParam(SyncEventRecorder data, int flag, Mask intMask, Mask strMask) {
-		this.data = data;
-		this.flag = flag;
-		this.intMask = intMask;
-		this.strMask = strMask;
+	public BinlogUpdateCallbackParam(Map<Integer, Integer> intPrevValue, Map<Integer, String> strPrevValue) {
+		this.intPrevValue = intPrevValue;
+		this.strPrevValue = strPrevValue;
 	}
 
-	public SyncEventRecorder getData() {
-		return data;
+	public Map<Integer, Integer> getIntPrevValue() {
+		return intPrevValue;
 	}
 
-	public int getFlag() {
-		return flag;
-	}
-
-	public Mask getIntMask() {
-		return intMask;
-	}
-
-	public Mask getStrMask() {
-		return strMask;
+	public Map<Integer, String> getStrPrevValue() {
+		return strPrevValue;
 	}
 }
