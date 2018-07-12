@@ -97,4 +97,42 @@ public abstract class ServerManager {
 		sro.setOpcodes(opcodes);
 		channel.writeAndFlush(sro);
 	}
+	
+	/**
+	 *  给当前服务器注册消息
+	 * @param channel
+	 * @param guidType
+	 */
+	public void addWatchAndCall(String guidType) {
+		this.addWatchAndCall(0, guidType);
+	}
+	
+	/**
+	 * 给客户端注册消息
+	 * @param channel
+	 * @param fd
+	 * @param guidType
+	 */
+	public void addWatchAndCall(int fd, String guidType) {
+		// this.centerChannel;
+	}
+	
+	/**
+	 *  给当前服务器注册消息
+	 * @param channel
+	 * @param ownerTag
+	 */
+	public void addTagWatchAndCall(String ownerTag) {
+		this.addTagWatchAndCall(0, ownerTag);
+	}
+	
+	/**
+	 * 给客户端注册消息
+	 * @param channel
+	 * @param fd
+	 * @param guidType
+	 */
+	public void addTagWatchAndCall(int fd, String ownerTag) {
+		// this.centerChannel;
+	}
 }

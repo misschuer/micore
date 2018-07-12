@@ -16,6 +16,8 @@ import cc.mi.core.generate.msg.ServerStartFinishMsg;
 import cc.mi.core.generate.msg.CloseSession;
 import cc.mi.core.generate.msg.BinlogDataModify;
 import cc.mi.core.generate.msg.UnitBinlogDataModify;
+import cc.mi.core.generate.msg.AddWatchAndCall;
+import cc.mi.core.generate.msg.AddTagWatchAndCall;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -34,6 +36,8 @@ public final class Opcodes  {
 	public static final int MSG_CLOSESESSION = 13; //通知网关服关闭客户端
 	public static final int MSG_BINLOGDATAMODIFY = 15; //对象更新
 	public static final int MSG_UNITBINLOGDATAMODIFY = 16; //场景元素对象更新
+	public static final int MSG_ADDWATCHANDCALL = 17; //添加binlog并发送
+	public static final int MSG_ADDTAGWATCHANDCALL = 18; //添加整组binlog并发送
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -50,6 +54,8 @@ public final class Opcodes  {
 		coders[MSG_CLOSESESSION] = new CloseSession();
 		coders[MSG_BINLOGDATAMODIFY] = new BinlogDataModify();
 		coders[MSG_UNITBINLOGDATAMODIFY] = new UnitBinlogDataModify();
+		coders[MSG_ADDWATCHANDCALL] = new AddWatchAndCall();
+		coders[MSG_ADDTAGWATCHANDCALL] = new AddTagWatchAndCall();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	

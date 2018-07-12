@@ -3,6 +3,12 @@ package cc.mi.core.constance;
 public class ObjectType {
 	//全局对象
 	public static final char GLOBAL_VALUE = 'G';
+	public static final String GLOBAL_CLIENT_GAME_CONFIG = "G.gameconfig";
+	// 帮派变量
+	public static final String BINLOG_FACTION = "FACTION";
+	// 组队变量
+	public static final String BINLOG_GROUP = "GROUP";
+	
 	//玩家
 	public static final char PLAYER = 'P';
 	//生物
