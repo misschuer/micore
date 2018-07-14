@@ -25,6 +25,14 @@ public class RelateHash<K, V> {
 		set.add(v);
 	}
 	
+	public Set<V> removeAll(K k) {
+		return this.relateHash.remove(k);
+	}
+	
+	public void remove(K k, V v) {
+		this.relateHash.get(k).remove(v);
+	}
+	
 	public Iterator<V> relatedList(K k) {
 		if (!this.relateHash.containsKey(k)) {
 			return null;

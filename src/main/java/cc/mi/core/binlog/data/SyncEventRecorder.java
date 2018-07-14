@@ -11,6 +11,7 @@ import cc.mi.core.binlog.stru.BinlogStruValueStr;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.utils.Bytes;
 import cc.mi.core.utils.Mask;
+import cc.mi.core.utils.Strings;
 
 /**
  * 同步事件记录器
@@ -24,7 +25,7 @@ public class SyncEventRecorder {
 	
 	protected String guid;
 	protected final Bytes intValues;
-	protected final String[] strValues;
+	protected Strings strValues;
 	
 	private BinlogUpdateCallback updateCallback;
 	
@@ -41,7 +42,7 @@ public class SyncEventRecorder {
 		this.guid = guid;
 		this.mode = mode;
 		intValues = new Bytes(intMaxSize << 2);
-		strValues = new String[strMaxSize];
+		strValues = new Strings(strMaxSize);
 		
 		bsIntIndxHash = new HashMap<>();
 		bsStrIndxHash = new HashMap<>();
@@ -89,8 +90,8 @@ public class SyncEventRecorder {
 					String strValue = strValueUpdated.get(strValueIndx);
 					++ strValueIndx;
 					int indx = offset+bit;
-					String prev = this.strValues[indx];
-					this.strValues[indx] = strValue;
+					String prev = this.strValues.get(indx);
+					this.strValues.set(indx, strValue);
 					if (strValuePrevHash != null) {
 						strValuePrevHash.put(indx, prev);
 					}
@@ -181,11 +182,11 @@ public class SyncEventRecorder {
 	
 	public String getStrDataString() {
 		String str = "";
-		str += this.strValues[ 0 ];
+		str += this.strValues.get(0);
 		
-		int size = this.strValues.length;
+		int size = this.strValues.capacity();
 		for (int i = 1; i < size; ++ i) {
-			str += BINLOG_DATA_SEP + this.strValues[ i ];
+			str += BINLOG_DATA_SEP + this.strValues.get(i);
 		}
 		
 		return str;

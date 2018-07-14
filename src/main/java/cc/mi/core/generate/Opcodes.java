@@ -18,6 +18,8 @@ import cc.mi.core.generate.msg.BinlogDataModify;
 import cc.mi.core.generate.msg.UnitBinlogDataModify;
 import cc.mi.core.generate.msg.AddWatchAndCall;
 import cc.mi.core.generate.msg.AddTagWatchAndCall;
+import cc.mi.core.generate.msg.AddWatch;
+import cc.mi.core.generate.msg.AddTagWatch;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -38,6 +40,8 @@ public final class Opcodes  {
 	public static final int MSG_UNITBINLOGDATAMODIFY = 16; //场景元素对象更新
 	public static final int MSG_ADDWATCHANDCALL = 17; //添加binlog并发送
 	public static final int MSG_ADDTAGWATCHANDCALL = 18; //添加整组binlog并发送
+	public static final int MSG_ADDWATCH = 19; //添加binlog
+	public static final int MSG_ADDTAGWATCH = 20; //添加整组binlog
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -56,6 +60,8 @@ public final class Opcodes  {
 		coders[MSG_UNITBINLOGDATAMODIFY] = new UnitBinlogDataModify();
 		coders[MSG_ADDWATCHANDCALL] = new AddWatchAndCall();
 		coders[MSG_ADDTAGWATCHANDCALL] = new AddTagWatchAndCall();
+		coders[MSG_ADDWATCH] = new AddWatch();
+		coders[MSG_ADDTAGWATCH] = new AddTagWatch();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	

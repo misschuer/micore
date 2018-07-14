@@ -51,9 +51,9 @@ public class BinlogModifier extends SyncEventRecorder {
 		data.setIntValues(newIntList);
 		
 		tmpStrMask.clear();
-		List<String> newStrList = new ArrayList<>(strValues.length);
-		for (int i = 0; i < this.strValues.length; ++ i) {
-			String str = this.strValues[ i ];
+		List<String> newStrList = new ArrayList<>(strValues.capacity());
+		for (int i = 0; i < this.strValues.capacity(); ++ i) {
+			String str = this.strValues.get(i);
 			if (str != null && !"".equals(str) && (this.createStrMask == null || this.createStrMask.isMarked(i))) {
 				newStrList.add(str);
 				tmpStrMask.mark(i);
@@ -93,7 +93,7 @@ public class BinlogModifier extends SyncEventRecorder {
 		}
 		Collections.sort(indice);
 		tmpStrMask.clear();
-		size = this.strValues.length;
+		size = this.strValues.capacity();
 		List<String> newStrList = new ArrayList<>(size);
 		for (int indx : indice) {
 			BinlogStruValueStr bs = bsStrIndxHash.get(indx);
@@ -233,11 +233,11 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public String getStr(int indx) {
-		return this.strValues[indx];
+		return this.strValues.get(indx);
 	}
 	
 	public void setStr(int indx, String str) {
-		this.strValues[indx] = str;
+		this.strValues.set(indx, str);
 		this.onEventStr(BinlogOptType.OPT_SET, indx, this.getStr(indx));
 	}
 	
@@ -246,6 +246,6 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public int strSize() {
-		return this.strValues.length;
+		return this.strValues.capacity();
 	}
 }

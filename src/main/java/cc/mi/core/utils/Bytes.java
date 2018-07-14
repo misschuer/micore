@@ -30,12 +30,32 @@ public class Bytes {
 		return values.length;
 	}
 	
+	public void capacity(int len) {
+		// 长度不比原来大不需要扩展
+		if (this.values.length >= len) {
+			return;
+		}
+		// 系数变为 (len * 3 / 2) + 1
+		int oldLen = this.values.length;
+		int newLen = len > (oldLen << 1) ? len + oldLen : oldLen << 1;
+		byte[] tmp = new byte[newLen+1];
+		System.arraycopy(this.values, 0, tmp, 0, this.values.length);
+		this.values = tmp;
+	}
+	
+	private void ensureIndex(int index) {
+		if (index >= this.capacity()) {
+			this.capacity(index);
+		}
+	}
+	
 	public int intSize() {
 		int len = this.values.length;
 		return (len >> 2) + (len > 0 ? 1 : 0);
 	}
 	
 	public void setBit(int indx, int offset) {
+		this.ensureIndex(indx);
 		indx += offset >> 5;
 		offset &= 31;
 		int bitSet = offset & 7;
@@ -44,6 +64,7 @@ public class Bytes {
 	}
 	
 	public void unSetBit(int indx, int offset) {
+		this.ensureIndex(indx);
 		indx += offset >> 5;
 		offset &= 31;
 		int bitSet = offset & 7;
@@ -52,12 +73,14 @@ public class Bytes {
 	}
 	
 	public void setByte(int indx, int offset, int value) {
+		this.ensureIndex(indx);
 		indx += offset >> 2;
 		offset &= 3;
 		this.values[(indx << 2) + offset] = (byte) value;
 	}
 	
 	public void setShort(int indx, int offset, int value) {
+		this.ensureIndex(indx);
 		indx += offset >> 1;
 		offset &= 1;
 		this.values[(indx << 2) + offset+1] = (byte) ((value >>> 8) & 0xFF);
@@ -65,6 +88,7 @@ public class Bytes {
 	}
 	
 	public void setInt(int indx, int value) {
+		this.ensureIndex(indx);
 		this.values[(indx << 2) + 3] = (byte) ((value >>> 24) & 0xFF);
 		this.values[(indx << 2) + 2] = (byte) ((value >>> 16) & 0xFF);
 		this.values[(indx << 2) + 1] = (byte) ((value >>> 8) & 0xFF);
@@ -72,10 +96,12 @@ public class Bytes {
 	}
 	
 	public void setFloat(int indx, float value) {
+		this.ensureIndex(indx);
 		this.setInt(indx, Float.floatToRawIntBits(value));
 	}
 	
 	public void setLong(int indx, long value) {
+		this.ensureIndex(indx);
 		this.values[(indx << 2) + 7] = ((byte) ((value >>> 56) & 0xFF));
 		this.values[(indx << 2) + 6] = ((byte) ((value >>> 48) & 0xFF));
 		this.values[(indx << 2) + 5] = ((byte) ((value >>> 40) & 0xFF));
@@ -89,6 +115,9 @@ public class Bytes {
 	public boolean getBit(int indx, int offset) {
 		indx += offset >> 5;
 		offset &= 31;
+		if (indx >= this.capacity()) {
+			return false;
+		}
 		int bitSet = offset & 7;
 		offset >>= 3;
 		return ((this.values[(indx << 2) + offset] >>> bitSet) & 1) == 1;
@@ -96,6 +125,9 @@ public class Bytes {
 	
 	public byte getByte(int indx, int offset) {
 		indx += offset >> 2;
+		if (indx >= this.capacity()) {
+			return 0;
+		}
 		offset &= 3;
 		return this.values[(indx << 2) + offset];
 	}
@@ -107,7 +139,9 @@ public class Bytes {
 	public short getShort(int indx, int offset) {
 		indx += offset >> 1;
 		offset &= 1;
-		
+		if (indx >= this.capacity()) {
+			return 0;
+		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + offset  ]);
 		int a1 = Byte.toUnsignedInt(this.values[(indx << 2) + offset+1]);
 		
@@ -119,6 +153,9 @@ public class Bytes {
 	}
 	
 	public int getInt(int indx) {
+		if (indx >= this.capacity()) {
+			return 0;
+		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + 0]);
 		int a1 = Byte.toUnsignedInt(this.values[(indx << 2) + 1]);
 		int a2 = Byte.toUnsignedInt(this.values[(indx << 2) + 2]);
@@ -136,6 +173,9 @@ public class Bytes {
 	}
 	
 	public long getLong(int indx) {
+		if (indx >= this.capacity()) {
+			return 0;
+		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + 0]);
 		int a1 = Byte.toUnsignedInt(this.values[(indx << 2) + 1]);
 		int a2 = Byte.toUnsignedInt(this.values[(indx << 2) + 2]);

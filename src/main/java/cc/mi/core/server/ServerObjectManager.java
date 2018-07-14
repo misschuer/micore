@@ -5,11 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cc.mi.core.binlog.data.BinlogModifier;
+import cc.mi.core.binlog.data.BinlogData;
 import cc.mi.core.callback.AbstractCallback;
-import io.netty.channel.Channel;
 
-public class ServerObjectManager extends GuidObjectTable {
+public class ServerObjectManager extends BinlogObjectTable {
 	//以binlog的owner_guid为key，保存相关的所有数据
 	private final Map<String, OwnerDataSet> allOwnerDataSet;
 	
@@ -18,19 +17,20 @@ public class ServerObjectManager extends GuidObjectTable {
 		allOwnerDataSet = new HashMap<>();
 	}
 	
-	public void getDataSetAllObject(final String guid, List<BinlogModifier> result) {
-		if (!allOwnerDataSet.containsKey(guid)) {
+	public void getDataSetAllObject(final String ownerId, final List<BinlogData> result) {
+		if (!allOwnerDataSet.containsKey(ownerId)) {
 			return;
 		}
 		
-		List<String> removeGuidList = new LinkedList<>();
-		OwnerDataSet ds = allOwnerDataSet.get(guid);
+		final List<String> removeGuidList = new LinkedList<>();
+		final ServerObjectManager self = this;
+		OwnerDataSet ds = allOwnerDataSet.get(ownerId);
 		ds.foreach(new AbstractCallback<String>() {
 			@Override
-			public void invoke(String value) {
-				BinlogModifier obj = get(value);
+			public void invoke(String binlogId) {
+				BinlogData obj = self.get(binlogId);
 				if (obj == null) {
-					removeGuidList.add(value);
+					removeGuidList.add(binlogId);
 					return;
 				}
 				result.add(obj);

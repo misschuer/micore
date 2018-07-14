@@ -1,7 +1,5 @@
 package cc.mi.core.binlog.data;
 
-import java.util.Arrays;
-
 import cc.mi.core.constance.BinlogStrFieldIndice;
 import cc.mi.core.constance.BinlogSyncMode;
 
@@ -10,6 +8,10 @@ public class BinlogData extends BinlogModifier {
 	
 	public BinlogData(int intMaxSize, int strMaxSize) {
 		this(BinlogSyncMode.SYNC_UPDATEDATA, intMaxSize, strMaxSize);
+	}
+	
+	public BinlogData(String guid, int intMaxSize, int strMaxSize) {
+		this(BinlogSyncMode.SYNC_UPDATEDATA, guid, intMaxSize, strMaxSize);
 	}
 	
 	public BinlogData(int mode, int intMaxSize, int strMaxSize) {
@@ -46,6 +48,6 @@ public class BinlogData extends BinlogModifier {
 	
 	public void clear() {
 		this.intValues.clear();
-		Arrays.fill(this.strValues, null);
+		this.strValues.clear();
 	}
 }

@@ -8,10 +8,10 @@ import org.apache.logging.log4j.spi.ExtendedLoggerWrapper;
 
 public class CustomLogger {
 	protected static final String FQCN = CustomLogger.class.getName();
-	protected static final Level ERROR_LOG = Level.forName("ERROR", 12);
-	protected static final Level WARN_LOG   = Level.forName("WARN"  , 23);
-	protected static final Level DEV_LOG   = Level.forName("DEV"  , 30);
-	protected static final Level DB_LOG    = Level.forName("DB"   , 89);
+	protected static final Level ERROR_LOG	= Level.forName("ERROR", 12);
+	protected static final Level WARN_LOG	= Level.forName("WARN"  , 23);
+	protected static final Level DEV_LOG	= Level.forName("DEV"  , 30);
+	protected static final Level DEBUG_LOG	= Level.forName("DEBUG"  , 40);
 	
 	private final ExtendedLoggerWrapper extendLogger;
 	
@@ -22,6 +22,10 @@ public class CustomLogger {
 			
 	public static CustomLogger getLogger(Class<?> clazz) {
 		return new CustomLogger(clazz);
+	}
+	
+	public void debugLog(String message, Object... params) {
+		extendLogger.logIfEnabled(FQCN, DEBUG_LOG, null, message, params);
 	}
 	
 	public void devLog(String message, Object... params) {
