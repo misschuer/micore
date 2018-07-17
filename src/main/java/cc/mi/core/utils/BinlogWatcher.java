@@ -1,5 +1,6 @@
 package cc.mi.core.utils;
 
+import java.util.Iterator;
 import java.util.Set;
 
 public class BinlogWatcher {
@@ -14,6 +15,14 @@ public class BinlogWatcher {
 	final RelateHash<String, Integer> biOwnerHash = new RelateHash<>();
 	
 	public BinlogWatcher() {}
+	
+	public Iterator<Integer> binOwnerWatchIterator(String ownerId) {
+		return biOwnerHash.relatedList(ownerId);
+	}
+	
+	public Iterator<Integer> binWatchIterator(String ownerId) {
+		return biHash.relatedList(ownerId);
+	}
 	
 	public void addWatch(int fd, String binlogId) {
 		this.fdHash.addWatch(fd, binlogId);

@@ -11,7 +11,7 @@ import cc.mi.core.generate.stru.BinlogInfo;
  **/
 public class BinlogDataModify extends PacketImpl  {
 	//改变量对象
-	private List<BinlogInfo> binlogDataList;
+	private List<BinlogInfo> binlogInfoList;
 
 	public BinlogDataModify() {
 		super(15);
@@ -19,29 +19,29 @@ public class BinlogDataModify extends PacketImpl  {
 	
 	@Override
 	public void encode(ByteBuf buffer) {
-		buffer.writeShort(this.binlogDataList.size());
-		for (BinlogInfo element : this.binlogDataList) {
+		buffer.writeShort(this.binlogInfoList.size());
+		for (BinlogInfo element : this.binlogInfoList) {
 			element.encode(buffer);
 		}
 	}
 
 	@Override
 	public void decode(ByteBuf buffer) {
-		int binlogDataListSize = buffer.readUnsignedShort();
-		this.binlogDataList = new ArrayList<>(binlogDataListSize);
-		for (int i = 0; i < binlogDataListSize; ++ i) {
+		int binlogInfoListSize = buffer.readUnsignedShort();
+		this.binlogInfoList = new ArrayList<>(binlogInfoListSize);
+		for (int i = 0; i < binlogInfoListSize; ++ i) {
 			BinlogInfo element = new BinlogInfo();
 			element.decode(buffer);
-			this.binlogDataList.add(element);
+			this.binlogInfoList.add(element);
 		}
 	}
 	
-	public List<BinlogInfo> getBinlogDataList() {
-		return this.binlogDataList;
+	public List<BinlogInfo> getBinlogInfoList() {
+		return this.binlogInfoList;
 	}
 	
-	public void setBinlogDataList(List<BinlogInfo> binlogDataList) {
-		this.binlogDataList = binlogDataList;
+	public void setBinlogInfoList(List<BinlogInfo> binlogInfoList) {
+		this.binlogInfoList = binlogInfoList;
 	}
 	
 

@@ -11,7 +11,7 @@ import cc.mi.core.generate.stru.UnitBinlogInfo;
  **/
 public class UnitBinlogDataModify extends PacketImpl  {
 	//场景元素对象
-	private List<UnitBinlogInfo> unitBinlogDataList;
+	private List<UnitBinlogInfo> unitBinlogInfoList;
 
 	public UnitBinlogDataModify() {
 		super(16);
@@ -19,29 +19,29 @@ public class UnitBinlogDataModify extends PacketImpl  {
 	
 	@Override
 	public void encode(ByteBuf buffer) {
-		buffer.writeShort(this.unitBinlogDataList.size());
-		for (UnitBinlogInfo element : this.unitBinlogDataList) {
+		buffer.writeShort(this.unitBinlogInfoList.size());
+		for (UnitBinlogInfo element : this.unitBinlogInfoList) {
 			element.encode(buffer);
 		}
 	}
 
 	@Override
 	public void decode(ByteBuf buffer) {
-		int unitBinlogDataListSize = buffer.readUnsignedShort();
-		this.unitBinlogDataList = new ArrayList<>(unitBinlogDataListSize);
-		for (int i = 0; i < unitBinlogDataListSize; ++ i) {
+		int unitBinlogInfoListSize = buffer.readUnsignedShort();
+		this.unitBinlogInfoList = new ArrayList<>(unitBinlogInfoListSize);
+		for (int i = 0; i < unitBinlogInfoListSize; ++ i) {
 			UnitBinlogInfo element = new UnitBinlogInfo();
 			element.decode(buffer);
-			this.unitBinlogDataList.add(element);
+			this.unitBinlogInfoList.add(element);
 		}
 	}
 	
-	public List<UnitBinlogInfo> getUnitBinlogDataList() {
-		return this.unitBinlogDataList;
+	public List<UnitBinlogInfo> getUnitBinlogInfoList() {
+		return this.unitBinlogInfoList;
 	}
 	
-	public void setUnitBinlogDataList(List<UnitBinlogInfo> unitBinlogDataList) {
-		this.unitBinlogDataList = unitBinlogDataList;
+	public void setUnitBinlogInfoList(List<UnitBinlogInfo> unitBinlogInfoList) {
+		this.unitBinlogInfoList = unitBinlogInfoList;
 	}
 	
 
