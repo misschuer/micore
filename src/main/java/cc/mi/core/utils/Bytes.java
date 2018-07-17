@@ -44,19 +44,20 @@ public class Bytes {
 	}
 	
 	private void ensureIndex(int index) {
-		if (index >= this.capacity()) {
-			this.capacity(index);
+		if (index >= this.intSize()) {
+			this.capacity(index << 2);
 		}
 	}
 	
 	public int intSize() {
 		int len = this.values.length;
-		return (len >> 2) + (len > 0 ? 1 : 0);
+		int rest = len & 3;
+		return (len >> 2) + (rest > 0 ? 1 : 0);
 	}
 	
 	public void setBit(int indx, int offset) {
-		this.ensureIndex(indx);
 		indx += offset >> 5;
+		this.ensureIndex(indx);
 		offset &= 31;
 		int bitSet = offset & 7;
 		offset >>= 3;
@@ -64,8 +65,8 @@ public class Bytes {
 	}
 	
 	public void unSetBit(int indx, int offset) {
-		this.ensureIndex(indx);
 		indx += offset >> 5;
+		this.ensureIndex(indx);
 		offset &= 31;
 		int bitSet = offset & 7;
 		offset >>= 3;
@@ -73,15 +74,15 @@ public class Bytes {
 	}
 	
 	public void setByte(int indx, int offset, int value) {
-		this.ensureIndex(indx);
 		indx += offset >> 2;
+		this.ensureIndex(indx);
 		offset &= 3;
 		this.values[(indx << 2) + offset] = (byte) value;
 	}
 	
 	public void setShort(int indx, int offset, int value) {
-		this.ensureIndex(indx);
 		indx += offset >> 1;
+		this.ensureIndex(indx);
 		offset &= 1;
 		this.values[(indx << 2) + offset+1] = (byte) ((value >>> 8) & 0xFF);
 		this.values[(indx << 2) + offset] = (byte) (value & 0xFF);
@@ -115,7 +116,7 @@ public class Bytes {
 	public boolean getBit(int indx, int offset) {
 		indx += offset >> 5;
 		offset &= 31;
-		if (indx >= this.capacity()) {
+		if (indx >= this.intSize()) {
 			return false;
 		}
 		int bitSet = offset & 7;
@@ -125,7 +126,7 @@ public class Bytes {
 	
 	public byte getByte(int indx, int offset) {
 		indx += offset >> 2;
-		if (indx >= this.capacity()) {
+		if (indx >= this.intSize()) {
 			return 0;
 		}
 		offset &= 3;
@@ -139,7 +140,7 @@ public class Bytes {
 	public short getShort(int indx, int offset) {
 		indx += offset >> 1;
 		offset &= 1;
-		if (indx >= this.capacity()) {
+		if (indx >= this.intSize()) {
 			return 0;
 		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + offset  ]);
@@ -153,7 +154,7 @@ public class Bytes {
 	}
 	
 	public int getInt(int indx) {
-		if (indx >= this.capacity()) {
+		if (indx >= this.intSize()) {
 			return 0;
 		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + 0]);
@@ -173,7 +174,7 @@ public class Bytes {
 	}
 	
 	public long getLong(int indx) {
-		if (indx >= this.capacity()) {
+		if (indx >= this.intSize() || indx+1 >= this.intSize()) {
 			return 0;
 		}
 		int a0 = Byte.toUnsignedInt(this.values[(indx << 2) + 0]);
