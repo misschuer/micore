@@ -7,7 +7,9 @@ public class ObjectType {
 	//全局对象
 	public static final String GLOBAL_VALUE_OWNER_STRING = "GLOBAL_VALUE";
 	public static final String GLOBAL_CLIENT_GAME_CONFIG = "G.gameconfig";
-	public static final List<String> GLOBAL_VALUE_LIST = Arrays.asList(GLOBAL_CLIENT_GAME_CONFIG);
+	public static final String GLOBAL_CONFIG = "G.global";
+	public static final String GLOBAL_COUNTER_CONFIG = "G.counter";
+	public static final List<String> GLOBAL_VALUE_LIST = Arrays.asList(GLOBAL_CLIENT_GAME_CONFIG, GLOBAL_CONFIG, GLOBAL_COUNTER_CONFIG);
 	// 帮派变量
 	public static final String FACTION_BINLOG_OWNER_STRING = "FACTION";
 	// 组队变量
