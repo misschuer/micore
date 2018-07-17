@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import cc.mi.core.callback.Callback;
+import cc.mi.core.log.CustomLogger;
 
 public class OwnerDataSet {
+	static final CustomLogger logger = CustomLogger.getLogger(OwnerDataSet.class);
 	private final String owner;
 	private final Set<String> allData;
 	
@@ -26,7 +28,13 @@ public class OwnerDataSet {
 	public void remove(List<String> guidList) {
 		for (String guid : guidList) {
 			this.allData.remove(guid);
+			logger.devLog("OwnerDataSet remove guid = %s", guid);
 		}
+	}
+	
+	public void add(String guid) {
+		this.allData.add(guid);
+		logger.devLog("OwnerDataSet add guid = %s", guid);
 	}
 
 	public String getOwner() {

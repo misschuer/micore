@@ -7,7 +7,7 @@ import java.util.List;
 public enum FileUtils {
 	INSTANCE;
 	
-	private static final String BINLOG_EXT_NAME = ".blg";
+	private static final String BINLOG_EXT_NAME = ".bl";
 	private FileUtils() {}
 	
 	public boolean loadPlayerBinlog(final String dir, final String fileName, List<String> lines) {

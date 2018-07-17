@@ -2,8 +2,11 @@ package cc.mi.core.manager;
 
 import java.util.List;
 
+import cc.mi.core.generate.msg.AddTagWatchAndCall;
+import cc.mi.core.generate.msg.AddWatchAndCall;
 import cc.mi.core.generate.msg.IdentityServerMsg;
 import cc.mi.core.generate.msg.ServerRegOpcode;
+import cc.mi.core.generate.msg.StartReady;
 import cc.mi.core.log.CustomLogger;
 import io.netty.channel.Channel;
 
@@ -38,7 +41,11 @@ public abstract class ServerManager {
 		this.indentityServer(this.centerChannel);
 		// 注册消息
 		this.registerOpcode(this.centerChannel, opcodes);
+		
+		this.afterCenterConnectedInnerServerInit();
 	}
+	
+	protected void afterCenterConnectedInnerServerInit() {}
 	
 	public void onCenterDisconnected(Channel centerChannel) {
 		if (this.centerChannel == centerChannel) {
@@ -114,7 +121,10 @@ public abstract class ServerManager {
 	 * @param guidType
 	 */
 	public void addWatchAndCall(int fd, String guidType) {
-		// this.centerChannel;
+		AddWatchAndCall awac = new AddWatchAndCall();
+		awac.setFd(fd);
+		awac.setGuidType(guidType);
+		this.centerChannel.writeAndFlush(awac);
 	}
 	
 	/**
@@ -133,6 +143,18 @@ public abstract class ServerManager {
 	 * @param guidType
 	 */
 	public void addTagWatchAndCall(int fd, String ownerTag) {
-		// this.centerChannel;
+		AddTagWatchAndCall atwac = new AddTagWatchAndCall();
+		atwac.setFd(fd);
+		atwac.setOwnerTag(ownerTag);
+		this.centerChannel.writeAndFlush(atwac);
+	}
+	
+	/**
+	 * 告诉对方中心服准备完成
+	 * @param channel
+	 */
+	protected void startReady() {
+		StartReady sr = new StartReady();
+		this.centerChannel.writeAndFlush(sr);
 	}
 }

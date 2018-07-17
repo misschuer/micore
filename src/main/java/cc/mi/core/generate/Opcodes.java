@@ -14,12 +14,15 @@ import cc.mi.core.generate.msg.CreateChar;
 import cc.mi.core.generate.msg.IdentityServerMsg;
 import cc.mi.core.generate.msg.ServerStartFinishMsg;
 import cc.mi.core.generate.msg.CloseSession;
+import cc.mi.core.generate.msg.StartReady;
 import cc.mi.core.generate.msg.BinlogDataModify;
 import cc.mi.core.generate.msg.UnitBinlogDataModify;
 import cc.mi.core.generate.msg.AddWatchAndCall;
 import cc.mi.core.generate.msg.AddTagWatchAndCall;
 import cc.mi.core.generate.msg.AddWatch;
 import cc.mi.core.generate.msg.AddTagWatch;
+import cc.mi.core.generate.msg.PutObjects;
+import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -36,12 +39,15 @@ public final class Opcodes  {
 	public static final int MSG_IDENTITYSERVERMSG = 11; //通知服务器身份
 	public static final int MSG_SERVERSTARTFINISHMSG = 12; //通知网关服启动完成
 	public static final int MSG_CLOSESESSION = 13; //通知网关服关闭客户端
+	public static final int MSG_STARTREADY = 14; //通知中心服服务器启动完毕
 	public static final int MSG_BINLOGDATAMODIFY = 15; //对象更新
 	public static final int MSG_UNITBINLOGDATAMODIFY = 16; //场景元素对象更新
 	public static final int MSG_ADDWATCHANDCALL = 17; //添加binlog并发送
 	public static final int MSG_ADDTAGWATCHANDCALL = 18; //添加整组binlog并发送
 	public static final int MSG_ADDWATCH = 19; //添加binlog
 	public static final int MSG_ADDTAGWATCH = 20; //添加整组binlog
+	public static final int MSG_PUTOBJECTS = 21; //对象提交
+	public static final int MSG_PUTOBJECT = 22; //对象提交
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -56,12 +62,15 @@ public final class Opcodes  {
 		coders[MSG_IDENTITYSERVERMSG] = new IdentityServerMsg();
 		coders[MSG_SERVERSTARTFINISHMSG] = new ServerStartFinishMsg();
 		coders[MSG_CLOSESESSION] = new CloseSession();
+		coders[MSG_STARTREADY] = new StartReady();
 		coders[MSG_BINLOGDATAMODIFY] = new BinlogDataModify();
 		coders[MSG_UNITBINLOGDATAMODIFY] = new UnitBinlogDataModify();
 		coders[MSG_ADDWATCHANDCALL] = new AddWatchAndCall();
 		coders[MSG_ADDTAGWATCHANDCALL] = new AddTagWatchAndCall();
 		coders[MSG_ADDWATCH] = new AddWatch();
 		coders[MSG_ADDTAGWATCH] = new AddTagWatch();
+		coders[MSG_PUTOBJECTS] = new PutObjects();
+		coders[MSG_PUTOBJECT] = new PutObject();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
