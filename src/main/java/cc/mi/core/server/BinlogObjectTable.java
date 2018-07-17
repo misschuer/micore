@@ -9,8 +9,11 @@ import java.util.Set;
 import cc.mi.core.binlog.data.BinlogData;
 import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.generate.stru.BinlogInfo;
+import cc.mi.core.log.CustomLogger;
 
 public class BinlogObjectTable {
+	static final CustomLogger logger = CustomLogger.getLogger(BinlogObjectTable.class);
+	
 	private final Set<String> indice;
 	private final Map<String, BinlogData> objHash;
 	private final Map<String, Map<String, BinlogData>> indiceObjHash;
@@ -30,19 +33,13 @@ public class BinlogObjectTable {
 		return this.indice.contains(prefix) ? prefix : null;
 	}
 	
-	public BinlogData createObject(String guid, int intMaxSize, int strMaxSize) {
-//		GuidObject obj = new GuidObject(this.mode, guid, intMaxSize, strMaxSize);
-//		this.attachObject(obj);
-//		return obj;
-		return null;
-	}
-	
 	public void attachObject(BinlogData obj) {
 		this.objHash.put(obj.getGuid(), obj);
 		String indice = this.getBinlogDataIndice(obj.getGuid());
 		if (indice != null) {
 			this.indiceObjHash.get(indice).put(obj.getGuid(), obj);
 		}
+		logger.devLog("add new data guid = {}", obj.getGuid());
 	}
 	
 	public void releaseObject(String guid) {

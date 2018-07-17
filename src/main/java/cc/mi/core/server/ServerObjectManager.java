@@ -56,7 +56,7 @@ public class ServerObjectManager extends BinlogObjectTable {
 	
 	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result) {
 		PutObjects po = new PutObjects();
-		List<BinlogInfo> binlogDataList = new ArrayList<>();
+		List<BinlogInfo> binlogDataList = new ArrayList<>(result.size());
 		for (BinlogData binlogData : result) {
 			binlogDataList.add(binlogData.packNewBinlogInfo());
 		}
