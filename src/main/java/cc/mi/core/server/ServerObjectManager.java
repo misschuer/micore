@@ -8,6 +8,8 @@ import java.util.Map;
 
 import cc.mi.core.binlog.data.BinlogData;
 import cc.mi.core.callback.AbstractCallback;
+import cc.mi.core.callback.Callback;
+import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.PutObjects;
 import cc.mi.core.generate.stru.BinlogInfo;
@@ -18,9 +20,16 @@ public class ServerObjectManager extends BinlogObjectTable {
 	private final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
 	
+	private final Map<String, Callback<Void>> ownerCallbackHash;
+	
 	protected ServerObjectManager(int serverType) {
 		this.serverType = serverType;
 		allOwnerDataSet = new HashMap<>();
+		this.ownerCallbackHash = new HashMap<>();
+	}
+	
+	public void addCreateCallback(String ownerId, Callback<Void> callback) {
+		this.ownerCallbackHash.put(ownerId, callback);
 	}
 	
 	public void getDataSetAllObject(final String ownerId, final List<BinlogData> result) {
@@ -49,6 +58,10 @@ public class ServerObjectManager extends BinlogObjectTable {
 	public void addOwnerDataSet(final String ownerId, String binlogId) {
 		if (!this.allOwnerDataSet.containsKey(ownerId)) {
 			this.allOwnerDataSet.put(ownerId, new OwnerDataSet(ownerId));
+			// 有注册回调事件的就回调
+			if (ownerCallbackHash.containsKey(ownerId)) {
+				ownerCallbackHash.get(ownerId).invoke(null);
+			}
 		}
 		OwnerDataSet ds = allOwnerDataSet.get(ownerId);
 		ds.add(binlogId);
@@ -70,5 +83,25 @@ public class ServerObjectManager extends BinlogObjectTable {
 		po.setBinlogData(result.packNewBinlogInfo());
 		po.setOwnerId(ownerId);
 		centerChannel.writeAndFlush(po);
+	}
+	
+	public void parseBinlogInfo(BinlogInfo binlogInfo) {
+		String guid = binlogInfo.getBinlogId();
+		BinlogData binlogData = this.get(guid);
+		if (binlogData == null) {
+			binlogData = new BinlogData(1 << 6, 1 << 6);
+		}
+		List<Integer> intMask = binlogInfo.getIntMask();
+		List<Integer> intValueChanged = binlogInfo.getIntValues();
+		List<Integer> strMask = binlogInfo.getStrMask();
+		List<String>  strValueChanged = binlogInfo.getStrValues();
+		if (binlogInfo.getState() == BinlogOptType.OPT_NEW) {
+			binlogData.setGuid(binlogInfo.getBinlogId());
+			binlogData.onCreateEvent(intMask, intValueChanged, strMask, strValueChanged);
+			this.attachObject(binlogData);
+			this.addOwnerDataSet(binlogData.getOwner(), binlogData.getGuid());
+		} else if (binlogInfo.getState() == BinlogOptType.OPT_UPDATE) {
+			binlogData.onUpdateEvent(intMask, intValueChanged, strMask, strValueChanged);
+		}
 	}
 }

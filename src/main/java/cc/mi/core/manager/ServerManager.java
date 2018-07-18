@@ -2,6 +2,7 @@ package cc.mi.core.manager;
 
 import java.util.List;
 
+import cc.mi.core.callback.Callback;
 import cc.mi.core.generate.msg.AddTagWatchAndCall;
 import cc.mi.core.generate.msg.AddWatchAndCall;
 import cc.mi.core.generate.msg.IdentityServerMsg;
@@ -133,7 +134,16 @@ public abstract class ServerManager {
 	 * @param ownerTag
 	 */
 	public void addTagWatchAndCall(String ownerTag) {
-		this.addTagWatchAndCall(0, ownerTag);
+		this.addTagWatchAndCall(ownerTag, null);
+	}
+	
+	/**
+	 *  给当前服务器注册消息
+	 * @param channel
+	 * @param ownerTag
+	 */
+	public void addTagWatchAndCall(String ownerTag, Callback<Void> callback) {
+		this.addTagWatchAndCall(0, ownerTag, callback);
 	}
 	
 	/**
@@ -143,11 +153,26 @@ public abstract class ServerManager {
 	 * @param guidType
 	 */
 	public void addTagWatchAndCall(int fd, String ownerTag) {
+		this.addTagWatchAndCall(fd, ownerTag, null);
+	}
+	
+	/**
+	 * 给客户端注册消息
+	 * @param channel
+	 * @param fd
+	 * @param guidType
+	 */
+	public void addTagWatchAndCall(int fd, String ownerTag, Callback<Void> callback) {
 		AddTagWatchAndCall atwac = new AddTagWatchAndCall();
 		atwac.setFd(fd);
 		atwac.setOwnerTag(ownerTag);
 		this.centerChannel.writeAndFlush(atwac);
+		if (callback != null) {
+			this.addTagWatchCallback(ownerTag, callback);
+		}
 	}
+	
+	protected void addTagWatchCallback(String ownerTag, Callback<Void> callback) {}
 	
 	/**
 	 * 告诉对方中心服准备完成

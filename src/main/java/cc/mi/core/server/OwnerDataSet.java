@@ -28,13 +28,13 @@ public class OwnerDataSet {
 	public void remove(List<String> guidList) {
 		for (String guid : guidList) {
 			this.allData.remove(guid);
-			logger.devLog("OwnerDataSet remove guid = %s", guid);
+			logger.devLog("OwnerDataSet remove guid = {}", guid);
 		}
 	}
 	
 	public void add(String guid) {
 		this.allData.add(guid);
-		logger.devLog("OwnerDataSet add guid = %s", guid);
+		logger.devLog("OwnerDataSet add guid = {}", guid);
 	}
 
 	public String getOwner() {
