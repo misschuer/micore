@@ -9,6 +9,7 @@ import cc.mi.core.generate.msg.IdentityServerMsg;
 import cc.mi.core.generate.msg.ServerRegOpcode;
 import cc.mi.core.generate.msg.StartReady;
 import cc.mi.core.log.CustomLogger;
+import cc.mi.core.packet.Packet;
 import io.netty.channel.Channel;
 
 public abstract class ServerManager {
@@ -181,5 +182,13 @@ public abstract class ServerManager {
 	protected void startReady() {
 		StartReady sr = new StartReady();
 		this.centerChannel.writeAndFlush(sr);
+	}
+	
+	public void sendToGate(Packet packet) {
+		this.gateChannel.writeAndFlush(packet);
+	}
+	
+	public void sendToCenter(Packet packet) {
+		this.centerChannel.writeAndFlush(packet);
 	}
 }

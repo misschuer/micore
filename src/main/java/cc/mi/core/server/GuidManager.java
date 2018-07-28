@@ -1,26 +1,17 @@
 package cc.mi.core.server;
 
-import cc.mi.core.binlog.data.BinlogData;
-import cc.mi.core.constance.BinlogSyncMode;
+import java.util.HashMap;
+import java.util.Map;
+
 import cc.mi.core.constance.ObjectType;
 
 public enum GuidManager {
 	INSTANCE;
 	
-	// 临时数据
-	private BinlogData myData;
-	// 存档的数据
-	private BinlogData data;
-	
-	public void initData(BinlogData data) {
-		if (this.data != null) {
-			return;
-		}
-		this.data = data;
-		this.loadMyData();
+	private final Map<Integer, Integer> indxHash;
+	private GuidManager() {
+		this.indxHash = new HashMap<>();
 	}
-	
-	private GuidManager() {}
 	
 	private final String makeNewGuid(char objectType, long indx, String suffix) {
 		if (suffix.length() > 0) {
@@ -50,33 +41,19 @@ public enum GuidManager {
 		return objectType + guid.substring(1);
 	}
 	
-	public long newIndex(char objectType) {
-		this.data.addUInt32(objectType, 1);
-		this.myData.addUInt32(objectType, 1);
-		return this.myData.getUInt32(objectType);
+	public int newIndex(int objectType) {
+		int id = indxHash.get(objectType);
+		id ++;
+		indxHash.put(objectType, id);
+		return id;
 	}
 
-	private void loadMyData() {
-		this.myData = new BinlogData(BinlogSyncMode.SYNC_NONE, 255, 1);
-		for (int i = 0; i < this.data.intSize(); ++ i) {
-			this.myData.setUInt32(i, (int) this.data.getUInt32(i));
-		}
+	public void syncPlayerGuidIndex(int playerMax) {
+		indxHash.put((int) ObjectType.PLAYER, playerMax);
 	}
 	
-	//同步guid累加最大值
-	public void syncMaxGuid(long playerMax) {
-		if (this.myData.getUInt32(ObjectType.PLAYER) > playerMax) {
-			playerMax = this.myData.getUInt32(ObjectType.PLAYER);
-		}
-		playerMax += 1500;
-		this.myData.setUInt32(ObjectType.PLAYER, (int) playerMax);
-		this.data.setUInt32(ObjectType.PLAYER, (int) playerMax);
-
-		this.myData.clear();
-	}
-
-	public void setUnitGuid(int unitId) {
-		this.myData.setUInt32(ObjectType.UNIT, unitId);
+	public int getGuidIndex(int objectType) {
+		return indxHash.get(objectType);
 	}
 	
 	public boolean isPlayerGuid(String guid) {
