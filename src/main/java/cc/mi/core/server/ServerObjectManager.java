@@ -14,6 +14,9 @@ import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.PutObjects;
 import cc.mi.core.generate.stru.BinlogInfo;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelPromise;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 public class ServerObjectManager extends BinlogObjectTable {
 	//以binlog的owner_guid为key，保存相关的所有数据
@@ -67,7 +70,7 @@ public class ServerObjectManager extends BinlogObjectTable {
 		ds.add(binlogId);
 	}
 	
-	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result) {
+	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result, AbstractCallback<Boolean> abstractCallback) {
 		PutObjects po = new PutObjects();
 		List<BinlogInfo> binlogDataList = new ArrayList<>(result.size());
 		for (BinlogData binlogData : result) {
@@ -75,14 +78,34 @@ public class ServerObjectManager extends BinlogObjectTable {
 		}
 		po.setBinlogDataList(binlogDataList);
 		po.setOwnerId(ownerId);
-		centerChannel.writeAndFlush(po);
+		
+		ChannelPromise promise = centerChannel.newPromise();
+		promise.addListener(new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> future) throws Exception {
+				if (abstractCallback != null) {
+					abstractCallback.invoke(true);
+				}
+			}
+		});
+		centerChannel.writeAndFlush(po, promise);
 	}
 	
-	public void putObject(Channel centerChannel, String ownerId, BinlogData result) {
+	public void putObject(Channel centerChannel, String ownerId, BinlogData result, Callback<Boolean> callback) {
 		PutObject po = new PutObject();
 		po.setBinlogData(result.packNewBinlogInfo());
 		po.setOwnerId(ownerId);
-		centerChannel.writeAndFlush(po);
+		
+		ChannelPromise promise = centerChannel.newPromise();
+		promise.addListener(new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> future) throws Exception {
+				if (callback != null) {
+					callback.invoke(true);
+				}
+			}
+		});
+		centerChannel.writeAndFlush(po, promise);
 	}
 	
 	public void parseBinlogInfo(BinlogInfo binlogInfo) {
