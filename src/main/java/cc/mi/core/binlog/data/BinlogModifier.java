@@ -125,6 +125,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setLong(int indx, long value) {
+		if (this.intValues.getLong(indx) == value) {
+			return;
+		}
 		this.intValues.setLong(indx, value);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx  ));
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx+1));
@@ -140,6 +143,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setFloat(int indx, float value) {
+		if (this.getFloat(indx) == value) {
+			return;
+		}
 		this.intValues.setInt(indx, Float.floatToIntBits(value));
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
@@ -154,6 +160,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setUInt32(int indx, int value) {
+		if (this.getUInt32(indx) == value) {
+			return;
+		}
 		this.intValues.setInt(indx, value);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
@@ -168,6 +177,18 @@ public class BinlogModifier extends SyncEventRecorder {
 		this.setUInt32(indx, (int) (prev - value));
 	}
 	
+	public int getInt32(int indx) {
+		return this.intValues.getInt(indx);
+	}
+	
+	public void setInt32(int indx, int value) {
+		if (this.getInt32(indx) == value) {
+			return;
+		}
+		this.intValues.setInt(indx, value);
+		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
+	}
+	
 	/**
 	 * short操作
 	 * @param indx
@@ -179,6 +200,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setUInt16(int indx, short offset, int value) {
+		if (this.getUInt16(indx, offset) == value) {
+			return;
+		}
 		this.intValues.setShort(indx, offset, value);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
@@ -204,6 +228,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setUInt8(int indx, short offset, int value) {
+		if (this.getUInt8(indx, offset) == value) {
+			return;
+		}
 		this.intValues.setByte(indx, offset, value);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
@@ -223,11 +250,17 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setBit(int indx, short offset) {
+		if (this.intValues.getBit(indx, offset)) {
+			return;
+		}
 		this.intValues.setBit(indx, offset);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
 	
 	public void unSetBit(int indx, short offset) {
+		if (!this.intValues.getBit(indx, offset)) {
+			return;
+		}
 		this.intValues.unSetBit(indx, offset);
 		this.onEventUInt32(BinlogOptType.OPT_SET, indx, this.intValues.getInt(indx));
 	}
@@ -237,6 +270,9 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public void setStr(int indx, String str) {
+		if (str.equals(this.strValues.get(indx))) {
+			return;
+		}
 		this.strValues.set(indx, str);
 		this.onEventStr(BinlogOptType.OPT_SET, indx, this.getStr(indx));
 	}

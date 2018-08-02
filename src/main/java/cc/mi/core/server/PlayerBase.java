@@ -66,6 +66,128 @@ public class PlayerBase extends BinlogData {
 	}
 	
 	public void setMapId(int mapId) {
-		this.setUInt32(PlayerEnumFields.PLAYER_INT_FIELD_MAP_ID, mapId);
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_MAP_ID, mapId);
+	}
+	
+	public int getMapId() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_MAP_ID);
+	}
+	
+	public int getMapLineNo() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_LINE_NO);
+	}
+	
+	public void setMapLineNo(int lineNo) {
+		if (this.getMapLineNo() != lineNo) {
+			this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_LINE_NO, lineNo);
+		}
+	}
+	
+	//所在地图实例的id，若id为0，则是传送中
+	public int getInstanceId() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_INSTANCE_ID);
+	}
+	
+	public void setInstanceId(int id) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_INSTANCE_ID, id);
+	}
+	
+	//传送相关
+	
+	// 传送地图id
+	public int getTeleportMapID() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_MAP_ID);
+	}
+	
+	public void setTeleportMapID(int mapId) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_MAP_ID, mapId);
+	}
+	
+	// 传送坐标x
+	public float getTeleportPosX() {
+		return this.getFloat(PlayerEnumFields.PLAYER_INT_FIELD_TELE_POS_X);
+	}
+	
+	public void setTeleportPosX(float value) {
+		this.setFloat(PlayerEnumFields.PLAYER_INT_FIELD_TELE_POS_X, value);
+	}
+	
+	// 传送坐标y
+	public float getTeleportPosY() {
+		return this.getFloat(PlayerEnumFields.PLAYER_INT_FIELD_TELE_POS_Y);
+	}
+	
+	public void setTeleportPosY(float value) {
+		this.setFloat(PlayerEnumFields.PLAYER_INT_FIELD_TELE_POS_Y, value);
+	}
+	
+	// 传送的分线
+	public int getTeleportLineNo() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_LINE_NO);
+	}
+	
+	public void setTeleportLineNo(int lineNo) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_LINE_NO, lineNo);
+	}
+	
+	// 传送的实例id
+	public int getTeleportInstanceId() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_INST_ID);
+	}
+	
+	public void setTeleportInstanceId(int instId) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_TELE_INST_ID, instId);
+	}
+	
+	// 传送参数
+	public String getTeleportExt() {
+		return this.getStr(PlayerEnumFields.PLAYER_STR_FIELD_TELE_EXT);
+	}
+	
+	public void setTeleportExt(String ext) {
+		this.setStr(PlayerEnumFields.PLAYER_STR_FIELD_TELE_EXT, ext);
+	}
+
+	
+	public void setTeleportInfo(int mapId, float x, float y, int lineNo, final String ext) {
+		
+		this.setTeleportMapID(mapId);
+		this.setTeleportPosX(x);
+		this.setTeleportPosY(y);
+		this.setTeleportLineNo(lineNo);
+		if (!ext.equals(this.getTeleportExt())) {
+			this.setTeleportExt(ext);
+		}
+		this.setInstanceId(0); //传送中
+	}
+	
+	// 获得传送前的地图及其位置
+	public int getDBMapId() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_DB_MAP_ID);
+	}
+	
+	public float getDBPosX() {
+		return this.getFloat(PlayerEnumFields.PLAYER_INT_FIELD_DB_POS_X);
+	}
+	
+	public float getDBPosY() {
+		return this.getFloat(PlayerEnumFields.PLAYER_INT_FIELD_DB_POS_Y);
+	}
+	
+	// 还原传送前的位置
+	public void relocateDBPosition() {
+		if (this.getDBMapId() == 0) {
+			return;
+		}
+
+		this.setMapId(this.getDBMapId());
+		this.setPosition(this.getDBPosX(), this.getDBPosY());
+	}
+	
+	// 保存传送前的地图和位置
+	void setToDBPositon(int mapId, float x, float y) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_DB_MAP_ID, mapId);
+		this.setFloat(PlayerEnumFields.PLAYER_INT_FIELD_DB_POS_X, x);
+		this.setFloat(PlayerEnumFields.PLAYER_INT_FIELD_DB_POS_Y, y);
 	}
 }
