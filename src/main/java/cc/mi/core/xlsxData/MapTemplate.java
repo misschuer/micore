@@ -13,6 +13,10 @@ public final class MapTemplate {
 		return mapTemplateHash.get(mapId);
 	}
 	
+	public static boolean containsTemplate(int mapId) {
+		return mapTemplateHash.containsKey(mapId);
+	}
+	
 	public static void load() {
 		//TODO:
 	}

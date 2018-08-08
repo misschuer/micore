@@ -14,6 +14,7 @@ public class SegmentTree {
 	public static Segment[] seg = null;
 	
 	public static void main(String[] args) throws Exception {
+		SegmentTree segmentTree = new SegmentTree();
 		seg = new Segment[MAXN];
 		for (int i = 0; i < seg.length; ++ i) {
 			seg[ i ] = new Segment();
@@ -26,21 +27,21 @@ public class SegmentTree {
 	    	w = (int) in.nval;
 	    	in.nextToken();
 	    	int n = (int) in.nval;
-	    	h = MIN(h, n);
-	    	make(0, h-1, 1);
+	    	h = segmentTree.MIN(h, n);
+	    	segmentTree.make(0, h-1, 1);
 	    	
 	    	for (int i = 0; i < n; ++ i) {
 	    		in.nextToken();
 				int a = (int) in.nval;
 				floor = -1;
-				update(1, a);
+				segmentTree.update(1, a);
 				out.println(floor);
 			}
 		}
 		out.flush();
 	}
 	
-	public static void make(int a, int b, int k) {
+	public void make(int a, int b, int k) {
 		seg[ k ].setA(a);
 		seg[ k ].setB(b);
 		seg[ k ].setMaxspace(w);
@@ -51,7 +52,7 @@ public class SegmentTree {
         make(mid+1, b, (k << 1) | 1);
 	}
 	
-	public static void update(int k, int val) {
+	public void update(int k, int val) {
 	    if(seg[ k ].getA() == seg[ k ].getB() && seg[ k ].getMaxspace() >= val) {
 	        floor = seg[ k ].getB() + 1;
 	        int vv = seg[ k ].getMaxspace() - val;
@@ -68,12 +69,12 @@ public class SegmentTree {
 	    seg[ k ].setMaxspace(gft);
 	}
 	
-	public static int MAX(int a, int b) {
+	int MAX(int a, int b) {
 	    if(a > b) return a;
 	    return b;
 	}
 
-	public static int MIN(int a, int b) {
+	int MIN(int a, int b) {
 	    if(a < b) return a;
 	    return b;
 	}
@@ -90,9 +91,7 @@ class Segment {
 		this.maxspace = maxspace;
 	}
 	
-	public Segment() {
-		
-	}
+	public Segment() {}
 	
 	public int getA() {
 		return a;

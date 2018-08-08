@@ -42,7 +42,10 @@ public enum GuidManager {
 	}
 	
 	public int newIndex(int objectType) {
-		int id = indxHash.get(objectType);
+		int id = 0;
+		if (this.indxHash.containsKey(objectType)) {
+			id = indxHash.get(objectType);
+		}
 		id ++;
 		indxHash.put(objectType, id);
 		return id;
