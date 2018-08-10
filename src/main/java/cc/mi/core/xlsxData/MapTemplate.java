@@ -1,38 +1,68 @@
 package cc.mi.core.xlsxData;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import cc.mi.core.constance.MapTypeConst;
+
 public final class MapTemplate {
-	private static final Map<Integer, MapTemplate> mapTemplateHash= new HashMap<>();
+	// 基础信息
+	protected MapBaseinfo baseInfo;
+	// 障碍物信息
+	protected int[] obstacleMask;
+	// 复活点
+	protected List<MapRaise> raises;
+	// 传送点
+	protected List<MapTeleport> teleports;
+	//刷怪点
+	protected Map<Integer, MapMonster> monsters;
+	//刷游戏对象点
+	protected List<MapGameobject> gameobjects;
 	
-	private boolean isInstance;
-	
-	
-	public static MapTemplate getTemplate(int mapId) {
-		return mapTemplateHash.get(mapId);
+	public MapTemplate() {
+		this.raises = new LinkedList<>();
+		this.teleports = new LinkedList<>();
+		this.gameobjects = new LinkedList<>();
+		this.monsters = new HashMap<>();
 	}
 	
-	public static boolean containsTemplate(int mapId) {
-		return mapTemplateHash.containsKey(mapId);
-	}
-	
-	public static void load() {
-		//TODO:
-	}
-
-
 	public boolean isInstance() {
-		return isInstance;
+		int type = this.getBaseInfo().getType();
+		return type == MapTypeConst.MAP_TYPE_INSTANCE;
 	}
 	
 	public boolean isValidPosition(int x, int y) {
 		//TODO:
 		return true;
 	}
-	
 
-//	private void setInstance(boolean isInstance) {
-//		this.isInstance = isInstance;
-//	}
+	public MapBaseinfo getBaseInfo() {
+		return baseInfo;
+	}
+
+	public void setBaseInfo(MapBaseinfo baseInfo) {
+		this.baseInfo = baseInfo;
+	}
+
+	public void setObstacleMask(int[] obstacleMask) {
+		this.obstacleMask = obstacleMask;
+	}
+
+	public void addRaise(MapRaise raise) {
+		this.raises.add(raise);
+	}
+	
+	public void addTeleport(MapTeleport teleport) {
+		this.teleports.add(teleport);
+	}
+	
+	public void addGameObject(MapGameobject obj) {
+		this.gameobjects.add(obj);
+	}
+	
+	public void addMonster(int pos, MapMonster monster) {
+		this.monsters.put(pos, monster);
+	}
 }

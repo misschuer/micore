@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.LinkedList;
 import java.util.List;
 
 public enum FileUtils {
@@ -80,5 +81,18 @@ public enum FileUtils {
 		} catch (Throwable e) {
 			return false;
 		}
+	}
+	
+	public List<File> listFilesInCurrentDirectory(String path) {
+		List<File> ret = new LinkedList<>();
+		
+		File[] files = new File(path).listFiles();
+		for (File file : files) {
+			if (!file.isDirectory()) {
+				ret.add(file);
+			}
+		}
+		
+		return ret;
 	}
 }
