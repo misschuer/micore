@@ -20,7 +20,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 public class ServerObjectManager extends BinlogObjectTable {
 	//以binlog的owner_guid为key，保存相关的所有数据
-	private final Map<String, OwnerDataSet> allOwnerDataSet;
+	protected final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
 	
 	private final Map<String, Callback<Void>> ownerCallbackHash;
