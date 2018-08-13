@@ -10,6 +10,7 @@ import cc.mi.core.generate.msg.ServerRegOpcode;
 import cc.mi.core.generate.msg.StartReady;
 import cc.mi.core.log.CustomLogger;
 import cc.mi.core.packet.Packet;
+import cc.mi.core.server.ContextManager;
 import io.netty.channel.Channel;
 
 public abstract class ServerManager {
@@ -190,5 +191,9 @@ public abstract class ServerManager {
 	
 	public void sendToCenter(Packet packet) {
 		this.centerChannel.writeAndFlush(packet);
+	}
+	
+	public void closeSession(int fd, int reasonType) {
+		ContextManager.closeSession(this.gateChannel, fd, reasonType);
 	}
 }

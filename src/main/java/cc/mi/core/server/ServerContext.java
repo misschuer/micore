@@ -17,9 +17,9 @@ public abstract class ServerContext {
 		this.status = SessionStatus.STATUS_NONE;
 	}
 	
-	protected abstract void sendToGate(Packet coder);
+	public abstract void sendToGate(Packet coder);
 	
-	protected abstract void sendToCenter(Packet coder);
+	public abstract void sendToCenter(Packet coder);
 	
 	protected void sendPacketToOtherServer(int serverFd, Packet coder) {
 		coder.setFD(serverFd);
@@ -53,7 +53,9 @@ public abstract class ServerContext {
 		channel.writeAndFlush(result);
 	}
 	
-	abstract protected void operationResult(short type, String data);
+	protected void operationResult(short type, String data) {
+		//TODO:
+	}
 	
 
 	public String getRemoteIp() {

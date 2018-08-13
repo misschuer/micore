@@ -10,7 +10,6 @@ import cc.mi.core.binlog.stru.BinlogStruValueInt;
 import cc.mi.core.binlog.stru.BinlogStruValueStr;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.utils.Bytes;
-import cc.mi.core.utils.Mask;
 import cc.mi.core.utils.Strings;
 
 /**
@@ -32,11 +31,6 @@ public class SyncEventRecorder {
 	// 记录哪个下标的值修改
 	protected final Map<Integer, BinlogStruValueInt> bsIntIndxHash;
 	protected final Map<Integer, BinlogStruValueStr> bsStrIndxHash;
-	
-	protected Mask createIntMask;
-	protected Mask updateIntMask;
-	protected Mask createStrMask;
-	protected Mask updateStrMask;
 
 	public SyncEventRecorder(int mode, String guid, int intMaxSize, int strMaxSize) {
 		this.guid = guid;
@@ -150,10 +144,10 @@ public class SyncEventRecorder {
 		if ((this.mode & BinlogSyncMode.SYNC_NONE) == 1) {
 			return;
 		}
-		if (this.updateIntMask == null || this.updateIntMask.isMarked(indx)) {
+//		if (this.updateIntMask == null || this.updateIntMask.isMarked(indx)) {
 			BinlogStruValueInt binlog = new BinlogStruValueInt(optType, indx, value);
 			this.bsIntIndxHash.put(indx, binlog);
-		}
+//		}
 	}
 	
 	public void onEventStr(byte optType, int indx, String value) {
@@ -162,10 +156,10 @@ public class SyncEventRecorder {
 			return;
 		}
 		
-		if (this.updateStrMask == null || this.updateStrMask.isMarked(indx)) {
+//		if (this.updateStrMask == null || this.updateStrMask.isMarked(indx)) {
 			BinlogStruValueStr binlog = new BinlogStruValueStr(optType, indx, value);
 			this.bsStrIndxHash.put(indx, binlog);
-		}
+//		}
 	}
 
 	public String getIntDataString() {
