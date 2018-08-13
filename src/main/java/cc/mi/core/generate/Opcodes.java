@@ -24,9 +24,10 @@ import cc.mi.core.generate.msg.AddTagWatch;
 import cc.mi.core.generate.msg.PutObjects;
 import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.RemoveBinlog;
-import cc.mi.core.generate.msg.InstanceResult;
 import cc.mi.core.generate.msg.SendCharInfo;
 import cc.mi.core.generate.msg.PlayerLogin;
+import cc.mi.core.generate.msg.CreateMap;
+import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
 	private static final PacketImpl[] coders = new PacketImpl[376];
@@ -52,9 +53,10 @@ public final class Opcodes  {
 	public static final int MSG_PUTOBJECTS = 21; //对象提交
 	public static final int MSG_PUTOBJECT = 22; //对象提交
 	public static final int MSG_REMOVEBINLOG = 23; //对象删除
-	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	public static final int MSG_SENDCHARINFO = 24; //发送角色信息
 	public static final int MSG_PLAYERLOGIN = 25; //玩家登录
+	public static final int MSG_CREATEMAP = 26; //创建地图
+	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
 		coders[MSG_NULLACTION] = new NullAction();
@@ -78,9 +80,10 @@ public final class Opcodes  {
 		coders[MSG_PUTOBJECTS] = new PutObjects();
 		coders[MSG_PUTOBJECT] = new PutObject();
 		coders[MSG_REMOVEBINLOG] = new RemoveBinlog();
-		coders[MSG_INSTANCERESULT] = new InstanceResult();
 		coders[MSG_SENDCHARINFO] = new SendCharInfo();
 		coders[MSG_PLAYERLOGIN] = new PlayerLogin();
+		coders[MSG_CREATEMAP] = new CreateMap();
+		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
 	private Opcodes(){}

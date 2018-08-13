@@ -40,6 +40,9 @@ public final class MapTemplate {
 		return !this.isObstacle(x, y);
 	}
 	
+	public boolean isValidPosition(int index) {
+		return !this.isObstacle(index);
+	}
 	
 	// 传入给定路径，判断是否可以通过
 	public boolean isCanRun(float fromX, float fromY, List<Float> path) {
