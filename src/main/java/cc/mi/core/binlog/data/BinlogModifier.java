@@ -31,8 +31,12 @@ public class BinlogModifier extends SyncEventRecorder {
 		this.tmpIntMask = new Mask(intMaxSize);
 		this.tmpStrMask = new Mask(strMaxSize);
 	}
-
+	
 	public BinlogInfo packNewBinlogInfo() {
+		return this.packNewBinlogInfo(null, null);
+	}
+
+	public BinlogInfo packNewBinlogInfo(Mask createIntMask, Mask createStrMask) {
 		BinlogInfo data = new BinlogInfo();
 		data.setBinlogId(this.guid);
 		data.setState(BinlogOptType.OPT_NEW);
@@ -42,7 +46,7 @@ public class BinlogModifier extends SyncEventRecorder {
 		List<Integer> newIntList = new ArrayList<>(size);
 		for (int i = 0; i < size; ++ i) {
 			int value = this.intValues.getInt(i);
-			if (value > 0 && (this.createIntMask == null || this.createIntMask.isMarked(i))) {
+			if (value > 0 && (createIntMask == null || createIntMask.isMarked(i))) {
 				newIntList.add(value);
 				tmpIntMask.mark(i);
 			}
@@ -54,7 +58,7 @@ public class BinlogModifier extends SyncEventRecorder {
 		List<String> newStrList = new ArrayList<>(strValues.capacity());
 		for (int i = 0; i < this.strValues.capacity(); ++ i) {
 			String str = this.strValues.get(i);
-			if (str != null && !"".equals(str) && (this.createStrMask == null || this.createStrMask.isMarked(i))) {
+			if (str != null && !"".equals(str) && (createStrMask == null || createStrMask.isMarked(i))) {
 				newStrList.add(str);
 				tmpStrMask.mark(i);
 			}
@@ -66,6 +70,10 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public BinlogInfo packUpdateBinlogInfo() {
+		return this.packUpdateBinlogInfo(null, null);
+	}
+	
+	public BinlogInfo packUpdateBinlogInfo(Mask updateIntMask, Mask updateStrMask) {
 		BinlogInfo data = new BinlogInfo();
 		data.setBinlogId(this.guid);
 		data.setState(BinlogOptType.OPT_UPDATE);
@@ -80,8 +88,10 @@ public class BinlogModifier extends SyncEventRecorder {
 		List<Integer> newIntList = new ArrayList<>(size);
 		for (int indx : indice) {
 			BinlogStruValueInt bs = bsIntIndxHash.get(indx);
-			tmpIntMask.mark(indx);
-			newIntList.add(bs.getValue());
+			if (updateIntMask == null || updateIntMask.isMarked(indx)) {
+				tmpIntMask.mark(indx);
+				newIntList.add(bs.getValue());
+			}
 		}
 		data.setIntMask(tmpIntMask.toNewList());
 		data.setIntValues(newIntList);
@@ -97,8 +107,10 @@ public class BinlogModifier extends SyncEventRecorder {
 		List<String> newStrList = new ArrayList<>(size);
 		for (int indx : indice) {
 			BinlogStruValueStr bs = bsStrIndxHash.get(indx);
-			tmpStrMask.mark(indx);
-			newStrList.add(bs.getValue());
+			if (updateStrMask == null || updateStrMask.isMarked(indx)) {
+				tmpStrMask.mark(indx);
+				newStrList.add(bs.getValue());
+			}
 		}
 		data.setStrMask(tmpStrMask.toNewList());
 		data.setStrValues(newStrList);
