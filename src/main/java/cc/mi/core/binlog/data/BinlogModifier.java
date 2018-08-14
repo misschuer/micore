@@ -120,7 +120,6 @@ public class BinlogModifier extends SyncEventRecorder {
 		return data;
 	}
 	
-	
 	public String getGuid() {
 		return guid;
 	}

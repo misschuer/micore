@@ -27,6 +27,8 @@ import cc.mi.core.generate.msg.RemoveBinlog;
 import cc.mi.core.generate.msg.SendCharInfo;
 import cc.mi.core.generate.msg.PlayerLogin;
 import cc.mi.core.generate.msg.CreateMap;
+import cc.mi.core.generate.msg.ReleaseBinlogData;
+import cc.mi.core.generate.msg.ReleaseUnitBinlogData;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -56,6 +58,8 @@ public final class Opcodes  {
 	public static final int MSG_SENDCHARINFO = 24; //发送角色信息
 	public static final int MSG_PLAYERLOGIN = 25; //玩家登录
 	public static final int MSG_CREATEMAP = 26; //创建地图
+	public static final int MSG_RELEASEBINLOGDATA = 27; //对象删除
+	public static final int MSG_RELEASEUNITBINLOGDATA = 28; //场景元素对象删除
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -83,6 +87,8 @@ public final class Opcodes  {
 		coders[MSG_SENDCHARINFO] = new SendCharInfo();
 		coders[MSG_PLAYERLOGIN] = new PlayerLogin();
 		coders[MSG_CREATEMAP] = new CreateMap();
+		coders[MSG_RELEASEBINLOGDATA] = new ReleaseBinlogData();
+		coders[MSG_RELEASEUNITBINLOGDATA] = new ReleaseUnitBinlogData();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
