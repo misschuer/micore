@@ -47,7 +47,7 @@ public class BinlogData extends BinlogModifier {
 	}
 	
 	public void clear() {
-		this.intValues.clear();
-		this.strValues.clear();
+		this.bsIntIndxHash.clear();
+		this.bsStrIndxHash.clear();
 	}
 }

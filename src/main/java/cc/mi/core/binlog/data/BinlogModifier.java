@@ -73,6 +73,11 @@ public class BinlogModifier extends SyncEventRecorder {
 	}
 	
 	public BinlogInfo packUpdateBinlogInfo(Mask updateIntMask, Mask updateStrMask) {
+		
+		if (bsIntIndxHash.size() == 0 && bsStrIndxHash.size() == 0) {
+			return null;
+		}
+		
 		BinlogInfo data = new BinlogInfo();
 		data.setBinlogId(this.guid);
 		data.setState(BinlogOptType.OPT_UPDATE);
@@ -114,8 +119,9 @@ public class BinlogModifier extends SyncEventRecorder {
 		data.setStrMask(tmpStrMask.toNewList());
 		data.setStrValues(newStrList);
 		
-		bsIntIndxHash.clear();
-		bsStrIndxHash.clear();
+//		这里交给外部调用clear()函数
+//		bsIntIndxHash.clear();
+//		bsStrIndxHash.clear();
 		
 		return data;
 	}
