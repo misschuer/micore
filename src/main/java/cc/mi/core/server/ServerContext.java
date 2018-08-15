@@ -6,7 +6,7 @@ import io.netty.channel.Channel;
 
 public abstract class ServerContext {
 	// 客户端连接网关服的fd
-	private final int fd;
+	private int fd;
 	private SessionStatus status;
 	private String remoteIp;
 	private short remotePort;
@@ -20,6 +20,10 @@ public abstract class ServerContext {
 	public abstract void sendToGate(Packet coder);
 	
 	public abstract void sendToCenter(Packet coder);
+	
+	public void changeFd(int fd) {
+		this.fd = fd;
+	}
 	
 	protected void sendPacketToOtherServer(int serverFd, Packet coder) {
 		coder.setFD(serverFd);
