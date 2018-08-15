@@ -32,8 +32,9 @@ public class PlayerEnumFields {
 	public static final int PLAYER_INT_FIELD_GENDER			= PLAYER_INT_FIELD_LEVEL + 1;			//四个字节,分别存放 0角色id,
 	public static final int PLAYER_INT_FIELD_CREATE_TIME	= PLAYER_INT_FIELD_GENDER + 1;			//角色创建时间
 	
+	public static final int PLAYER_INT_FIELD_CHECK_DATA		= PLAYER_INT_FIELD_CREATE_TIME + 1;		//角色数据验证(0, 1:传送数据完整性检测, 2, 3)
 	//长度
-	public static final int PLAYER_INT_FIELDS_SIZE			= PLAYER_INT_FIELD_CREATE_TIME + 1;		//int类型数据的大小
+	public static final int PLAYER_INT_FIELDS_SIZE			= PLAYER_INT_FIELD_CHECK_DATA + 1;		//int类型数据的大小
 	
 	/*****************************************************************************************************************/
 	public static final int PLAYER_STR_FIELD_ACCOUNT		= BinlogStrFieldIndice.BINLOG_STRING_FIELD_OWNER + 1; //账号

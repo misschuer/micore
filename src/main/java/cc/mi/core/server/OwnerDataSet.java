@@ -32,6 +32,11 @@ public class OwnerDataSet {
 		}
 	}
 	
+	public void remove(String binlogId) {
+		this.allData.remove(binlogId);
+		logger.devLog("OwnerDataSet remove guid = {}", binlogId);
+	}
+	
 	public void add(String guid) {
 		this.allData.add(guid);
 		logger.devLog("OwnerDataSet add guid = {}", guid);

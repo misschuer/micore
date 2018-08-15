@@ -18,7 +18,7 @@ import io.netty.channel.ChannelPromise;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
-public class ServerObjectManager extends BinlogObjectTable {
+public abstract class ServerObjectManager extends BinlogObjectTable {
 	//以binlog的owner_guid为key，保存相关的所有数据
 	protected final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
@@ -70,6 +70,13 @@ public class ServerObjectManager extends BinlogObjectTable {
 		ds.add(binlogId);
 	}
 	
+	public void removeOwnerDataSet(final String ownerId, String binlogId) {
+		if (!this.allOwnerDataSet.containsKey(ownerId)) {
+			return;
+		}
+		this.allOwnerDataSet.get(ownerId).remove(binlogId);
+	}
+	
 	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result, AbstractCallback<Boolean> abstractCallback) {
 		PutObjects po = new PutObjects();
 		List<BinlogInfo> binlogDataList = new ArrayList<>(result.size());
@@ -108,11 +115,13 @@ public class ServerObjectManager extends BinlogObjectTable {
 		centerChannel.writeAndFlush(po, promise);
 	}
 	
+	protected abstract BinlogData createBinlogData(String guid);
+	
 	public void parseBinlogInfo(BinlogInfo binlogInfo) {
 		String guid = binlogInfo.getBinlogId();
 		BinlogData binlogData = this.get(guid);
 		if (binlogData == null) {
-			binlogData = new BinlogData(1 << 6, 1 << 6);
+			binlogData = this.createBinlogData(guid);
 		}
 		List<Integer> intMask = binlogInfo.getIntMask();
 		List<Integer> intValueChanged = binlogInfo.getIntValues();
@@ -125,6 +134,9 @@ public class ServerObjectManager extends BinlogObjectTable {
 			this.addOwnerDataSet(binlogData.getOwner(), binlogData.getGuid());
 		} else if (binlogInfo.getState() == BinlogOptType.OPT_UPDATE) {
 			binlogData.onUpdateEvent(intMask, intValueChanged, strMask, strValueChanged);
+		} else if (binlogInfo.getState() == BinlogOptType.OPT_DELETE) {
+			this.detachObject(binlogData);
+			this.removeOwnerDataSet(binlogData.getOwner(), binlogData.getGuid());
 		}
 	}
 }

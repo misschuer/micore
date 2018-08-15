@@ -10,6 +10,15 @@ public class PlayerBase extends BinlogData {
 		super(BinlogSyncMode.SYNC_UPDATEDATA, intMaxSize, strMaxSize);
 	}
 	
+	
+	public void setSceneFd(int fd) {
+		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_FD, fd);
+	}
+	
+	public int getSceneFd() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_FD);
+	}
+	
 	public void setLevel(int level) {
 		this.setUInt32(PlayerEnumFields.PLAYER_INT_FIELD_LEVEL, level);
 	}
@@ -148,6 +157,13 @@ public class PlayerBase extends BinlogData {
 		this.setStr(PlayerEnumFields.PLAYER_STR_FIELD_TELE_EXT, ext);
 	}
 
+	public byte getTeleportSign() {
+		return (byte) this.getUInt8(PlayerEnumFields.PLAYER_INT_FIELD_CHECK_DATA, (short) 1);
+	}
+	
+	public void setTeleportSign(byte sign) {
+		 this.setUInt8(PlayerEnumFields.PLAYER_INT_FIELD_CHECK_DATA, (short) 1, sign);
+	}
 	
 	public void setTeleportInfo(int mapId, float x, float y, int lineNo, final String ext) {
 		

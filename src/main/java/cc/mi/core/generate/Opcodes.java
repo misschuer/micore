@@ -29,6 +29,7 @@ import cc.mi.core.generate.msg.PlayerLogin;
 import cc.mi.core.generate.msg.CreateMap;
 import cc.mi.core.generate.msg.ReleaseBinlogData;
 import cc.mi.core.generate.msg.ReleaseUnitBinlogData;
+import cc.mi.core.generate.msg.JoinMapMsg;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -60,6 +61,7 @@ public final class Opcodes  {
 	public static final int MSG_CREATEMAP = 26; //创建地图
 	public static final int MSG_RELEASEBINLOGDATA = 27; //对象删除
 	public static final int MSG_RELEASEUNITBINLOGDATA = 28; //场景元素对象删除
+	public static final int MSG_JOINMAPMSG = 29; //玩家加入地图
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -89,6 +91,7 @@ public final class Opcodes  {
 		coders[MSG_CREATEMAP] = new CreateMap();
 		coders[MSG_RELEASEBINLOGDATA] = new ReleaseBinlogData();
 		coders[MSG_RELEASEUNITBINLOGDATA] = new ReleaseUnitBinlogData();
+		coders[MSG_JOINMAPMSG] = new JoinMapMsg();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	

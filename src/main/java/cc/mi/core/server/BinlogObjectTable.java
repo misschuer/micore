@@ -30,6 +30,10 @@ public class BinlogObjectTable {
 		return objHash.get(guid);
 	}
 	
+	public boolean contains(String guid) {
+		return this.objHash.containsKey(guid);
+	}
+	
 	public String getBinlogDataIndice(String binlogId) {
 		String prefix = binlogId.substring(0, 1);
 		return this.indice.contains(prefix) ? prefix : null;
