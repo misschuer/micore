@@ -8,6 +8,7 @@ import cc.mi.core.binlog.callback.BinlogUpdateCallback;
 import cc.mi.core.binlog.callbackParam.BinlogUpdateCallbackParam;
 import cc.mi.core.binlog.stru.BinlogStruValueInt;
 import cc.mi.core.binlog.stru.BinlogStruValueStr;
+import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.utils.Bytes;
 import cc.mi.core.utils.Strings;
@@ -52,7 +53,9 @@ public class SyncEventRecorder {
 	
 	private void setIntValues(List<Integer> intMask, 
 								List<Integer> intValueUpdated, 
-								Map<Integer, Integer> intValuePrevHash) {
+								Map<Integer, Integer> intValuePrevHash,
+								Map<Integer, Integer> intValueHash
+			) {
 		int intValueIndx = 0;
 		for (int i = 0; i < intMask.size(); ++ i) {
 			int offset = i << 5; // * 32
@@ -67,6 +70,9 @@ public class SyncEventRecorder {
 					if (intValuePrevHash != null) {
 						intValuePrevHash.put(indx, prev);
 					}
+					if (intValueHash != null) {
+						intValueHash.put(indx, intValue);
+					}
 				}
 			}
 		}
@@ -74,7 +80,10 @@ public class SyncEventRecorder {
 	
 	private void setStrValues(List<Integer> strMask, 
 								List<String> strValueUpdated, 
-								Map<Integer, String> strValuePrevHash) {
+								Map<Integer, String> strValuePrevHash,
+								Map<Integer, String> strValueHash
+			) {
+		
 		int strValueIndx = 0;
 		for (int i = 0; i < strMask.size(); ++ i) {
 			int offset = i << 5; // * 32
@@ -89,21 +98,12 @@ public class SyncEventRecorder {
 					if (strValuePrevHash != null) {
 						strValuePrevHash.put(indx, prev);
 					}
+					if (strValueHash != null) {
+						strValueHash.put(indx, strValue);
+					}
 				}
 			}
 		}
-	}
-	
-	private Map<Integer, Integer> setAndGetIntPrevHashMap(List<Integer> intMask, List<Integer> intValueUpdated) {
-		Map<Integer, Integer> intValuePrevHash = new HashMap<>();
-		this.setIntValues(intMask, intValueUpdated, intValuePrevHash);
-		return intValuePrevHash;
-	}
-	
-	private Map<Integer, String> setAndGetStrPrevHashMap(List<Integer> strMask, List<String> strValueUpdated) {
-		Map<Integer, String> strValuePrevHash = new HashMap<>();
-		this.setStrValues(strMask, strValueUpdated, strValuePrevHash);
-		return strValuePrevHash;
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class SyncEventRecorder {
 	 */
 	public void onCreateEvent(List<Integer> intMask, List<Integer> intValueChanged, 
 			  				  List<Integer> strMask, List<String>  strValueChanged) {
-		this.setIntValues(intMask, intValueChanged, null);
-		this.setStrValues(strMask, strValueChanged, null);
+		this.setIntValues(intMask, intValueChanged, null, null);
+		this.setStrValues(strMask, strValueChanged, null, null);
 	}
 	
 	/**
@@ -125,10 +125,15 @@ public class SyncEventRecorder {
 	public void onUpdateEvent(List<Integer> intMask, List<Integer> intValueChanged, 
 							  List<Integer> strMask, List<String>  strValueChanged) {
 		
-		Map<Integer, Integer> intValuePrevHash = this.setAndGetIntPrevHashMap(intMask, intValueChanged);
-		Map<Integer, String> strValuePrevHash = this.setAndGetStrPrevHashMap(strMask, strValueChanged);
+		Map<Integer, Integer> intValueHash = new HashMap<>();
+		this.setIntValues(intMask, intValueChanged, null, intValueHash);
+		Map<Integer, String> strValueHash = new HashMap<>();
+		this.setStrValues(strMask, strValueChanged, null, strValueHash);
+		
 		if (this.updateCallback != null) {
-			BinlogUpdateCallbackParam param = new BinlogUpdateCallbackParam(intValuePrevHash, strValuePrevHash);
+			BinlogUpdateCallbackParam param = new BinlogUpdateCallbackParam(
+				BinlogOptType.OPT_UPDATE, intValueHash, strValueHash
+			);
 			this.updateCallback.invoke(param);
 		}
 	}

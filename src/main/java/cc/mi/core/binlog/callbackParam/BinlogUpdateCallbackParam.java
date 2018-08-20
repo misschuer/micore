@@ -3,19 +3,25 @@ package cc.mi.core.binlog.callbackParam;
 import java.util.Map;
 
 public class BinlogUpdateCallbackParam {
-	private final Map<Integer, Integer> intPrevValue;
-	private final Map<Integer, String> strPrevValue;
+	private final byte flags;
+	private final Map<Integer, Integer> intValueHash;
+	private final Map<Integer, String> strValueHash;
 	
-	public BinlogUpdateCallbackParam(Map<Integer, Integer> intPrevValue, Map<Integer, String> strPrevValue) {
-		this.intPrevValue = intPrevValue;
-		this.strPrevValue = strPrevValue;
+	public BinlogUpdateCallbackParam(byte flags, Map<Integer, Integer> intValueHash, Map<Integer, String> strValueHash) {
+		this.flags			=	flags;
+		this.intValueHash	=	intValueHash;
+		this.strValueHash	=	strValueHash;
 	}
 
-	public Map<Integer, Integer> getIntPrevValue() {
-		return intPrevValue;
+	public byte getFlags() {
+		return flags;
 	}
 
-	public Map<Integer, String> getStrPrevValue() {
-		return strPrevValue;
+	public Map<Integer, Integer> getIntValueHash() {
+		return intValueHash;
+	}
+
+	public Map<Integer, String> getStrValueHash() {
+		return strValueHash;
 	}
 }

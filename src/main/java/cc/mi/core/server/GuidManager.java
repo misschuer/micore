@@ -62,4 +62,12 @@ public enum GuidManager {
 	public boolean isPlayerGuid(String guid) {
 		return guid != null && guid.charAt(0) == ObjectType.PLAYER;
 	}
+	
+	public int getElementIntGuid(String guid) {
+		int len = guid.indexOf(".");
+		if (len == -1) {
+			len = guid.length();
+		}
+		return Integer.parseInt(guid.substring(1, len));
+	}
 }

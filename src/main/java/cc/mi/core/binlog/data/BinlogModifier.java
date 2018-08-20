@@ -2,7 +2,9 @@ package cc.mi.core.binlog.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cc.mi.core.binlog.stru.BinlogStruValueInt;
 import cc.mi.core.binlog.stru.BinlogStruValueStr;
@@ -66,6 +68,31 @@ public class BinlogModifier extends SyncEventRecorder {
 		data.setStrValues(newStrList);
 		
 		return data;
+	}
+	
+	public Map<Integer, Integer> getIntCreateHash(Mask mask) {
+		int size = this.intValues.intSize();
+		Map<Integer, Integer> values = new HashMap<>();
+		for (int i = 0; i < size; ++ i) {
+			int value = this.intValues.getInt(i);
+			if (value > 0 && (mask == null || mask.isMarked(i))) {
+				values.put(i, value);
+			}
+		}
+		
+		return values;
+	}
+	
+	public Map<Integer, String> getStrCreateHash(Mask mask) {
+		int size = this.strValues.capacity();
+		Map<Integer, String> values = new HashMap<>();
+		for (int i = 0; i < size; ++ i) {
+			String str = this.strValues.get(i);
+			if (str != null && !"".equals(str) && (mask == null || mask.isMarked(i))) {
+				values.put(i, str);
+			}
+		}
+		return values;
 	}
 	
 	public BinlogInfo packUpdateBinlogInfo() {
