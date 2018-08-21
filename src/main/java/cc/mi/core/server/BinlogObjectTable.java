@@ -9,7 +9,6 @@ import cc.mi.core.binlog.data.BinlogData;
 import cc.mi.core.log.CustomLogger;
 
 /**
- * FIXME: 需要和ownerdataset关联
  * @author gy
  *
  */

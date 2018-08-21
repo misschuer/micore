@@ -11,6 +11,7 @@ import cc.mi.core.generate.msg.StartReady;
 import cc.mi.core.log.CustomLogger;
 import cc.mi.core.packet.Packet;
 import cc.mi.core.server.ContextManager;
+import cc.mi.core.server.ServerConnList;
 import io.netty.channel.Channel;
 
 public abstract class ServerManager {
@@ -21,6 +22,8 @@ public abstract class ServerManager {
 	protected Channel gateChannel = null;
 	
 	private final int serverType;
+	
+	private final ServerConnList connList = new ServerConnList();
 	
 	// 需要的消息opcode列表
 	private final List<Integer> opcodes;
@@ -195,5 +198,9 @@ public abstract class ServerManager {
 	
 	public void closeSession(int fd, int reasonType) {
 		ContextManager.closeSession(this.gateChannel, fd, reasonType);
+	}
+
+	public ServerConnList getConnList() {
+		return connList;
 	}
 }
