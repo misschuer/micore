@@ -10,4 +10,8 @@ public abstract class AbstractCallback<T> implements Callback<T> {
 	public boolean isMatched(T value) {
 		return false;
 	}
+	
+	public T createObject() {
+		return null;
+	}
 }

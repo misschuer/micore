@@ -18,6 +18,10 @@ public class ObjectType {
 	
 	//玩家
 	public static final char PLAYER = 'P';
+	// APP服务器用到的对象
+	public static final char PLAYER_ITEM = 'i';
+	public static final char PLAYER_SOCIAL = 's';
+	
 	//生物
 	public static final char UNIT = 'U';
 	//地图变量

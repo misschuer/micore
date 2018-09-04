@@ -11,6 +11,14 @@ public class PlayerBase extends BinlogData {
 	}
 	
 	
+	public boolean isBinlogCreated(short offset) {
+		return this.getBit(PlayerEnumFields.PLAYER_INT_FIELD_BINLOG_FLAG, offset);
+	}
+	
+	public void setBinlogCreate(short offset) {
+		this.setBit(PlayerEnumFields.PLAYER_INT_FIELD_BINLOG_FLAG, offset);
+	}
+	
 	public void setSceneFd(int fd) {
 		this.setInt32(PlayerEnumFields.PLAYER_INT_FIELD_FD, fd);
 	}

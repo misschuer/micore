@@ -31,6 +31,7 @@ import cc.mi.core.generate.msg.ReleaseBinlogData;
 import cc.mi.core.generate.msg.ReleaseUnitBinlogData;
 import cc.mi.core.generate.msg.JoinMapMsg;
 import cc.mi.core.generate.msg.InnerServerConnList;
+import cc.mi.core.generate.msg.PlayerLoginMsg;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -64,6 +65,7 @@ public final class Opcodes  {
 	public static final int MSG_RELEASEUNITBINLOGDATA = 28; //场景元素对象删除
 	public static final int MSG_JOINMAPMSG = 29; //玩家加入地图
 	public static final int MSG_INNERSERVERCONNLIST = 30; //内部服务器列表
+	public static final int MSG_PLAYERLOGINMSG = 31; //玩家登陆
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -95,6 +97,7 @@ public final class Opcodes  {
 		coders[MSG_RELEASEUNITBINLOGDATA] = new ReleaseUnitBinlogData();
 		coders[MSG_JOINMAPMSG] = new JoinMapMsg();
 		coders[MSG_INNERSERVERCONNLIST] = new InnerServerConnList();
+		coders[MSG_PLAYERLOGINMSG] = new PlayerLoginMsg();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
