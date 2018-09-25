@@ -21,6 +21,10 @@ public final class ContextManager {
 		return sessionHash.get(account);
 	}
 	
+	public static void removeSessionFd(String account) {
+		sessionHash.remove(account);
+	}
+	
 	public static void pushContext(ServerContext context) {
 		fdContextHash.put(context.getFd(), context);
 	}
