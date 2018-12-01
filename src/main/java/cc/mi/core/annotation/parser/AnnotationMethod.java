@@ -10,14 +10,12 @@ import cc.mi.core.annotation.utils.CC;
 
 public class AnnotationMethod {
 	private static Map<Class<?>, Method> checkMethodHash = null;
-	private static Checkable check = null;
 	
 	static {
 		checkMethodHash = new HashMap<Class<?>, Method>();
-		check = Checkable.getInstance();
 		
 		try {
-			Method[] methods = check.getClass().getDeclaredMethods();
+			Method[] methods = Checkable.INSTANCE.getClass().getDeclaredMethods();
 			for (Method method : methods) {
 				if (method.getName().startsWith("check")) {
 					String key = method.getName().substring(5);
@@ -47,7 +45,7 @@ public class AnnotationMethod {
 					Annotation an = anns[ i ][ j ];
 					Method checkMethod = checkMethodHash.get(an.annotationType());
 					if (checkMethod != null) {
-						boolean checked = (boolean) checkMethod.invoke(check, (Object)an, args[ i ]);
+						boolean checked = (boolean) checkMethod.invoke(Checkable.INSTANCE, (Object)an, args[ i ]);
 						if (!checked) return false;
 					}
 				}

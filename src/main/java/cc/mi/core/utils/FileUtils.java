@@ -87,9 +87,11 @@ public enum FileUtils {
 		List<File> ret = new LinkedList<>();
 		
 		File[] files = new File(path).listFiles();
-		for (File file : files) {
-			if (!file.isDirectory()) {
-				ret.add(file);
+		if (files != null) {
+			for (File file : files) {
+				if (!file.isDirectory()) {
+					ret.add(file);
+				}
 			}
 		}
 		

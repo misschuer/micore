@@ -29,7 +29,7 @@ public class DLX {
 		DLX dlx = new DLX();
 	    while(true) {
 //TODO 输入数据	        String str = next();
-	    	String str = "";
+	    	String str = "111111";
 			if(str.charAt(0) == 'e') break;
 			
 			dlx.setStr(str);

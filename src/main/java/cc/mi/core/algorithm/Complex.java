@@ -1,6 +1,6 @@
 package cc.mi.core.algorithm;
 
-public class Complex {
+public class Complex implements Cloneable {
 	private double real;
 	private double image;
 	private static final double EPS = 1e-4;

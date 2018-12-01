@@ -6,21 +6,10 @@ import cc.mi.core.annotation.utils.Max;
 import cc.mi.core.annotation.utils.Min;
 import cc.mi.core.annotation.utils.Range;
 
-public class Checkable {
-	private static Checkable instance = null;
+public enum Checkable {
+	INSTANCE;
 	
 	private Checkable() {
-	}
-	
-	public static Checkable getInstance() {
-		if (instance == null) {
-			synchronized (Checkable.class) {
-				if (instance == null) {
-					instance = new Checkable();
-				}
-			}
-		}
-		return instance;
 	}
 	
 	

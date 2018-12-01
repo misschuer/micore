@@ -113,42 +113,43 @@ public final class MapTemplate {
 	public boolean isCanRun(float fromx, float fromy, float tox, float toy, 
 			int lastX, int lastY, int cannotx, int cannoty, boolean isStart) {
 		
-		int x0 = (int)fromx, y0 = (int)fromy, x1 = (int)tox, y1 = (int)toy;
-		int dx =  Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-		int dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-		int err = dx + dy, e2; /* error value e_xy */
-		lastX = 0;
-		lastY = 0;
-
-		for(;;) {
-			/* loop */
-			if(!this.isValidPosition(x0, y0) && !isStart) {
-				
-				cannotx = x0;
-				cannoty = y0;
-				return false;
-			}
-
-			lastX = x0;
-			lastY = y0;
-			isStart = false;
-
-			if(x0 == x1 && y0 == y1) break;
-
-			e2 = 2 * err;
-
-			if(e2 >= dy) {
-				err += dy;    /* e_xy+e_x > 0 */
-				x0 += sx;
-			}
-
-			if(e2 <= dx) {
-				err += dx;    /* e_xy+e_y < 0 */
-				y0 += sy;
-			}
-		}
-
-		return true;
+//		int x0 = (int)fromx, y0 = (int)fromy, x1 = (int)tox, y1 = (int)toy;
+//		int dx =  Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+//		int dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+//		int err = dx + dy, e2; /* error value e_xy */
+//		lastX = 0;
+//		lastY = 0;
+//
+//		for(;;) {
+//			/* loop */
+//			if(!this.isValidPosition(x0, y0) && !isStart) {
+//				
+//				cannotx = x0;
+//				cannoty = y0;
+//				return false;
+//			}
+//
+//			lastX = x0;
+//			lastY = y0;
+//			isStart = false;
+//
+//			if(x0 == x1 && y0 == y1) break;
+//
+//			e2 = 2 * err;
+//
+//			if(e2 >= dy) {
+//				err += dy;    /* e_xy+e_x > 0 */
+//				x0 += sx;
+//			}
+//
+//			if(e2 <= dx) {
+//				err += dx;    /* e_xy+e_y < 0 */
+//				y0 += sy;
+//			}
+//		}
+//
+//		return true;
+		return false;
 	}
 	
 	public boolean isInMap(int x, int y) {

@@ -64,9 +64,11 @@ public final class ClasspathLoader {
 			}
 		});
 		
-		for (File file : files) {
-			String fullName = classPkg + "." + file.getName().replaceAll("\\"+CLASS_FILE_SUFFIX, "");
-			addClass(classList, fullName, annotationClass);
+		if (files != null) {
+			for (File file : files) {
+				String fullName = classPkg + "." + file.getName().replaceAll("\\"+CLASS_FILE_SUFFIX, "");
+				addClass(classList, fullName, annotationClass);
+			}
 		}
 		
 		files = null;

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author gy
  */
-public class Mask {
+public class Mask implements Cloneable {
 	static final byte MAX_VALUE = (byte)((1 << 8) - 1);
 	private final byte[] mask;
 	private final int maxIndex;

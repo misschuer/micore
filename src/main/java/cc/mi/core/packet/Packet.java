@@ -17,6 +17,6 @@ public interface Packet {
 	 * 当消息只发给内部服务器时的是中心服和内部服务器连接的fd
 	 * @return
 	 */
-	public int getFD();
-	public void setFD(int fd);
+	public int getBaseFd();
+	public void setBaseFd(int fd);
 }

@@ -33,10 +33,23 @@ public class BinlogModifier extends SyncEventRecorder {
 		this.tmpStrMask = new Mask(strMaxSize);
 	}
 	
+	/**
+	 * 创建普通对象包
+	 * @return
+	 */
 	public BinlogInfo packNewBinlogInfo() {
 		return this.packNewBinlogInfo(null, null);
 	}
-
+	
+	/**
+	 * 创建普通对象包
+	 * 打包规则是 intmask是int类型数据的掩码,包括数据的下表
+	 * intvalues 是掩码对应的有序的int数据
+	 * str同理
+	 * @param createIntMask	需要打包的int类型的数据
+	 * @param createStrMask 需要打包的str类型的数据
+	 * @return
+	 */
 	public BinlogInfo packNewBinlogInfo(Mask createIntMask, Mask createStrMask) {
 		BinlogInfo data = new BinlogInfo();
 		data.setBinlogId(this.guid);
@@ -95,10 +108,20 @@ public class BinlogModifier extends SyncEventRecorder {
 		return values;
 	}
 	
+	/**
+	 * 更新普通对象包
+	 * @return
+	 */
 	public BinlogInfo packUpdateBinlogInfo() {
 		return this.packUpdateBinlogInfo(null, null);
 	}
 	
+	/**
+	 * 更新普通对象包
+	 * @param updateIntMask
+	 * @param updateStrMask
+	 * @return
+	 */
 	public BinlogInfo packUpdateBinlogInfo(Mask updateIntMask, Mask updateStrMask) {
 		
 		if (bsIntIndxHash.size() == 0 && bsStrIndxHash.size() == 0) {

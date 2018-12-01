@@ -26,12 +26,12 @@ public abstract class ServerContext {
 	}
 	
 	protected void sendPacketToOtherServer(int serverFd, Packet coder) {
-		coder.setFD(serverFd);
+		coder.setBaseFd(serverFd);
 		this.sendToCenter(coder);
 	}
 	
 	protected void sendToClient(Packet coder) {
-		coder.setFD(fd);
+		coder.setBaseFd(fd);
 		this.sendToGate(coder);
 	}
 	
@@ -53,7 +53,7 @@ public abstract class ServerContext {
 		OperationResult result = new OperationResult();
 		result.setData(data);
 		result.setType(type);
-		result.setFD(this.fd);
+		result.setBaseFd(this.fd);
 		channel.writeAndFlush(result);
 	}
 	

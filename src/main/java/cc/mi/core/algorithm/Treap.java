@@ -99,7 +99,7 @@ public class Treap {
 
 		int findCmpResult = this.cmp.find(node, key);
 		if (findCmpResult == SELF) {
-			if (node.getLt() == null && node.getLt() == null) {
+			if (node.getLt() == null && node.getRt() == null) {
 				node = null;
 				return node;
 			}

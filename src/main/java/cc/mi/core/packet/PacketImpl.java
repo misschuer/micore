@@ -10,24 +10,24 @@ public abstract class PacketImpl implements Packet {
 	/**
 	 *  如果是发给客户端的fd > 0, 否则只是内部发
 	 */
-	private int fd;
+	private int baseFd;
 	
 	public PacketImpl(int opcode) {
 		this.opcode = opcode;
-		this.fd = 0;
+		this.baseFd = 0;
 	}
 	
 	@Override
 	public void onEncode(ByteBuf buffer) {
 		buffer.writeInt(opcode);
-		buffer.writeInt(fd);
+		buffer.writeInt(baseFd);
 		this.encode(buffer);
 	}
 	
 	@Override
 	public void onDecode(ByteBuf buffer) {
 		this.opcode = buffer.readInt();
-		this.fd = buffer.readInt();
+		this.baseFd = buffer.readInt();
 		this.decode(buffer);
 	}
 
@@ -41,13 +41,13 @@ public abstract class PacketImpl implements Packet {
 	}
 	
 	@Override
-	public int getFD() {
-		return this.fd;
+	public int getBaseFd() {
+		return this.baseFd;
 	}
 	
 	@Override
-	public void setFD(int fd) {
-		this.fd = fd;
+	public void setBaseFd(int fd) {
+		this.baseFd = fd;
 	}
 	
 	public abstract PacketImpl newInstance();
