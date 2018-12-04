@@ -7,13 +7,13 @@ import cc.mi.core.packet.StringCoder;
 /**
  * 玩家登陆
  **/
-public class PlayerLoginMsg extends PacketImpl  {
+public class AppPlayerLoginMsg extends PacketImpl  {
 	//客户端连接的fd
 	private int clientFd;
 	//玩家guid
 	private String guid;
 
-	public PlayerLoginMsg() {
+	public AppPlayerLoginMsg() {
 		super(31);
 	}
 	
@@ -47,6 +47,6 @@ public class PlayerLoginMsg extends PacketImpl  {
 		
 
 	public PacketImpl newInstance() {
-		return new PlayerLoginMsg();
+		return new AppPlayerLoginMsg();
 	}
 }

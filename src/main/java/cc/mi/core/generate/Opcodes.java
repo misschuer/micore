@@ -31,8 +31,8 @@ import cc.mi.core.generate.msg.ReleaseBinlogData;
 import cc.mi.core.generate.msg.ReleaseUnitBinlogData;
 import cc.mi.core.generate.msg.JoinMapMsg;
 import cc.mi.core.generate.msg.InnerServerConnList;
-import cc.mi.core.generate.msg.PlayerLoginMsg;
-import cc.mi.core.generate.msg.PlayerLogoutMsg;
+import cc.mi.core.generate.msg.AppPlayerLoginMsg;
+import cc.mi.core.generate.msg.AppPlayerLogoutMsg;
 import cc.mi.core.generate.msg.PlayerLeaveMap;
 import cc.mi.core.generate.msg.DeleteMap;
 import cc.mi.core.generate.msg.InstanceResult;
@@ -68,8 +68,8 @@ public final class Opcodes  {
 	public static final int MSG_RELEASEUNITBINLOGDATA = 28; //场景元素对象删除
 	public static final int MSG_JOINMAPMSG = 29; //玩家加入地图
 	public static final int MSG_INNERSERVERCONNLIST = 30; //内部服务器列表
-	public static final int MSG_PLAYERLOGINMSG = 31; //玩家登陆
-	public static final int MSG_PLAYERLOGOUTMSG = 32; //玩家登出
+	public static final int MSG_APPPLAYERLOGINMSG = 31; //玩家登陆
+	public static final int MSG_APPPLAYERLOGOUTMSG = 32; //玩家登出
 	public static final int MSG_PLAYERLEAVEMAP = 33; //玩家离开地图
 	public static final int MSG_DELETEMAP = 34; //删除地图
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
@@ -103,8 +103,8 @@ public final class Opcodes  {
 		coders[MSG_RELEASEUNITBINLOGDATA] = new ReleaseUnitBinlogData();
 		coders[MSG_JOINMAPMSG] = new JoinMapMsg();
 		coders[MSG_INNERSERVERCONNLIST] = new InnerServerConnList();
-		coders[MSG_PLAYERLOGINMSG] = new PlayerLoginMsg();
-		coders[MSG_PLAYERLOGOUTMSG] = new PlayerLogoutMsg();
+		coders[MSG_APPPLAYERLOGINMSG] = new AppPlayerLoginMsg();
+		coders[MSG_APPPLAYERLOGOUTMSG] = new AppPlayerLogoutMsg();
 		coders[MSG_PLAYERLEAVEMAP] = new PlayerLeaveMap();
 		coders[MSG_DELETEMAP] = new DeleteMap();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();

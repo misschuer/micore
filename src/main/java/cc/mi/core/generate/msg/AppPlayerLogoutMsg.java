@@ -7,13 +7,13 @@ import cc.mi.core.packet.StringCoder;
 /**
  * 玩家登出
  **/
-public class PlayerLogoutMsg extends PacketImpl  {
+public class AppPlayerLogoutMsg extends PacketImpl  {
 	//客户端连接的fd
 	private int clientFd;
 	//玩家guid
 	private String guid;
 
-	public PlayerLogoutMsg() {
+	public AppPlayerLogoutMsg() {
 		super(32);
 	}
 	
@@ -47,6 +47,6 @@ public class PlayerLogoutMsg extends PacketImpl  {
 		
 
 	public PacketImpl newInstance() {
-		return new PlayerLogoutMsg();
+		return new AppPlayerLogoutMsg();
 	}
 }
