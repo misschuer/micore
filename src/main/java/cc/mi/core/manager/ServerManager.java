@@ -360,7 +360,7 @@ public abstract class ServerManager {
 	}
 	
 	public void closeSession(int fd, int reasonType) {
-		ContextManager.closeSession(this.gateChannel, fd, reasonType);
+		ContextManager.INSTANCE.closeSession(this.gateChannel, fd, reasonType);
 	}
 
 	public ServerConnList getConnList() {

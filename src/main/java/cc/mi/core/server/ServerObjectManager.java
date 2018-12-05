@@ -13,12 +13,13 @@ import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.PutObjects;
 import cc.mi.core.generate.stru.BinlogInfo;
+import cc.mi.core.impl.Tick;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
-public abstract class ServerObjectManager extends BinlogObjectTable {
+public abstract class ServerObjectManager extends BinlogObjectTable implements Tick {
 	//以binlog的owner_guid为key，保存相关的所有数据
 	protected final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
@@ -149,5 +150,9 @@ public abstract class ServerObjectManager extends BinlogObjectTable {
 			this.detachObject(binlogData);
 			this.removeOwnerDataSet(binlogData.getOwner(), binlogData.getGuid());
 		}
+	}
+	
+	public boolean update(int diff) {
+		return false;
 	}
 }

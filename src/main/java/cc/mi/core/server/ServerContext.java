@@ -1,10 +1,11 @@
 package cc.mi.core.server;
 
 import cc.mi.core.generate.msg.OperationResult;
+import cc.mi.core.impl.Tick;
 import cc.mi.core.packet.Packet;
 import io.netty.channel.Channel;
 
-public abstract class ServerContext {
+public abstract class ServerContext implements Tick {
 	// 客户端连接网关服的fd
 	private int fd;
 	private SessionStatus status;
@@ -84,5 +85,10 @@ public abstract class ServerContext {
 
 	public void setGuid(String guid) {
 		this.guid = guid;
+	}
+	
+	@Override
+	public boolean update(int diff) {
+		return false;
 	}
 }
