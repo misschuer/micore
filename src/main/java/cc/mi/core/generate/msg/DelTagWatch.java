@@ -7,13 +7,13 @@ import cc.mi.core.packet.StringCoder;
 /**
  * 删除注册监听
  **/
-public class DelTagWatchAndCall extends PacketImpl  {
+public class DelTagWatch extends PacketImpl  {
 	//需要注册的fd(0:表示消息发来的服务器
 	private int fd;
 	//需要注册的binlog拥有者id
 	private String ownerTag;
 
-	public DelTagWatchAndCall() {
+	public DelTagWatch() {
 		super(36);
 	}
 	
@@ -47,6 +47,6 @@ public class DelTagWatchAndCall extends PacketImpl  {
 		
 
 	public PacketImpl newInstance() {
-		return new DelTagWatchAndCall();
+		return new DelTagWatch();
 	}
 }

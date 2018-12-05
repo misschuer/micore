@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import cc.mi.core.callback.Callback;
 import cc.mi.core.generate.msg.AddTagWatchAndCall;
 import cc.mi.core.generate.msg.AddWatchAndCall;
-import cc.mi.core.generate.msg.DelTagWatchAndCall;
+import cc.mi.core.generate.msg.DelTagWatch;
 import cc.mi.core.generate.msg.IdentityServerMsg;
 import cc.mi.core.generate.msg.ServerRegOpcode;
 import cc.mi.core.generate.msg.StartReady;
@@ -285,8 +285,8 @@ public abstract class ServerManager {
 	 *  给当前服务器删除注册
 	 * @param ownerTag
 	 */
-	public void delTagWatchAndCall(String ownerTag) {
-		this.delTagWatchAndCall(0, ownerTag);
+	public void delTagWatch(String ownerTag) {
+		this.delTagWatch(0, ownerTag);
 	}
 	
 	/**
@@ -294,8 +294,8 @@ public abstract class ServerManager {
 	 * @param channel
 	 * @param ownerTag
 	 */
-	public void delTagWatchAndCall(int fd, String ownerTag) {
-		DelTagWatchAndCall packet = new DelTagWatchAndCall();
+	public void delTagWatch(int fd, String ownerTag) {
+		DelTagWatch packet = new DelTagWatch();
 		packet.setFd(fd);
 		packet.setOwnerTag(ownerTag);
 		this.centerChannel.writeAndFlush(packet);

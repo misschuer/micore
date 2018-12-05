@@ -31,6 +31,9 @@ public class RelateHash<K, V> {
 	
 	public void remove(K k, V v) {
 		this.relateHash.get(k).remove(v);
+		if (this.relateHash.get(k).isEmpty()) {
+			this.relateHash.remove(k);
+		}
 	}
 	
 	public Iterator<V> relatedList(K k) {

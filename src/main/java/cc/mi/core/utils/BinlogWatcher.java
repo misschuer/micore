@@ -34,15 +34,21 @@ public class BinlogWatcher {
 		this.biOwnerHash.addWatch(binlogOwnerId, fd);
 	}
 	
-	public void remove(int fd) {
-		Set<String> set = this.fdHash.removeAll(fd);
-		for (String bid : set) {
-			this.biHash.remove(bid, fd);
+	/**
+	 * 删除所有的关系
+	 * @param binlogId
+	 */
+	public void remove(String binlogId) {
+		// 删除 hash的数据
+		Set<Integer> set = this.biHash.removeAll(binlogId);
+		for (Integer fd : set) {
+			this.fdHash.remove(fd, binlogId);
 		}
 		
-		Set<String> set2 = this.fdOwnerHash.removeAll(fd);
-		for (String bid : set2) {
-			this.biOwnerHash.remove(bid, fd);
+		// 删除OwnerHash的数据
+		set = this.biOwnerHash.removeAll(binlogId);
+		for (Integer fd : set) {
+			this.fdOwnerHash.remove(fd, binlogId);
 		}
 	}
 }
