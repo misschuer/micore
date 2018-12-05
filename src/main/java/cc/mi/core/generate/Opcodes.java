@@ -35,6 +35,8 @@ import cc.mi.core.generate.msg.AppPlayerLoginMsg;
 import cc.mi.core.generate.msg.AppPlayerLogoutMsg;
 import cc.mi.core.generate.msg.PlayerLeaveMap;
 import cc.mi.core.generate.msg.DeleteMap;
+import cc.mi.core.generate.msg.QueuingMsg;
+import cc.mi.core.generate.msg.DelTagWatchAndCall;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -72,6 +74,8 @@ public final class Opcodes  {
 	public static final int MSG_APPPLAYERLOGOUTMSG = 32; //玩家登出
 	public static final int MSG_PLAYERLEAVEMAP = 33; //玩家离开地图
 	public static final int MSG_DELETEMAP = 34; //删除地图
+	public static final int MSG_QUEUINGMSG = 35; //排队名次
+	public static final int MSG_DELTAGWATCHANDCALL = 36; //删除注册监听
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -107,6 +111,8 @@ public final class Opcodes  {
 		coders[MSG_APPPLAYERLOGOUTMSG] = new AppPlayerLogoutMsg();
 		coders[MSG_PLAYERLEAVEMAP] = new PlayerLeaveMap();
 		coders[MSG_DELETEMAP] = new DeleteMap();
+		coders[MSG_QUEUINGMSG] = new QueuingMsg();
+		coders[MSG_DELTAGWATCHANDCALL] = new DelTagWatchAndCall();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	

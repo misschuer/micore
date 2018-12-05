@@ -29,12 +29,12 @@ public final class ContextManager {
 		fdContextHash.put(context.getFd(), context);
 	}
 	
-	public static void removeContext(int fd) {
-		fdContextHash.remove(fd);
+	public static ServerContext removeContext(int fd) {
+		return fdContextHash.remove(fd);
 	}
 	
-	public static void removeContext(ServerContext context) {
-		removeContext(context.getFd());
+	public static ServerContext removeContext(ServerContext context) {
+		return removeContext(context.getFd());
 	}
 	
 	public static ServerContext getContext(int fd) {
