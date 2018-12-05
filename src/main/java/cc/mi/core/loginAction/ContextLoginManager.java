@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.Queue;
 
 import cc.mi.core.constance.LoginActionEnum;
+import cc.mi.core.impl.Tick;
 
-public abstract class ContextLoginManager {
+public abstract class ContextLoginManager implements Tick {
 	protected Map<String, Queue<LoginActionBase>> actionHash = new HashMap<>();
 	
-	public void update(int diff) {
+	public boolean update(int diff) {
 		List<String> removedGuid = new LinkedList<>();
 		for (Queue<LoginActionBase> queue: actionHash.values()) {
 			LoginActionBase action = queue.peek();
@@ -27,6 +28,8 @@ public abstract class ContextLoginManager {
 		for (String guid : removedGuid) {
 			this.actionHash.remove(guid);
 		}
+		
+		return true;
 	}
 	
 	public abstract void pushAction(String guid, int fd, LoginActionEnum actionType);

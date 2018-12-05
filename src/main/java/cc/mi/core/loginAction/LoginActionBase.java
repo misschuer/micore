@@ -1,8 +1,9 @@
 package cc.mi.core.loginAction;
 
 import cc.mi.core.constance.LoginActionEnum;
+import cc.mi.core.impl.Tick;
 
-public abstract class LoginActionBase {
+public abstract class LoginActionBase implements Tick {
 	private final int fd;
 	private final String guid;
 	
@@ -10,8 +11,6 @@ public abstract class LoginActionBase {
 		this.fd   =   fd;
 		this.guid = guid;
 	}
-	
-	public abstract boolean update(int diff);
 	
 	public abstract LoginActionEnum getType();
 
