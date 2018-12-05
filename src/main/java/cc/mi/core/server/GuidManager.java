@@ -2,6 +2,7 @@ package cc.mi.core.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import cc.mi.core.constance.ObjectType;
 
@@ -11,6 +12,10 @@ public enum GuidManager {
 	private final Map<Integer, Integer> indxHash;
 	private GuidManager() {
 		this.indxHash = new HashMap<>();
+	}
+	
+	public final String makeNewGuidByUuid(char objectType) {
+		return String.format("%c%s", objectType, UUID.randomUUID().toString().replace("-", "").toLowerCase());
 	}
 	
 	private final String makeNewGuid(char objectType, long indx, String suffix) {
