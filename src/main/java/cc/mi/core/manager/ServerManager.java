@@ -20,7 +20,6 @@ import cc.mi.core.handler.Handler;
 import cc.mi.core.log.CustomLogger;
 import cc.mi.core.packet.Packet;
 import cc.mi.core.server.ContextManager;
-import cc.mi.core.server.ServerConnList;
 import cc.mi.core.utils.ServerProcessBlock;
 import io.netty.channel.Channel;
 
@@ -32,8 +31,6 @@ public abstract class ServerManager {
 	protected Channel gateChannel = null;
 	
 	private final int serverType;
-	
-	private final ServerConnList connList = new ServerConnList();
 	
 	// 消息收到以后的回调
 	protected final Map<Integer, Handler> handlers = new HashMap<>();
@@ -361,9 +358,5 @@ public abstract class ServerManager {
 	
 	public void closeSession(int fd, int reasonType) {
 		ContextManager.INSTANCE.closeSession(this.gateChannel, fd, reasonType);
-	}
-
-	public ServerConnList getConnList() {
-		return connList;
 	}
 }

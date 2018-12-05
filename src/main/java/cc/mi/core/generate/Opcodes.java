@@ -37,6 +37,8 @@ import cc.mi.core.generate.msg.PlayerLeaveMap;
 import cc.mi.core.generate.msg.DeleteMap;
 import cc.mi.core.generate.msg.QueuingMsg;
 import cc.mi.core.generate.msg.DelTagWatch;
+import cc.mi.core.generate.msg.MapCreateMsg;
+import cc.mi.core.generate.msg.MapDeleteMsg;
 import cc.mi.core.generate.msg.InstanceResult;
 
 public final class Opcodes  {
@@ -76,6 +78,8 @@ public final class Opcodes  {
 	public static final int MSG_DELETEMAP = 34; //删除地图
 	public static final int MSG_QUEUINGMSG = 35; //排队名次
 	public static final int MSG_DELTAGWATCH = 36; //删除注册监听
+	public static final int MSG_MAPCREATEMSG = 37; //创建地图
+	public static final int MSG_MAPDELETEMSG = 38; //删除地图
 	public static final int MSG_INSTANCERESULT = 375; //副本结果
 	
 	static {
@@ -113,6 +117,8 @@ public final class Opcodes  {
 		coders[MSG_DELETEMAP] = new DeleteMap();
 		coders[MSG_QUEUINGMSG] = new QueuingMsg();
 		coders[MSG_DELTAGWATCH] = new DelTagWatch();
+		coders[MSG_MAPCREATEMSG] = new MapCreateMsg();
+		coders[MSG_MAPDELETEMSG] = new MapDeleteMsg();
 		coders[MSG_INSTANCERESULT] = new InstanceResult();
 	}
 	
