@@ -220,8 +220,8 @@ public abstract class ServerManager {
 	 * @param channel
 	 * @param guidType
 	 */
-	public void addWatchAndCall(String guidType) {
-		this.addWatchAndCall(0, guidType);
+	public void addWatchAndCall(String binlogId) {
+		this.addWatchAndCall(0, binlogId, null);
 	}
 	
 	/**
@@ -230,11 +230,48 @@ public abstract class ServerManager {
 	 * @param fd
 	 * @param guidType
 	 */
-	public void addWatchAndCall(int fd, String guidType) {
+	public void addWatchAndCall(int fd, String binlogId) {
+		this.addWatchAndCall(fd, binlogId, null);
+	}
+	
+	
+	/**
+	 * 先从本地取, 本地没有去远程取
+	 * @param binlogId
+	 * @param callback
+	 */
+	public void addWatchAndCall(String binlogId, Callback<Void> callback) {
+		this.addWatchAndCall(0, binlogId, callback);
+	}
+	
+	/**
+	 * 给客户端注册消息
+	 * @param channel
+	 * @param fd
+	 * @param guidType
+	 */
+	public void addWatchAndCall(int fd, String binlogId, Callback<Void> callback) {
+		// 本地的话直接可以取
+		if (fd == 0) {
+			if (this.isLocalBinlogDataExists(binlogId)) {
+				if (callback != null) {
+					callback.invoke(null);
+				}
+				return;
+			}
+		}
+		
 		AddWatchAndCall awac = new AddWatchAndCall();
 		awac.setFd(fd);
-		awac.setGuidType(guidType);
+		awac.setGuidType(binlogId);
 		this.centerChannel.writeAndFlush(awac);
+		if (callback != null) {
+			this.addWatchCallback(binlogId, callback);
+		}
+	}
+	
+	protected boolean isLocalBinlogDataExists(String binlogId) {
+		return false;
 	}
 	
 	/**
@@ -302,6 +339,8 @@ public abstract class ServerManager {
 	}
 	
 	protected void addTagWatchCallback(String ownerTag, Callback<Void> callback) {}
+	
+	protected void addWatchCallback(String binlogId, Callback<Void> callback) {}
 	
 	/**
 	 * 告诉对方中心服准备完成

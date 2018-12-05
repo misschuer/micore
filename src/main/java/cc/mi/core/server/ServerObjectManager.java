@@ -23,16 +23,22 @@ public abstract class ServerObjectManager extends BinlogObjectTable {
 	protected final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
 	
-	private final Map<String, Callback<Void>> ownerCallbackHash;
+	private final Map<String, Callback<Void>> createCallbackHash;
+	private final Map<String, Callback<Void>> ownerCreateCallbackHash;
 	
 	protected ServerObjectManager(int serverType) {
 		this.serverType = serverType;
 		allOwnerDataSet = new HashMap<>();
-		this.ownerCallbackHash = new HashMap<>();
+		this.createCallbackHash = new HashMap<>();
+		this.ownerCreateCallbackHash = new HashMap<>();
 	}
 	
-	public void addCreateCallback(String ownerId, Callback<Void> callback) {
-		this.ownerCallbackHash.put(ownerId, callback);
+	public void addOwnerCreateCallback(String ownerId, Callback<Void> callback) {
+		this.ownerCreateCallbackHash.put(ownerId, callback);
+	}
+	
+	public void addCreateCallback(String binlogId, Callback<Void> callback) {
+		this.createCallbackHash.put(binlogId, callback);
 	}
 	
 	public void getDataSetAllObject(final String ownerId, final List<BinlogData> result) {
@@ -61,13 +67,18 @@ public abstract class ServerObjectManager extends BinlogObjectTable {
 	public void addOwnerDataSet(final String ownerId, String binlogId) {
 		if (!this.allOwnerDataSet.containsKey(ownerId)) {
 			this.allOwnerDataSet.put(ownerId, new OwnerDataSet(ownerId));
-			// 有注册回调事件的就回调
-			if (ownerCallbackHash.containsKey(ownerId)) {
-				ownerCallbackHash.get(ownerId).invoke(null);
+			// owner回调
+			if (ownerCreateCallbackHash.containsKey(ownerId)) {
+				ownerCreateCallbackHash.get(ownerId).invoke(null);
 			}
 		}
 		OwnerDataSet ds = allOwnerDataSet.get(ownerId);
 		ds.add(binlogId);
+		
+		// 某个binlog回调
+		if (createCallbackHash.containsKey(binlogId)) {
+			createCallbackHash.get(binlogId).invoke(null);
+		}
 	}
 	
 	public void removeOwnerDataSet(final String ownerId, String binlogId) {
