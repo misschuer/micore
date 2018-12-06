@@ -6,11 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.log.CustomLogger;
 import cc.mi.core.utils.FileUtils;
+import cc.mi.core.utils.Point2D;
 import cc.mi.core.xlsxData.MapBaseinfo;
 import cc.mi.core.xlsxData.MapGameobject;
 import cc.mi.core.xlsxData.MapMonster;
@@ -33,7 +35,7 @@ public enum MapTemplateManager {
 	}
 	
 	public void loads(boolean baseInfoOnly) {
-		URL url = MapTemplate.class.getResource("/maps");
+		URL url = MapTemplateManager.class.getResource("/maps");
 		List<File> fileList = FileUtils.INSTANCE.listFilesInCurrentDirectory(url.getPath());
 		try {
 			for (File file : fileList) {
@@ -52,7 +54,7 @@ public enum MapTemplateManager {
 		MapTemplate mt = new MapTemplate();
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 		
-		//先载入基本信息
+		//先载入基本信息 line 1
 	    if (!this.loadBaseinfo(bufferedReader, mt)) {
 	        return null;
 	    }
@@ -62,28 +64,33 @@ public enum MapTemplateManager {
 			return mt;
 		}
 
-	    //载入障碍信息
+	    //载入障碍信息 line 2
 	    if (!this.loadObstacle(bufferedReader, mt)) {
 	        return null;
 	    }
 
-	    //载入复活点信息
+	    //载入复活点信息 line 3
 	    if (!this.loadRaise(bufferedReader, mt)) {
 	        return null;
 	    }
 	    
-	    //载入传送点信息
+	    //载入传送点信息 line 4
 	    if (!this.loadTeleport(bufferedReader, mt)) {
 	        return null;
 	    }
 
-	    //载入怪物信息
+	    //载入怪物信息 line 5
 	    if (!this.loadCreatrue(bufferedReader, mt)) {
 	        return null;
 	    }
 
-	    //载入游戏对象
+	    //载入游戏对象 line 6
 	    if (!this.loadGameObject(bufferedReader, mt)) {
+	        return null;
+	    }
+	    
+	    //载入主干道 line 7
+	    if (!this.loadMainLoad(bufferedReader, mt)) {
 	        return null;
 	    }
 
@@ -102,17 +109,15 @@ public enum MapTemplateManager {
 		logger.devLog("loadBaseinfo");
 		MapBaseinfo baseInfo = new MapBaseinfo();
 		String[] params = str.split(",");
-//		1,上玄宗,2018-01-04,8460,9540,30,30,282,318,1,0
+//		1,上玄宗,8460,9540,30,30,282,318,1,0
 		try {
 			baseInfo.setMapId(Integer.parseInt(params[ 0 ]));
 			baseInfo.setName(params[ 1 ]);
-			baseInfo.setDate(params[ 2 ]);
-			baseInfo.setGridWidth(Integer.parseInt(params[ 3 ]));
-			baseInfo.setGridHeight(Integer.parseInt(params[ 4 ]));
-			baseInfo.setWidth(Integer.parseInt(params[ 5 ]));
-			baseInfo.setHeight(Integer.parseInt(params[ 6 ]));
-			baseInfo.setParentId(Integer.parseInt(params[ 7 ]));
-			baseInfo.setType(Integer.parseInt(params[ 8 ]));
+			baseInfo.setGridWidth(Integer.parseInt(params[ 2 ]));
+			baseInfo.setGridHeight(Integer.parseInt(params[ 3 ]));
+			baseInfo.setWidth(Integer.parseInt(params[ 4 ]));
+			baseInfo.setHeight(Integer.parseInt(params[ 5 ]));
+			baseInfo.setParentId(Integer.parseInt(params[ 6 ]));
 			mt.setBaseInfo(baseInfo);
 		} catch (Throwable e) {
 			return false;
@@ -262,4 +267,36 @@ public enum MapTemplateManager {
 	    return true;
 	}
 
+	private boolean loadMainLoad(BufferedReader bufferedReader, MapTemplate mt) throws IOException {
+		String str = bufferedReader.readLine();
+		// 已经读到文件末
+		if (str == null) {
+			return false;
+		}
+		
+		logger.devLog("loadMainLoad");
+		if (str.isEmpty()) {
+			return true;
+		}
+		String[] params = str.split(",");
+		try {
+			//140,310,1,100,300
+			for (int i = 0; i < params.length; ) {
+				int x = Integer.parseInt(params[i++]);
+				int y = Integer.parseInt(params[i++]);
+				int cnt = Integer.parseInt(params[i++]);
+				List<Point2D<Integer>> neibNodeList = new LinkedList<>();
+				for (int k = 0; k < cnt; ++ k) {
+					int nx = Integer.parseInt(params[i++]);
+					int ny = Integer.parseInt(params[i++]);
+					neibNodeList.add(new Point2D<Integer>(nx, ny));
+				}
+				mt.addMainNode(x, y, neibNodeList);
+			}
+		} catch (Throwable e) {
+			return false;
+		}
+
+	    return true;
+	}
 }

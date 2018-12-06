@@ -1,11 +1,13 @@
 package cc.mi.core.xlsxData;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cc.mi.core.constance.MapTypeConst;
+import cc.mi.core.callback.Callback;
+import cc.mi.core.utils.Point2D;
 
 public final class MapTemplate {
 	// 基础信息
@@ -21,16 +23,21 @@ public final class MapTemplate {
 	//刷游戏对象点
 	protected List<MapGameobject> gameobjects;
 	
+	protected MapMainLoad mainLoad;
+	
 	public MapTemplate() {
+		Arrays.asList();
 		this.raises = new LinkedList<>();
 		this.teleports = new LinkedList<>();
 		this.gameobjects = new LinkedList<>();
 		this.monsters = new HashMap<>();
+		this.mainLoad = new MapMainLoad();
 	}
 	
 	public boolean isInstance() {
-		int type = this.getBaseInfo().getType();
-		return type == MapTypeConst.MAP_TYPE_INSTANCE;
+		// type 通过配表获得
+//		return type == MapTypeConst.MAP_TYPE_INSTANCE;
+		return false;
 	}
 	
 	public boolean isValidPosition(int x, int y) {
@@ -193,5 +200,33 @@ public final class MapTemplate {
 	
 	public void addMonster(int pos, MapMonster monster) {
 		this.monsters.put(pos, monster);
+	}
+	
+	public void addMainNode(int x, int y, List<Point2D<Integer>> neibNodeList) {
+		this.mainLoad.addMainNode(x, y, neibNodeList);
+	}
+	
+	public void foreachTeleport(Callback<MapTeleport> callback) {
+		for (MapTeleport value : this.teleports) {
+			callback.invoke(value);
+		}
+	}
+	
+	public void foreachRaise(Callback<MapRaise> callback) {
+		for (MapRaise value : this.raises) {
+			callback.invoke(value);
+		}
+	}
+	
+	public void foreachMonster(Callback<MapMonster> callback) {
+		for (MapMonster value : this.monsters.values()) {
+			callback.invoke(value);
+		}
+	}
+	
+	public void foreachGameObject(Callback<MapGameobject> callback) {
+		for (MapGameobject value : this.gameobjects) {
+			callback.invoke(value);
+		}
 	}
 }
