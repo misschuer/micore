@@ -1,0 +1,8 @@
+{
+	1 : {"id" : 1, "audio" : "http://h5vedio.com:8199/static/audio/59a64eee3a725.mp3", "duration" : 31000},
+	2 : {"id" : 2, "audio" : "http://h5vedio.com:8199/static/audio/59c50951c9f46.mp3", "duration" : 15000},
+	3 : {"id" : 3, "audio" : "http://h5vedio.com:8199/static/audio/59cb3187bf97a.mp3", "duration" : 37000},
+	4 : {"id" : 4, "audio" : "http://h5vedio.com:8199/static/audio/59d35c1e30021.mp3", "duration" : 3000},
+	5 : {"id" : 5, "audio" : "http://h5vedio.com:8199/static/audio/59d362115633d.mp3", "duration" : 1000},
+	6 : {"id" : 6, "audio" : "http://h5vedio.com:8199/static/audio/59f7f2a6aab93.mp3", "duration" : 16000}
+}
