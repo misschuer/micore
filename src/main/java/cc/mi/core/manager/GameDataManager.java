@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import cc.mi.core.gameData.TableMap;
 import cc.mi.core.utils.FileUtils;
 
 public enum GameDataManager {
@@ -21,6 +22,11 @@ public enum GameDataManager {
 	private final Map<String, JsonObject> jsonHash = new HashMap<>();
 	
 	public void loads() {
+		this.loadJsons();
+		TableMap.INSTANCE.parse(jsonHash.get(TableMap.INSTANCE.getTableName()));
+	}
+	
+	private void loadJsons() {
 		URL url = MapTemplateManager.class.getResource("/datas");
 		List<File> fileList = FileUtils.INSTANCE.listFilesInCurrentDirectory(url.getPath());
 		try {
