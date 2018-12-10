@@ -7,8 +7,10 @@ import java.util.Map.Entry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import cc.mi.core.annotation.data.DataKey;
 import cc.mi.core.constance.MapTypeConst;
 
+@DataKey(value = "tb_map")
 public enum TableMap {
 	INSTANCE;
 	
@@ -54,33 +56,4 @@ public enum TableMap {
 		
 		throw new RuntimeException(String.format("mapid = %s is not valid", id));
 	}
-	
-	public String getTableName() {
-		return "tb_map";
-	}
-	
-//	static class MapData {
-//		// 父级id
-//		private final int parentId;
-//		// 选择的场景服索引
-//		private final int connIndx;
-//		// 传送位置
-//		private final Point2D<Integer> tele;
-//		// 限制进入等级
-//		private final int levelLimit;
-//		// 地图类型
-//		private final int type;
-//		// 是否有时间限制
-//		private final int isTimeLimit;
-//		// 是否允许切换战斗模式
-//		private final int allowChangeMode;
-//		// 如果地图是副本地图的类型
-//		private final int instType;
-//		// 判断是哪个副本地图的子类型
-//		private final int instSubType;
-//		// 判断是否需要传送参数
-//		private final int isNeedGeneral;
-//		// 判断是否允许离线重进
-//		private final int isOfflineReenter;
-//	}
 }

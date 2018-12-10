@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import cc.mi.core.annotation.data.DataKey;
 import cc.mi.core.gameData.TableMap;
 import cc.mi.core.utils.FileUtils;
 
@@ -23,7 +24,12 @@ public enum GameDataManager {
 	
 	public void loads() {
 		this.loadJsons();
-		TableMap.INSTANCE.parse(jsonHash.get(TableMap.INSTANCE.getTableName()));
+		TableMap.INSTANCE.parse(this.getObject(TableMap.class));
+	}
+	
+	private JsonObject getObject(Class<?> clazz) {
+		String name = clazz.getAnnotation(DataKey.class).value();
+		return jsonHash.get(name);
 	}
 	
 	private void loadJsons() {
