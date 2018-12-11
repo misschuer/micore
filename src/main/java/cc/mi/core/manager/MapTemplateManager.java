@@ -6,13 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.log.CustomLogger;
 import cc.mi.core.utils.FileUtils;
-import cc.mi.core.utils.Point2D;
 import cc.mi.core.xlsxData.MapBaseinfo;
 import cc.mi.core.xlsxData.MapGameobject;
 import cc.mi.core.xlsxData.MapMonster;
@@ -280,18 +278,22 @@ public enum MapTemplateManager {
 		}
 		String[] params = str.split(",");
 		try {
-			//140,310,1,100,300
-			for (int i = 0; i < params.length; ) {
-				int x = Integer.parseInt(params[i++]);
-				int y = Integer.parseInt(params[i++]);
-				int cnt = Integer.parseInt(params[i++]);
-				List<Point2D<Integer>> neibNodeList = new LinkedList<>();
-				for (int k = 0; k < cnt; ++ k) {
-					int nx = Integer.parseInt(params[i++]);
-					int ny = Integer.parseInt(params[i++]);
-					neibNodeList.add(new Point2D<Integer>(nx, ny));
-				}
-				mt.addMainNode(x, y, neibNodeList);
+			// 2,0,140,310,1,100,300,1,0,1
+			// 第一个表示有N个点, 后面N个(序号,x，y),后面有一个数M表示有M组关系,后面M个（序号1,序号2）
+			int i = 0;
+			int n = Integer.parseInt(params[i++]);
+			for (int k = 0; k < n; ++ k) {
+				int id = Integer.parseInt(params[i++]);
+				int  x = Integer.parseInt(params[i++]);
+				int  y = Integer.parseInt(params[i++]);
+				mt.addMainNode(id, x, y);
+			}
+			mt.initMainNodeDist(n+2);
+			int m = Integer.parseInt(params[i++]);
+			for (int k = 0; k < m; ++ k) {
+				int  id1 = Integer.parseInt(params[i++]);
+				int  id2 = Integer.parseInt(params[i++]);
+				mt.linkMainNode(id1, id2);
 			}
 		} catch (Throwable e) {
 			return false;

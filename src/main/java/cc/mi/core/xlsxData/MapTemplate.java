@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.callback.Callback;
-import cc.mi.core.utils.Point2D;
 
 public final class MapTemplate {
 	// 基础信息
@@ -202,8 +201,16 @@ public final class MapTemplate {
 		this.monsters.put(pos, monster);
 	}
 	
-	public void addMainNode(int x, int y, List<Point2D<Integer>> neibNodeList) {
-		this.mainLoad.addMainNode(x, y, neibNodeList);
+	public void addMainNode(int id, int x, int y) {
+		this.mainLoad.addMainNode(id, x, y);
+	}
+	
+	public void linkMainNode(int id1, int id2) {
+		this.mainLoad.linkMainNode(id1, id2);
+	}
+	
+	public void initMainNodeDist(int n) {
+		this.mainLoad.initDist(n);
 	}
 	
 	public void foreachTeleport(Callback<MapTeleport> callback) {
