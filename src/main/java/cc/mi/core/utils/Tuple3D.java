@@ -1,25 +1,25 @@
 package cc.mi.core.utils;
 
-public class Tuple3D<T> {
-	private final T x;
-	private final T y;
-	private final T z;
+public class Tuple3D<X, Y, Z> {
+	private final X x;
+	private final Y y;
+	private final Z z;
 	
-	public Tuple3D(T x, T y, T z) {
+	public Tuple3D(X x, Y y, Z z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public T getX() {
+	public X getX() {
 		return x;
 	}
 
-	public T getY() {
+	public Y getY() {
 		return y;
 	}
 
-	public T getZ() {
+	public Z getZ() {
 		return z;
 	}
 }

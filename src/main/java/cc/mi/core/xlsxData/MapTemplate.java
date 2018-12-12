@@ -1,12 +1,18 @@
 package cc.mi.core.xlsxData;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.callback.Callback;
+import cc.mi.core.utils.Floyd;
+import cc.mi.core.utils.MIMath;
+import cc.mi.core.utils.Path;
+import cc.mi.core.utils.Point2D;
 
 public final class MapTemplate {
 	// 基础信息
@@ -84,7 +90,7 @@ public final class MapTemplate {
 		int x0 = (int)fromx, y0 = (int)fromy, x1 = (int)tox, y1 = (int)toy;
 		int dx =  Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 		int dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-		int err = dx + dy, e2; /* error value e_xy */	
+		int err = dx + dy, e2; /* error value e_xy */
 
 		for(;;) {
 			/* loop */
@@ -211,6 +217,55 @@ public final class MapTemplate {
 	
 	public void initMainNodeDist(int n) {
 		this.mainLoad.initDist(n);
+	}
+	
+	private void makeLink(JointNode<Float, Integer> node, float[][] dist, List<JointNode<Float, Integer>> infos) {
+		Collections.sort(infos, new Comparator<JointNode<Float, Integer>>() {
+			@Override
+			public int compare(JointNode<Float, Integer> o1, JointNode<Float, Integer> o2) {
+				double a = MIMath.INSTANCE.getDistance(node.getX(), node.getY(), o1.getX(), o1.getY());
+				double b = MIMath.INSTANCE.getDistance(node.getX(), node.getY(), o2.getX(), o2.getY());
+				if (a < b)
+					return -1;
+				if (a > b)
+					return 1;
+				return 0;
+			}
+		});
+		
+		// 最多取10个点连接 看看能不能直接走过去, 最好地图生成的时候尽量最优的
+		// 如果地图太大的话需要修改
+		for (int i = 0; i < 10 && i < infos.size(); ++ i) {
+			JointNode<Float, Integer> info = infos.get(i);
+			if (this.isCanRun(node.getX(), node.getY(), info.getX(), info.getY(), true)) {
+				dist[node.getZ()][info.getZ()] = (float) MIMath.INSTANCE.getDistance(node.getX(), node.getY(), info.getX(), info.getY());
+			}
+		}
+	}
+	
+	public Path getPath(float x1, float y1, float x2, float y2) {
+		int n = this.mainLoad.getN();
+		List<JointNode<Float, Integer>> infos = this.mainLoad.getNodeInfoList();
+		float[][] dist = this.mainLoad.cloneDist();
+		
+		final JointNode<Float, Integer> a = new JointNode<Float, Integer>(x1, y1, n-2);
+		final JointNode<Float, Integer> b = new JointNode<Float, Integer>(x2, y2, n-1);
+		
+		// 放到hash里面 这2个会被后面的覆盖掉, 有引用也不怕内存泄漏
+		this.mainLoad.putNode(a, b);
+		// 这里是核心代码 构造可走路径
+		this.makeLink(a, dist, infos);
+		this.makeLink(b, dist, infos);
+		
+		Floyd floyd = new Floyd(n);
+		List<Integer> pathIndx = floyd.getPath(n-2, n-1, dist);
+		Path path = new Path();
+		for (int indx : pathIndx) {
+			JointNode<Float, Integer> info = this.mainLoad.getNode(indx);
+			path.addPath(new Point2D<Float>(info.getX(), info.getY()));
+		}
+		
+		return path;
 	}
 	
 	public void foreachTeleport(Callback<MapTeleport> callback) {
