@@ -15,16 +15,30 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import cc.mi.core.annotation.data.DataKey;
+import cc.mi.core.gameData.TableCreature;
+import cc.mi.core.gameData.TableGameObject;
 import cc.mi.core.gameData.TableMap;
 import cc.mi.core.utils.FileUtils;
 
 public enum GameDataManager {
 	INSTANCE;
+	// 临时用的
 	private final Map<String, JsonObject> jsonHash = new HashMap<>();
 	
 	public void loads() {
 		this.loadJsons();
+		this.parseTable();
+		// 临时的释放掉 如果有需要再说
+		this.jsonHash.clear();
+	}
+	
+	/**
+	 * 只需在这里加
+	 */
+	private void parseTable() {
 		TableMap.INSTANCE.parse(this.getObject(TableMap.class));
+		TableCreature.INSTANCE.parse(this.getObject(TableCreature.class));
+		TableGameObject.INSTANCE.parse(this.getObject(TableGameObject.class));
 	}
 	
 	private JsonObject getObject(Class<?> clazz) {
