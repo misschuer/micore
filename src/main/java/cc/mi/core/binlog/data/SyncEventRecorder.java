@@ -8,6 +8,7 @@ import cc.mi.core.binlog.callback.BinlogUpdateCallback;
 import cc.mi.core.binlog.callbackParam.BinlogUpdateCallbackParam;
 import cc.mi.core.binlog.stru.BinlogStruValueInt;
 import cc.mi.core.binlog.stru.BinlogStruValueStr;
+import cc.mi.core.constance.BinlogChangeInfo;
 import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.constance.BinlogSyncMode;
 import cc.mi.core.utils.Bytes;
@@ -152,6 +153,7 @@ public class SyncEventRecorder {
 //		if (this.updateIntMask == null || this.updateIntMask.isMarked(indx)) {
 			BinlogStruValueInt binlog = new BinlogStruValueInt(optType, indx, value);
 			this.bsIntIndxHash.put(indx, binlog);
+			this.onBinlogChanged();
 //		}
 	}
 	
@@ -164,6 +166,7 @@ public class SyncEventRecorder {
 //		if (this.updateStrMask == null || this.updateStrMask.isMarked(indx)) {
 			BinlogStruValueStr binlog = new BinlogStruValueStr(optType, indx, value);
 			this.bsStrIndxHash.put(indx, binlog);
+			this.onBinlogChanged();
 //		}
 	}
 
@@ -199,5 +202,10 @@ public class SyncEventRecorder {
 		
 		params = strs.split(BINLOG_DATA_SEP);
 		System.arraycopy(params, 0, strValues, 0, params.length);
+	}
+	
+	// 需要存起来给
+	public void onBinlogChanged() {
+		BinlogChangeInfo.INSTANCE.add(guid);
 	}
 }

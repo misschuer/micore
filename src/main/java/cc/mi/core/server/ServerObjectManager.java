@@ -9,11 +9,14 @@ import java.util.Map;
 import cc.mi.core.binlog.data.BinlogData;
 import cc.mi.core.callback.AbstractCallback;
 import cc.mi.core.callback.Callback;
+import cc.mi.core.constance.BinlogChangeInfo;
 import cc.mi.core.constance.BinlogOptType;
+import cc.mi.core.generate.msg.BinlogDataModify;
 import cc.mi.core.generate.msg.PutObject;
 import cc.mi.core.generate.msg.PutObjects;
 import cc.mi.core.generate.stru.BinlogInfo;
 import cc.mi.core.impl.Tick;
+import cc.mi.core.packet.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.concurrent.Future;
@@ -154,5 +157,31 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 	
 	public boolean update(int diff) {
 		return false;
+	}
+	
+	public Packet getUpdatePacket() {
+		final BinlogObjectTable self = this;
+		List<BinlogInfo> binlogInfoList = new ArrayList<>();
+		BinlogChangeInfo.INSTANCE.foreach(new AbstractCallback<String>() {
+			@Override
+			public void invoke(String value) {
+				BinlogData data = self.get(value);
+				if (data != null) {
+					BinlogInfo info = data.packUpdateBinlogInfo();
+					if (info != null) {
+						binlogInfoList.add(info);
+					}
+				}
+			}
+		});
+		
+		if (binlogInfoList.size() == 0) {
+			return null;
+		}
+		
+		BinlogDataModify packet = new BinlogDataModify();
+		packet.setBinlogInfoList(binlogInfoList);
+		
+		return packet;
 	}
 }
