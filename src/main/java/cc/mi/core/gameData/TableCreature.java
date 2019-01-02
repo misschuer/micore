@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import cc.mi.core.annotation.data.DataKey;
+import cc.mi.core.constance.MovementType;
 
 @DataKey(value = "tb_creature_template")
 public enum TableCreature {
@@ -39,6 +40,20 @@ public enum TableCreature {
 //	public JsonObject getJsonObjectData(int id) {
 //		return dataHash.get(id);
 //	}
+	
+	public int getMoveType(int id) {
+		if (!dataHash.containsKey(id)) {
+			return MovementType.IDLE;
+		}
+		return dataHash.get(id).get("moveType").getAsInt();
+	}
+	
+	public int getReactType(int id) {
+		if (!dataHash.containsKey(id)) {
+			return MovementType.IDLE;
+		}
+		return dataHash.get(id).get("attackType").getAsInt();
+	}
 	
 	public String getName(int id) {
 		if (!dataHash.containsKey(id)) {
