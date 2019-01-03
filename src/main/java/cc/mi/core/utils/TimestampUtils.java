@@ -117,6 +117,14 @@ public class TimestampUtils {
 		return calendar;
 	}
 	
+	public static String getYMD() {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		return year + "" + month + "" + day;
+	}
+	
 	public static long str2Timestamp(String datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(SIMPLE_DATE_FORMAT);
         try {

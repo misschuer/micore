@@ -11,12 +11,33 @@ import java.util.List;
 public enum FileUtils {
 	INSTANCE;
 	
-	private static final String BINLOG_EXT_NAME = ".bl";
+	private static final String BINLOG_EXT_NAME = ".data";
+	
+	private static final String BACKUP_FILE = "backuplist.txt";
+	
+	private static final String SAVE_DB_FILE = "savetodb_%d.txt";
+	
+	
 	private FileUtils() {}
 	
 	public boolean loadPlayerBinlog(final String dir, final String fileName, List<String> lines) {
-		String path = dir + "/" + fileName + "." + BINLOG_EXT_NAME;
+		String path = dir + "/" + fileName + BINLOG_EXT_NAME;
 		return this.loadFile(path, lines);
+	}
+	
+	public boolean savePlayerData(final String dir, final String fileName, String content) {
+		String path = dir + "/" + fileName + BINLOG_EXT_NAME;
+		return this.writeContent(path, content);
+	}
+	
+	public boolean appendBackup(final String dir, String content) {
+		String path = dir + "/" + BACKUP_FILE;
+		return this.append(path, content);
+	}
+	
+	public boolean appendSaveDB(final String dir, String content) {
+		String path = dir + "/" + String.format(SAVE_DB_FILE, TimestampUtils.getYMD());
+		return this.append(path, content);
 	}
 	
 	public boolean loadFile(final String path, List<String> lines) {
@@ -46,6 +67,7 @@ public enum FileUtils {
 	public boolean append(final String fileName, String str) {
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName, true));) {
 			out.write(str);
+			out.flush();
 			return true;
 		} catch (Throwable e) {
 			return false;
@@ -55,6 +77,27 @@ public enum FileUtils {
 	public boolean append(final File file, String str) {
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file, true));) {
 			out.write(str);
+			out.flush();
+			return true;
+		} catch (Throwable e) {
+			return false;
+		}
+	}
+	
+	public boolean writeContent(final File file, String str) {
+		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
+			out.write(str);
+			out.flush();
+			return true;
+		} catch (Throwable e) {
+			return false;
+		}
+	}
+	
+	public boolean writeContent(final String filePath, String str) {
+		try (BufferedWriter out = new BufferedWriter(new FileWriter(filePath));) {
+			out.write(str);
+			out.flush();
 			return true;
 		} catch (Throwable e) {
 			return false;
@@ -66,17 +109,19 @@ public enum FileUtils {
 			for (String content : list) {
 				out.write(content);
 			}
+			out.flush();
 			return true;
 		} catch (Throwable e) {
 			return false;
 		}
 	}
 	
-	public boolean writeContent(final String fileName, List<String> list) {
-		try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName));) {
+	public boolean writeContent(final String filePath, List<String> list) {
+		try (BufferedWriter out = new BufferedWriter(new FileWriter(filePath));) {
 			for (String content : list) {
 				out.write(content);
 			}
+			out.flush();
 			return true;
 		} catch (Throwable e) {
 			return false;

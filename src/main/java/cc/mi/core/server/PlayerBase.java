@@ -27,6 +27,10 @@ public class PlayerBase extends BinlogData {
 		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_FD);
 	}
 	
+	public int getLevel() {
+		return this.getInt32(PlayerEnumFields.PLAYER_INT_FIELD_LEVEL);
+	}
+	
 	public void setLevel(int level) {
 		this.setUInt32(PlayerEnumFields.PLAYER_INT_FIELD_LEVEL, level);
 	}
