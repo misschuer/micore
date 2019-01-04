@@ -35,10 +35,9 @@ public class Bytes {
 		if (this.values.length >= len) {
 			return;
 		}
-		// 系数变为 (len * 3 / 2) + 1
 		int oldLen = this.values.length;
 		int newLen = len > (oldLen << 1) ? len + oldLen : oldLen << 1;
-		byte[] tmp = new byte[newLen+1];
+		byte[] tmp = new byte[newLen];
 		System.arraycopy(this.values, 0, tmp, 0, this.values.length);
 		this.values = tmp;
 	}

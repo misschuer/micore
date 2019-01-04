@@ -18,10 +18,9 @@ public class Strings {
 		if (this.values.length >= len) {
 			return;
 		}
-		// 系数变为 (len * 3 / 2) + 1
 		int oldLen = this.values.length;
 		int newLen = len > (oldLen << 1) ? len + oldLen : oldLen << 1;
-		String[] tmp = new String[newLen+1];
+		String[] tmp = new String[newLen];
 		System.arraycopy(this.values, 0, tmp, 0, this.values.length);
 		this.values = tmp;
 	}
