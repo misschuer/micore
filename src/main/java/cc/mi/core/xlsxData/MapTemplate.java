@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 import cc.mi.core.utils.Floyd;
 import cc.mi.core.utils.MIMath;
 import cc.mi.core.utils.Path;
@@ -268,25 +268,25 @@ public final class MapTemplate {
 		return path;
 	}
 	
-	public void foreachTeleport(Callback<MapTeleport> callback) {
+	public void foreachTeleport(InvokeCallback<MapTeleport> callback) {
 		for (MapTeleport value : this.teleports) {
 			callback.invoke(value);
 		}
 	}
 	
-	public void foreachRaise(Callback<MapRaise> callback) {
+	public void foreachRaise(InvokeCallback<MapRaise> callback) {
 		for (MapRaise value : this.raises) {
 			callback.invoke(value);
 		}
 	}
 	
-	public void foreachMonster(Callback<MapMonster> callback) {
+	public void foreachMonster(InvokeCallback<MapMonster> callback) {
 		for (MapMonster value : this.monsters.values()) {
 			callback.invoke(value);
 		}
 	}
 	
-	public void foreachGameObject(Callback<MapGameobject> callback) {
+	public void foreachGameObject(InvokeCallback<MapGameobject> callback) {
 		for (MapGameobject value : this.gameobjects) {
 			callback.invoke(value);
 		}

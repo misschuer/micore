@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 import cc.mi.core.log.CustomLogger;
 
 public class OwnerDataSet {
@@ -17,7 +17,7 @@ public class OwnerDataSet {
 		this.allData = new HashSet<>();
 	}
 	
-	public void foreach(Callback<String> callback) {
+	public void foreach(InvokeCallback<String> callback) {
 		if (callback != null) {
 			for (String guid : this.allData) {
 				callback.invoke(guid);
@@ -42,6 +42,10 @@ public class OwnerDataSet {
 		logger.devLog("OwnerDataSet add guid = {}", guid);
 	}
 
+	public int size() {
+		return this.allData.size();
+	}
+	
 	public String getOwner() {
 		return owner;
 	}

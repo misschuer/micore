@@ -1,6 +1,6 @@
 package cc.mi.core.utils;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 import cc.mi.core.parameter.CallbackParams;
 
 public class TimerTimestampCallback {
@@ -10,14 +10,14 @@ public class TimerTimestampCallback {
 	private final TimerTimestamp timer;
 	
 	// 回调的方法
-	private final Callback<CallbackParams> callback;
+	private final InvokeCallback<CallbackParams> callback;
 	// 回调的参数
 	private final CallbackParams params;
 	
 	// 是否失效
 	private boolean available = true;
 	
-	public TimerTimestampCallback(int id, int timestamp, Callback<CallbackParams> callback, CallbackParams params) {
+	public TimerTimestampCallback(int id, int timestamp, InvokeCallback<CallbackParams> callback, CallbackParams params) {
 		this.id		= 						   id;
 		this.timer	= new TimerTimestamp(timestamp);
 		this.callback = callback;

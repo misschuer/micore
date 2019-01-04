@@ -3,7 +3,7 @@ package cc.mi.core.constance;
 import java.util.HashSet;
 import java.util.Set;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 
 public enum BinlogChangeInfo {
 	INSTANCE;
@@ -11,7 +11,7 @@ public enum BinlogChangeInfo {
 	private final Set<String> set = new HashSet<>();
 	private BinlogChangeInfo() {}
 	
-	public void foreach(Callback<String> callback) {
+	public void foreach(InvokeCallback<String> callback) {
 		for (String binlogId : this.set) {
 			callback.invoke(binlogId);
 		}

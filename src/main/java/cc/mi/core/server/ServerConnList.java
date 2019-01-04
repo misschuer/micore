@@ -3,7 +3,7 @@ package cc.mi.core.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 
 public enum ServerConnList {
 	INSTANCE;
@@ -61,7 +61,7 @@ public enum ServerConnList {
 		return this.sceneConns.get(0);
 	}
 	
-	public void foreach(Callback<Integer> callback) {
+	public void foreach(InvokeCallback<Integer> callback) {
 		if (this.sceneConns != null) {
 			for (int conn : this.sceneConns) {
 				callback.invoke(conn);

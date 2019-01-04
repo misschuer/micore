@@ -3,7 +3,8 @@ package cc.mi.core.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
+import cc.mi.core.callback.MatchCallback;
 import cc.mi.core.generate.msg.CloseSession;
 import io.netty.channel.Channel;
 
@@ -36,7 +37,7 @@ public enum ContextManager {
 		return fdContextHash.remove(fd);
 	}
 	
-	public void foreach(Callback<ServerContext> callback) {
+	public void foreach(InvokeCallback<ServerContext> callback) {
 		
 	}
 	
@@ -48,7 +49,7 @@ public enum ContextManager {
 		return fdContextHash.get(fd);
 	}
 	
-	public int getLoginPlayers(Callback<ServerContext> callback) {
+	public int getLoginPlayers(MatchCallback<ServerContext> callback) {
 		int cnt = 0;
 		for (ServerContext context : fdContextHash.values()) {
 			if (callback.isMatched(context)) {

@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 import cc.mi.core.generate.msg.AddTagWatchAndCall;
 import cc.mi.core.generate.msg.AddWatchAndCall;
 import cc.mi.core.generate.msg.DelTagWatch;
@@ -237,7 +237,7 @@ public abstract class ServerManager {
 	 * @param binlogId
 	 * @param callback
 	 */
-	public void addWatchAndCall(String binlogId, Callback<Void> callback) {
+	public void addWatchAndCall(String binlogId, InvokeCallback<Void> callback) {
 		this.addWatchAndCall(0, binlogId, callback);
 	}
 	
@@ -247,7 +247,7 @@ public abstract class ServerManager {
 	 * @param fd
 	 * @param guidType
 	 */
-	public void addWatchAndCall(int fd, String binlogId, Callback<Void> callback) {
+	public void addWatchAndCall(int fd, String binlogId, InvokeCallback<Void> callback) {
 		// 本地的话直接可以取
 		if (fd == 0) {
 			if (this.isLocalBinlogDataExists(binlogId)) {
@@ -285,7 +285,7 @@ public abstract class ServerManager {
 	 * @param channel
 	 * @param ownerTag
 	 */
-	public void addTagWatchAndCall(String ownerTag, Callback<Void> callback) {
+	public void addTagWatchAndCall(String ownerTag, InvokeCallback<Void> callback) {
 		this.addTagWatchAndCall(0, ownerTag, callback);
 	}
 	
@@ -305,7 +305,7 @@ public abstract class ServerManager {
 	 * @param fd
 	 * @param guidType
 	 */
-	public void addTagWatchAndCall(int fd, String ownerTag, Callback<Void> callback) {
+	public void addTagWatchAndCall(int fd, String ownerTag, InvokeCallback<Void> callback) {
 		AddTagWatchAndCall atwac = new AddTagWatchAndCall();
 		atwac.setFd(fd);
 		atwac.setOwnerTag(ownerTag);
@@ -335,9 +335,9 @@ public abstract class ServerManager {
 		this.centerChannel.writeAndFlush(packet);
 	}
 	
-	protected void addTagWatchCallback(String ownerTag, Callback<Void> callback) {}
+	protected void addTagWatchCallback(String ownerTag, InvokeCallback<Void> callback) {}
 	
-	protected void addWatchCallback(String binlogId, Callback<Void> callback) {}
+	protected void addWatchCallback(String binlogId, InvokeCallback<Void> callback) {}
 	
 	/**
 	 * 告诉对方中心服准备完成

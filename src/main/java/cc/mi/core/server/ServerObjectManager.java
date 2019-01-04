@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import cc.mi.core.binlog.data.BinlogData;
-import cc.mi.core.callback.AbstractCallback;
-import cc.mi.core.callback.Callback;
+import cc.mi.core.callback.InvokeCallback;
 import cc.mi.core.constance.BinlogChangeInfo;
 import cc.mi.core.constance.BinlogOptType;
 import cc.mi.core.generate.msg.BinlogDataModify;
@@ -27,21 +26,32 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 	protected final Map<String, OwnerDataSet> allOwnerDataSet;
 	protected final int serverType;
 	
-	private final Map<String, Callback<Void>> createCallbackHash;
-	private final Map<String, Callback<Void>> ownerCreateCallbackHash;
+	private final Map<String, InvokeCallback<Void>> createCallbackHash;
+	private final Map<String, InvokeCallback<Void>> ownerCreateCallbackHash;
+	
+	private final Map<String, InvokeCallback<String>> releaseCallbackHash;
 	
 	protected ServerObjectManager(int serverType) {
 		this.serverType = serverType;
 		allOwnerDataSet = new HashMap<>();
 		this.createCallbackHash = new HashMap<>();
 		this.ownerCreateCallbackHash = new HashMap<>();
+		this.releaseCallbackHash = new HashMap<>();
 	}
 	
-	public void addOwnerCreateCallback(String ownerId, Callback<Void> callback) {
+	public void registerReleaseEvent(String binlogId, InvokeCallback<String> callback) {
+		this.releaseCallbackHash.put(binlogId, callback);
+	}
+	
+	public void unregisterReleaseEvent(String binlogId) {
+		this.releaseCallbackHash.remove(binlogId);
+	}
+	
+	public void addOwnerCreateCallback(String ownerId, InvokeCallback<Void> callback) {
 		this.ownerCreateCallbackHash.put(ownerId, callback);
 	}
 	
-	public void addCreateCallback(String binlogId, Callback<Void> callback) {
+	public void addCreateCallback(String binlogId, InvokeCallback<Void> callback) {
 		this.createCallbackHash.put(binlogId, callback);
 	}
 	
@@ -53,7 +63,7 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 		final List<String> removeGuidList = new LinkedList<>();
 		final ServerObjectManager self = this;
 		OwnerDataSet ds = allOwnerDataSet.get(ownerId);
-		ds.foreach(new AbstractCallback<String>() {
+		ds.foreach(new InvokeCallback<String>() {
 			@Override
 			public void invoke(String binlogId) {
 				BinlogData obj = self.get(binlogId);
@@ -92,7 +102,7 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 		this.allOwnerDataSet.get(ownerId).remove(binlogId);
 	}
 	
-	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result, AbstractCallback<Boolean> abstractCallback) {
+	public void putObjects(Channel centerChannel, String ownerId, final List<BinlogData> result, InvokeCallback<Boolean> abstractCallback) {
 		PutObjects po = new PutObjects();
 		List<BinlogInfo> binlogDataList = new ArrayList<>(result.size());
 		for (BinlogData binlogData : result) {
@@ -113,7 +123,7 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 		centerChannel.writeAndFlush(po, promise);
 	}
 	
-	public void putObject(Channel centerChannel, String ownerId, BinlogData result, Callback<Boolean> callback) {
+	public void putObject(Channel centerChannel, String ownerId, BinlogData result, InvokeCallback<Boolean> callback) {
 		PutObject po = new PutObject();
 		po.setBinlogData(result.packNewBinlogInfo());
 		po.setOwnerId(ownerId);
@@ -162,7 +172,7 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 	public Packet getUpdatePacket() {
 		final BinlogObjectTable self = this;
 		List<BinlogInfo> binlogInfoList = new ArrayList<>();
-		BinlogChangeInfo.INSTANCE.foreach(new AbstractCallback<String>() {
+		BinlogChangeInfo.INSTANCE.foreach(new InvokeCallback<String>() {
 			@Override
 			public void invoke(String value) {
 				BinlogData data = self.get(value);
@@ -183,5 +193,9 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 		packet.setBinlogInfoList(binlogInfoList);
 		
 		return packet;
+	}
+	
+	public void removeCentreObject(String binlogId, InvokeCallback<String> callback) {
+		//TODO:
 	}
 }
