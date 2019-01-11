@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +38,9 @@ public abstract class ServerManager {
 	// 需要的消息opcode列表
 	protected final List<Integer> opcodes = new LinkedList<>();
 	// 帧刷新
-	protected final ScheduledExecutorService excutor = Executors.newScheduledThreadPool(1);
+	protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	// 主逻辑线程
+	protected final ExecutorService mainLogicalExecutor = Executors.newSingleThreadExecutor();
 	// 消息包队列
 	protected final Queue<Packet> packetQueue = new LinkedList<>();
 	// 当前帧刷新执行的代码逻辑
@@ -64,7 +67,17 @@ public abstract class ServerManager {
 	 */
 	protected void onExecutorInit() {
 		final ServerManager instance = this;
-		excutor.scheduleWithFixedDelay(new Runnable() {
+		executor.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				instance.doFrameLogical();
+			}
+		}, 1000, 50, TimeUnit.MILLISECONDS);
+	}
+	
+	private void doFrameLogical() {
+		final ServerManager instance = this;
+		mainLogicalExecutor.submit(new Runnable() {
 			@Override
 			public void run() {
 				long prev = instance.timestamp;
@@ -81,7 +94,7 @@ public abstract class ServerManager {
 					t.printStackTrace();
 				}
 			}
-		}, 1000, 100, TimeUnit.MILLISECONDS);
+		});
 	}
 	
 	/**
@@ -129,9 +142,14 @@ public abstract class ServerManager {
 	 * @param packet
 	 */
 	public void pushPacket(Packet packet) {
-		synchronized (this) {
-			packetQueue.add(packet);
-		}
+		final ServerManager instance = this;
+		mainLogicalExecutor.submit(new Runnable() {
+			@Override
+			public void run() {
+				// 这里看情况 玩家操作才添加也是可以的 
+				instance.packetQueue.add(packet);
+			}
+		});
 	}
 	
 	/**

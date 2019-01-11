@@ -196,6 +196,16 @@ public abstract class ServerObjectManager extends BinlogObjectTable implements T
 	}
 	
 	public void removeCentreObject(String binlogId, InvokeCallback<String> callback) {
+		
 		//TODO:
+		this.registerReleaseEvent(binlogId, callback);
+		
+//		ByteArray& pkt = MallocByteArray(opt_control_);
+//		pkt.writeByte(CMD_DEL_OBJ);
+//		pkt.writeUTF(key);
+//		pkt.writeInt(0);
+//		table_->RegisterReleaseEvent(key,cb);
+//		send_pkt_array_.push_back(std::make_pair(connection_id_,&pkt));
+		
 	}
 }
